@@ -26,7 +26,7 @@ The ESP32 collects sensor data and publishes it to a Mosquitto MQTT broker runni
 | Communication | MQTT over TLS (Mosquitto) |
 | Backend | Python (paho-mqtt, Flask) |
 | Database | PostgreSQL |
-| Frontend | React + TypeScript + Tailwind CSS |
+| Frontend | Nextjs + TypeScript + Tailwind CSS |
 | Remote access | DuckDNS + port forwarding |
 
 ## Architecture
