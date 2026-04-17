@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -15,7 +15,11 @@ type LoginFormProps = {
   loading?: boolean;
 };
 
+const PERSON_NUMBER_REGEX = /^\d{8}-\d{4}$/;
+
 export function LoginForm({ onLogin, loading }: LoginFormProps) {
+  const [validationError, setValidationError] = useState<string | null>(null);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -23,6 +27,14 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
     const personNumber = String(formData.get("personNumber") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
+    if (!PERSON_NUMBER_REGEX.test(personNumber)) {
+      setValidationError(
+        "Person number must be in the format 19900202-1234 (8 digits, a dash, and 4 digits).",
+      );
+      return;
+    }
+
+    setValidationError(null);
     onLogin({ personNumber, password });
   }
 
@@ -40,9 +52,20 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
             id="fieldgroup-personNumber"
             name="personNumber"
             placeholder="19500101-1234"
+            pattern="\d{8}-\d{4}"
+            title="Use the format 19900202-1234"
             className="mt-2"
           />
+          <FieldDescription className="mt-2 text-sm text-slate-500">
+            Use the format 19900202-1234 (8 digits, dash, 4 digits).
+          </FieldDescription>
         </Field>
+
+        {validationError ? (
+          <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+            {validationError}
+          </div>
+        ) : null}
 
         <Field className="w-full">
           <FieldLabel
