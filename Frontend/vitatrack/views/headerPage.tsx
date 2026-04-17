@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-
+import Link from "next/link";
 export function HeaderPage({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -35,10 +35,13 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
             How it works
           </a>
         </div>
+        <Link href="/login" className="ml-auto" >
 
-        <Button className="ml-auto" variant="outline">
+          <Button variant="outline">
           Log in
-        </Button>
+          </Button>
+        </Link>
+        
       </nav>
 
       {/* Page content renders here */}
