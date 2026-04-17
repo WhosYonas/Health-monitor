@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { postLoginThunk } from "@/communication/loginCommunication";
 
 interface userProfile {
   first_name: string | null;
@@ -35,6 +36,24 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(postLoginThunk.pending, (state) => {
+        state.loading = true;
+        state.error_message = null;
+      })
+      .addCase(postLoginThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.is_authenticated = true;
+        state.user = action.payload;
+        state.error_message = null;
+      })
+      .addCase(postLoginThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error_message =
+          action.payload ?? action.error.message ?? "Unknown error";
+      });
+  },
 });
 
 export default userSlice.reducer;
