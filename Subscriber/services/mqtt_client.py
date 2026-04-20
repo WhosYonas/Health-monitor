@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-from config.settings import settings
+from config.settings import MQTTSettings as settings
 from models.payload import parse_payload
 from utils.logger import get_logger
 
@@ -9,8 +9,8 @@ logger = get_logger(__name__)
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         logger.info("Connected to MQTT broker")
-        client.subscribe(settings.MQTT_TOPIC)
-        logger.info(f"Subscribed to topic: {settings.MQTT_TOPIC}")
+        client.subscribe(settings.topic)
+        logger.info(f"Subscribed to topic: {settings.topic}")
     else:
         logger.error(f"Failed to connect, return code: {rc}")
 
@@ -34,14 +34,14 @@ def create_client() -> mqtt.Client:
 
     # mTLS
     client.tls_set(
-        ca_certs=settings.CA_CERT,
-        certfile=settings.CLIENT_CERT,
-        keyfile=settings.CLIENT_KEY,
+        ca_certs=settings.ca_cert,
+        certfile=settings.client_cert,
+        keyfile=settings.client_key,
     )
 
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
 
-    client.connect(settings.MQTT_BROKER, settings.MQTT_PORT)
+    client.connect(settings.broker_host, settings.broker_port)
     return client
