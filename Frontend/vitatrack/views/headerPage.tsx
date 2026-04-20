@@ -21,10 +21,12 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
               strokeLinejoin="round"
             />
           </svg>
-
-          <h1 className="relative z-10 font-bold tracking-wide text-black">
+          <Link href="/">
+            <h1 className="relative z-10 font-bold tracking-wide text-black">
             VitaTrack
           </h1>
+          </Link>
+          
         </div>
 
         <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-6">
@@ -37,7 +39,7 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
         </div>
         <Link href="/login" className="ml-auto" >
 
-          <Button variant="outline">
+          <Button variant="outline" className="px-5 py-3 cursor-pointer transition hover:bg-lime-300">
           Log in
           </Button>
         </Link>
