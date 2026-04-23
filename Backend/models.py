@@ -30,10 +30,10 @@ class Device(Base):
     device_id = Column(Integer, primary_key=True, index=True)
     person_id = Column(Integer, ForeignKey("person.person_id"))
     person = relationship("Person", back_populates="device")
-    measurment = relationship("Measurment", back_populates="device", cascade="all, delete")
+    measurement = relationship("Measurement", back_populates="device", cascade="all, delete")
 
-class Measurment(Base):
-    __tablename__ = "measurment"
+class Measurement(Base):
+    __tablename__ = "measurement"
 
     measurement_id = Column(Integer, primary_key=True, index=True)
     time = Column(TIMESTAMP(timezone=True), server_default= text("NOW()"))
@@ -41,4 +41,4 @@ class Measurment(Base):
     heart_rate = Column(Integer, nullable=False)
     temperature = Column(Double, nullable=False)
     device_id = Column(Integer, ForeignKey("device.device_id"), nullable=False)
-    device = relationship("Device", back_populates="measurments")
+    device = relationship("Device", back_populates="measurements")
