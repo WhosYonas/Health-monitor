@@ -11,17 +11,11 @@ interface userProfile {
   critical_level: number | null;
 }
 
-interface healthData {
-  pulse: number | null;
-  body_temperature: number | null;
-  blood_oxygen_level: number | null;
-}
 interface userState {
   user: userProfile | null;
   is_authenticated: boolean;
   loading: boolean;
   error_message: string | null;
-  health_data: healthData | null;
 }
 
 const initialState: userState = {
@@ -29,7 +23,6 @@ const initialState: userState = {
   is_authenticated: false,
   loading: false,
   error_message: null,
-  health_data: null,
 };
 
 export const userSlice = createSlice({

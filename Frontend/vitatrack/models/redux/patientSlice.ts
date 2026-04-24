@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { postGetPatientInfoThunk } from "@/communication/patientInfoCommunication";
+import { postGetPatientHealthDataThunk } from "@/communication/patientHealthDataCommunication";
 
 interface patientHealthData {
   pulse: number | null;
@@ -7,34 +9,66 @@ interface patientHealthData {
 }
 
 interface patientInformation {
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  person_number: string;
-  relative_fullname: string;
-  relative_phone_number: string;
-  critical_level: number;
+  first_name: string | null;
+  last_name: string | null;
+  phone_number: string | null;
+  person_number: string | null;
+  relative_fullname: string | null;
+  relative_phone_number: string | null;
+  critical_level: number | null;
 }
 
 interface patientState {
   patient_info: patientInformation | null;
   health_data: patientHealthData | null;
-  loading: boolean;
-  error_message: string | null;
+  infoLoading: boolean;
+  healthLoading: boolean;
+  info_error_message: string | null;
+  health_error_message: string | null;
 }
 
 const initialState: patientState = {
   patient_info: null,
   health_data: null,
-  loading: false,
-  error_message: null,
+  infoLoading: false,
+  info_error_message: null,
+  healthLoading: false,
+  health_error_message: null,
 };
 
 export const patientSlice = createSlice({
   name: "patient",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder.addCase(postGetPatientInfoThunk.pending, (state) => {
+      state.infoLoading = true;
+      state.info_error_message = null;
+    });
+    builder.addCase(postGetPatientInfoThunk.fulfilled, (state, action) => {
+      state.patient_info = action.payload;
+      state.infoLoading = false;
+    });
+    builder.addCase(postGetPatientInfoThunk.rejected, (state, action) => {
+      state.info_error_message = action.payload as string;
+      state.infoLoading = false;
+    });
+    builder.addCase(postGetPatientHealthDataThunk.pending, (state) => {
+      state.healthLoading = true;
+      state.health_error_message = null;
+    });
+    builder.addCase(
+      postGetPatientHealthDataThunk.fulfilled,
+      (state, action) => {
+        state.health_data = action.payload;
+        state.healthLoading = false;
+      },
+    );
+    builder.addCase(postGetPatientHealthDataThunk.rejected, (state, action) => {
+      state.health_error_message = action.payload as string;
+      state.healthLoading = false;
+    });
+  },
 });
 
 export default patientSlice.reducer;
