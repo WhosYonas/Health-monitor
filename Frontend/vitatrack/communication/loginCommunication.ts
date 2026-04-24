@@ -10,9 +10,7 @@ type LoginResponse = {
   last_name: string | null;
   phone_number: string | null;
   person_number: string | null;
-  relative_fullname: string | null;
-  relative_phone_number: string | null;
-  critical_level: number | null;
+  role: "patient" | "caregiver" | null;
 };
 
 const postLogin = async (payload: loginPayload) => {
