@@ -31,7 +31,7 @@ class Device(Base):
     device_id = Column(Integer, primary_key=True, index=True)
     person_id = Column(Integer, ForeignKey("users.id"))
     person = relationship("Person", back_populates="device")
-    measurements = relationship("measurement", back_populates="device", cascade="all, delete")
+    measurements = relationship("Measurement", back_populates="device", cascade="all, delete")
 
 class Measurement(Base):
     __tablename__ = "measurement"
