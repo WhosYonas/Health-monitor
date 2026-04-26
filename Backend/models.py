@@ -9,15 +9,16 @@ class Person(Base):
     first_name = Column(String, nullable= False)
     last_name = Column(String, nullable =False)
     phone_number = Column(String, unique = True, nullable=False)
-    title = Column(String, nullable=False, nullable=False)
+    title = Column(String, nullable=False)
 
     account = relationship("Account", back_populates= "owner")
+    device = relationship("Device", back_populates = "person")
 
 class Account(Base):
     __tablename__ = "account"
 
     id = Column(Integer, primary_key=True, index= True)
-    personummer = Column(String, unique=True, nullable=False)
+    personal_number = Column(String, unique=True, nullable=False)
     password_hash = Column(String, nullable = False)
     created_at = Column(TIMESTAMP(timezone= True), server_default= text("NOW()"))
     person_id = Column(Integer, ForeignKey("users.id", ondelete= "CASCADE"), nullable=False)
@@ -28,9 +29,9 @@ class Device(Base):
     __tablename__ = "device"
 
     device_id = Column(Integer, primary_key=True, index=True)
-    person_id = Column(Integer, ForeignKey("person.person_id"))
+    person_id = Column(Integer, ForeignKey("users.id"))
     person = relationship("Person", back_populates="device")
-    measurement = relationship("Measurement", back_populates="device", cascade="all, delete")
+    measurements = relationship("measurement", back_populates="device", cascade="all, delete")
 
 class Measurement(Base):
     __tablename__ = "measurement"
