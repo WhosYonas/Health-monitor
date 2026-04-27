@@ -4,10 +4,10 @@ import type { AppDispatch, RootState } from "@/lib/store";
 import { postAddPatientThunk } from "@/communication/addPatientCommunication";
 
 export function AddPatientPagePresenter() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { addLoading, addSuccess, addError } = useSelector(
+  //const dispatch = useDispatch<AppDispatch>();
+  /*const { addLoading, addSuccess, addError } = useSelector(
     (state: RootState) => state.patientManagement,
-  );
+  );*/
 
   return <AddPatientPage />;
 }
