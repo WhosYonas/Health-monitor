@@ -1,12 +1,23 @@
 import { LoginForm } from "@/components/custom/loginForm";
 
 type LoginPageProps = {
-  onLogin: (credentials: { personNumber: string; password: string }) => void;
+  onLogin: (credentials: {
+    personNumber: string;
+    password: string;
+    role: "caregiver" | "patient";
+  }) => void;
   loading?: boolean;
   errorMessage?: string | null;
 };
 
 export function LoginPage({ onLogin, loading, errorMessage }: LoginPageProps) {
+  function handleLogin(credentials: {
+    personNumber: string;
+    password: string;
+  }) {
+    onLogin({ ...credentials, role: "caregiver" }); // hardcoded for now
+  }
+
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900">
       <div className="mx-auto w-full max-w-lg rounded-[1rem] border border-slate-200 bg-white p-8 sm:p-10">
@@ -19,15 +30,12 @@ export function LoginPage({ onLogin, loading, errorMessage }: LoginPageProps) {
             in one place.
           </p>
         </div>
-
-        <LoginForm onLogin={onLogin} loading={loading} />
-
+        <LoginForm onLogin={handleLogin} loading={loading} />
         {errorMessage ? (
           <div className="mb-6 rounded-lg px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
         ) : null}
-
         <div className="mt-8 text-center text-sm text-slate-600">
           Don&apos;t have an account?{" "}
           <span className="font-semibold text-slate-900">Contact us</span>

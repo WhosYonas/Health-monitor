@@ -14,15 +14,17 @@ export function LoginPagePresenter() {
   async function handleLogin(credentials: {
     personNumber: string;
     password: string;
+    role: "caregiver" | "patient";
   }) {
     try {
       await dispatch(
         postLoginThunk({
-          identifier: credentials.personNumber,
+          personnummer: credentials.personNumber,
           password: credentials.password,
+          role: credentials.role,
         }),
       ).unwrap();
-      console.log("Login successful", credentials);
+      console.log("Login successful");
     } catch (error) {
       console.log("Login failed", error);
     }

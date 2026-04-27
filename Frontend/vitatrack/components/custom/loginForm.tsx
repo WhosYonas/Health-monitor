@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -15,16 +15,16 @@ type LoginFormProps = {
   loading?: boolean;
 };
 
-const PERSON_NUMBER_REGEX = /^\d{8}-\d{4}$/;
+const PERSON_NUMBER_REGEX = /^\d{12}$/; // validate the stripped version
 
 export function LoginForm({ onLogin, loading }: LoginFormProps) {
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
-    const personNumber = String(formData.get("personNumber") ?? "").trim();
+    const raw = String(formData.get("personNumber") ?? "").trim();
+    const personNumber = raw.replace("-", ""); // strip dash if present
     const password = String(formData.get("password") ?? "");
 
     if (!PERSON_NUMBER_REGEX.test(personNumber)) {
@@ -35,7 +35,7 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
     }
 
     setValidationError(null);
-    onLogin({ personNumber, password });
+    onLogin({ personNumber, password }); // always sends 12 digits, no dash
   }
 
   return (
