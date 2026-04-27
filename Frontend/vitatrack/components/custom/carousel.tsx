@@ -12,19 +12,19 @@ import {
 const features = [
   {
     title: "Real-Time Vitals",
-    image: "/realtime-vitals.png",
+    image: "/time.png",
   },
   {
     title: "Instant Alerts",
-    image: "/alert-risk.jpg",
+    image: "/alerts.png",
   },
   {
     title: "Caregiver Dashboard",
-    image: "/dashboard.jpg",
+    image: "/dashboard.png",
   },
   {
     title: "Health Trends",
-    image: "/health-trends.png",
+    image: "/trends.png",
   },
 ];
 
@@ -39,9 +39,9 @@ export function CarouselSlide() {
                 <Card className="overflow-hidden">
                   <CardContent
                     className="relative flex h-[400px] items-center justify-center bg-cover bg-center bg-no-repeat p-6"
-                    style={{ backgroundImage: `url(${feature.image})` }}
+                    style={{ backgroundImage: `url(${feature.image})`}}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/0" />
 
                     <span className="relative z-10 text-center text-3xl font-semibold text-white text-shadow-lg"
                     style={{
