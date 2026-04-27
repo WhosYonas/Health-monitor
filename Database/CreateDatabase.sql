@@ -9,7 +9,7 @@ CREATE TABLE person (
 
 ALTER TABLE person ADD CONSTRAINT PK_person PRIMARY KEY (person_id);
 
-ALTER TABLE person ADD CONSTRAINT UQ_person_personummer UNIQUE (personnummer);
+ALTER TABLE person ADD CONSTRAINT UQ_person_personnummer UNIQUE (personnummer);
 
 ALTER TABLE person ADD CONSTRAINT CHK_person_role CHECK(role IN('patient', 'caregiver'));
 
