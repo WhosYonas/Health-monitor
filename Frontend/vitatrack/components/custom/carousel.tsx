@@ -39,7 +39,7 @@ export function CarouselSlide() {
                 <Card className="overflow-hidden">
                   <CardContent
                     className="relative flex h-[400px] items-center justify-center bg-cover bg-center bg-no-repeat p-6"
-                    style={{ backgroundImage: `url(${feature.image})` }}
+                    style={{ backgroundImage: `url(${feature.image})`}}
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/0" />
 

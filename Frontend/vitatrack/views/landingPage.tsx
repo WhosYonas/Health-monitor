@@ -3,6 +3,7 @@ import Link from "next/link";
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-amber-50">
+
       <div className="flex flex-col items-center justify-center">
         {/* Hero Section */}
         <section
