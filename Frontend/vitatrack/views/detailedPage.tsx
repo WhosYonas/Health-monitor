@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
-import { HealthDataGraph } from "@/components/ui/HealthDataGraph"; 
+import { HealthDataGraph } from "@/components/ui/HealthDataGraph";
 
 type HealthData = {
   pulse: number | null;
@@ -16,6 +16,10 @@ type DetailedPageProps = {
   healthData: HealthData | null;
   loading?: boolean;
   errorMessage?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  role?: string | null;
+  criticalLevel?: number | null;
 };
 
 type HealthCardProps = {
@@ -48,10 +52,45 @@ function HealthCard({ label, value, unit, loading, onClick }: HealthCardProps) {
 
 type healthGraphType = "Pulse" | "Body Temperature" | "Oxygen Level";
 
+type CriticalLevelIndicatorProps = {
+  criticalLevel?: number | null;
+};
+
+function CriticalLevelIndicator({
+  criticalLevel,
+}: CriticalLevelIndicatorProps) {
+  return (
+    <div className="mt-4 flex items-center gap-3">
+      <span className="text-sm font-medium text-slate-600">Critical level</span>
+
+      <div className="flex items-center gap-2">
+        {[1, 2, 3].map((level) => (
+          <span
+            key={level}
+            className={`h-4 w-4 rounded-full border border-slate-300 ${
+              criticalLevel === level
+                ? level === 1
+                  ? "bg-emerald-500"
+                  : level === 2
+                    ? "bg-yellow-400"
+                    : "bg-red-500"
+                : "bg-slate-200"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function DetailedPage({
   healthData,
   loading,
   errorMessage,
+  firstName,
+  lastName,
+  role,
+  criticalLevel,
 }: DetailedPageProps) {
   const [graphOpen, openGraph] = useState<healthGraphType | null>(null);
   function handleGraphOpening(healthCardName: healthGraphType) {
@@ -61,6 +100,10 @@ export function DetailedPage({
       openGraph(healthCardName);
     }
   }
+  {/* below only for test*/}
+  criticalLevel=1; role="patient"; firstName="Ingrid"
+
+
   return (
     <div className=" min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-950 via-teal-950 to-cyan-900">
       <div className="mx-auto w-full max-w-4xl rounded-[1rem] border border-slate-200 bg-white p-8 sm:p-10">
@@ -68,11 +111,11 @@ export function DetailedPage({
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
-              Health Overview
+              {role === "patient"
+                ? `Hi ${firstName}`
+                : "Patient health overview"}
             </h1>
-            <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">
-              Monitor your real-time health metrics in one place.
-            </p>
+            <CriticalLevelIndicator criticalLevel={criticalLevel} />
           </div>
           <Link href="/addPatientPage">
             <Button variant="outline">
@@ -113,29 +156,30 @@ export function DetailedPage({
         </div>
 
         {/* Conditional rendering for different graphs */}
-        
+
         {graphOpen && (
-        <div className="mt-10 mb-10">
+          <div className="mt-10 mb-10">
             <h2 className="text-lg font-semibold text-slate-800 mb-4">
-            {graphOpen}
+              {graphOpen}
             </h2>
             <div className="rounded-xl border border-slate-200 bg-slate-50 h-auto flex items-center justify-center text-slate-400 text-sm overflow-hidden">
-            <div className="w-full h-full">
-                <HealthDataGraph title={graphOpen}/>
+              <div className="w-full h-full">
+                <HealthDataGraph title={graphOpen} />
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         )}
 
-        {/* the general health-state Graph */}
+        {/* the general health-state Graph----- Removed for now: can be used as an extra feature later 
         <div className="mt-10">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">Trends</h2>
           <div className="rounded-xl border border-slate-200 bg-slate-50 h-48 flex items-center justify-center text-slate-400 text-sm">
             Graph coming soon
           </div>
         </div>
+        */}
 
-        {/* Description or analyse of the health values  */}
+        {/* Description or analyse of the health values-- Removed for now: can be used as an extra feature later  
         <div className="mt-10">
           <h2 className="text-lg font-semibold text-slate-800 mb-2">
             About Your Metrics
@@ -146,14 +190,16 @@ export function DetailedPage({
             outside your normal range.
           </p>
         </div>
+        */}
 
-        {/* History  */}
+        {/* History  ----- Removed for now: can be used as an extra feature later 
         <div className="mt-10">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">History</h2>
           <div className="rounded-xl border border-slate-200 bg-slate-50 h-32 flex items-center justify-center text-slate-400 text-sm">
             History coming soon
           </div>
         </div>
+        */}
       </div>
     </div>
   );
