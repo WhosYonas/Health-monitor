@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import users, plants, watering_events
+from routers import users
 from database import init_db
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +16,9 @@ app.add_middleware(
 
 
 
+
+
 # ALL ROUTERS HERE 
+app.include_router(users.router, prefix="/users", tags=["Users"])
 
 init_db()
