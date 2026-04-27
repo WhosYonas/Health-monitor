@@ -19,19 +19,19 @@ class MQTTSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
 
 class DatabaseSettings(BaseSettings):
-    #Define all the config needed for the database
     db_host: str = Field(..., alias="DATABASE_HOST")
-    db_port: int = Field(..., alias="DATABASE_PORT") 
+    db_port: int = Field(..., alias="DATABASE_PORT")
     db_name: str = Field(..., alias="DATABASE_NAME")
     db_user: str = Field(..., alias="DATABASE_USER")
     db_password: str = Field(..., alias="DATABASE_PASSWORD")
-    #For connection string convenience, when we want the db connected to psycopg 
-    #we can just write conn = psycopg2.connect(db.dsn)
+
+    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
+
     @property
     def dsn(self) -> str:
-        return(
+        return (
             f"postgresql://{self.db_user}:{self.db_password}"
-            f"@{self.db_host}:{self.db_port}:{self.name}"
+            f"@{self.db_host}:{self.db_port}/{self.db_name}"
         )
     
 class LogSettings(BaseSettings):

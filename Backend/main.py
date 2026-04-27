@@ -17,5 +17,6 @@ app.add_middleware(
 
 
 # ALL ROUTERS HERE 
+app.include_router(users.router, prefix="/users", tags=["Users"])
 
 init_db()

@@ -1,38 +1,42 @@
+import jwt
 import os
+from pathlib import Path
 from dotenv import load_dotenv
+from fastapi import HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
 
-load_dotenv()
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME")
+load_dotenv(Path(__file__).resolve().parent.parent.parent / "Subscriber" / ".env")
+KEY = os.get_env("SECRET_KEY")
 
-DATABASE_URL = (
-    f"postgresql://{DB_USER}:{DB_PASSWORD}"
-    f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
+if not KEY:
+    raise ValueError("Key is not set")
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True
-)
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 
-Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
+#Generate token
+def create_access_token(
+    data: dict,
+    expires_delta: int = ACCESS_TOKEN_EXPIRE_MINUTES
+):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(minutes=expires_delta)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, KEY, algorithm=ALGORITHM)
+# Decode token
+def decode_access_token(token: str):
     try:
-        yield db
-    finally:
-        db.close()
+        payload = jwt.decode(token, KEY, algorithms=[ALGORITHM])
+        user_id: int = payload.get("user_id")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        return user_id
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
