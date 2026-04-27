@@ -85,9 +85,8 @@ def create_account(db: Session, user: schemas.UserCreate, hashed_password: str):
         role=user.role,
     )
     db.add(db_person)
-    db.flush()  # gets db_person.person_id without committing
+    db.flush()  
 
-    # Then create the Account linked to that Person
     db_account = models.Account(
         username_id=user.username_id,
         password_hashed=hashed_password,

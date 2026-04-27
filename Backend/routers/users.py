@@ -73,4 +73,4 @@ def get_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     user = crud.get_account_by_personnummer(db, personnummer=payload.get("sub"))
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return user.owner  # return the Person, not the Account
+    return user.owner  
