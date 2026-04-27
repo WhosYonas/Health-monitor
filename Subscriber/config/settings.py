@@ -4,19 +4,19 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-class MQTTSettings(BaseSettings):
+#class MQTTSettings(BaseSettings):
     #Define all the config needed to know the broker
-    broker_host: str = Field(..., alias="MQTT_BROKER_HOST")
-    broker_port: int = Field(8883, alias="MQTT_BROKER_PORT")
-    client_id: str = Field(..., alias="MQTT_CLIENT_ID")
-    topic: str = Field(..., alias="MQTT_TOPIC")
-    keepalive: int = Field(..., alias="KEEP_ALIVE")
-
-    ca_cert: Path = Field(BASE_DIR / "certs/ca.crt", alias="MQTT_CA_CERT")
-    client_cert: Path = Field(BASE_DIR / "certs/client.crt", alias="MQTT_CLIENT_CERT")
-    client_key: Path = Field(BASE_DIR / "certs/client.key", alias="MQTT_CLIENT_KEY")
-
-    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
+    #broker_host: str = Field(..., alias="MQTT_BROKER_HOST")
+    #broker_port: int = Field(8883, alias="MQTT_BROKER_PORT")
+   # client_id: str = Field(..., alias="MQTT_CLIENT_ID")
+  #  topic: str = Field(..., alias="MQTT_TOPIC")
+ #   keepalive: int = Field(..., alias="KEEP_ALIVE")
+#
+  #  ca_cert: Path = Field(BASE_DIR / "certs/ca.crt", alias="MQTT_CA_CERT")
+ #   client_cert: Path = Field(BASE_DIR / "certs/client.crt", alias="MQTT_CLIENT_CERT")
+#    client_key: Path = Field(BASE_DIR / "certs/client.key", alias="MQTT_CLIENT_KEY")
+#
+#    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
 
 class DatabaseSettings(BaseSettings):
     db_host: str = Field(..., alias="DATABASE_HOST")
@@ -39,5 +39,5 @@ class LogSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
 
 log = LogSettings()
-mqtt = MQTTSettings()
+#mqtt = MQTTSettings()
 db = DatabaseSettings()
