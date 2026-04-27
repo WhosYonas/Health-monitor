@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 
 
 load_dotenv(Path(__file__).resolve().parent.parent.parent / "Subscriber" / ".env")
-KEY = os.get_env("SECRET_KEY")
+KEY = os.getenv("SECRET_KEY")
 
 if not KEY:
     raise ValueError("Key is not set")

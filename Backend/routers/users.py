@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas, models
-from Backend.database import get_db
+from database import get_db
 from passlib.context import CryptContext
 from .auth import create_access_token, oauth2_scheme, decode_access_token
 import bcrypt
@@ -31,13 +31,13 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 #=============CREATE USER=================
 
-@router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.UserOut, status_code=status.HTTP_201_CREATED)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    existing = crud.get_account_by_personummer(db, personummer=user.personummer)
+    existing = crud.get_account_by_personnummer(db, personnummer=user.personnummer)
     if existing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="An account with this personummer already exists."
+            detail="An account with this personnummer already exists."
         )
 
     hashed_password = hash_password(user.password)
@@ -48,21 +48,19 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    #Authenticate user and return JWT access token.
-    user = crud.get_account_by_personummer(db, personummer=form_data.username)
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    user = crud.get_account_by_personnummer(db, personnummer=form_data.username)
+    if not user or not verify_password(form_data.password, user.password_hashed):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect personummer or password",
+            detail="Incorrect personnummer or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(data={"sub": user.personummer})
+    access_token = create_access_token(data={"sub": user.owner.personnummer})
     return {"access_token": access_token, "token_type": "bearer"}
-
 
 #===============CURRENT USER==================
 
-@router.get("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.UserOut)
 def get_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     #Get currently authenticated user.
     payload = decode_access_token(token)
@@ -72,7 +70,7 @@ def get_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
             detail="Invalid or expired token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = crud.get_account_by_personummer(db, personummer=payload.get("sub"))
+    user = crud.get_account_by_personnummer(db, personnummer=payload.get("sub"))
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
+        raise HTTPException(status_code=404, detail="User not found")
+    return user.owner  # return the Person, not the Account
