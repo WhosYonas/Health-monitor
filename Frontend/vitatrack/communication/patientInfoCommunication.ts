@@ -1,20 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-type loginPayload = {
-  identifier: string;
-  password: string;
+type patientPayload = {
+  person_number: string;
 };
 
-type LoginResponse = {
+type patientResponse = {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
   person_number: string | null;
-  role: "patient" | "caregiver" | null;
+  relative_fullname: string | null;
+  relative_phone_number: string | null;
+  critical_level: number | null;
 };
 
-const postLogin = async (payload: loginPayload) => {
-  const response = await fetch(`/api/login`, {
+const postGetPatientInfo = async (payload: patientPayload) => {
+  const response = await fetch(`/api/patient_info`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -35,19 +36,19 @@ const postLogin = async (payload: loginPayload) => {
   return data;
 };
 
-export const postLoginThunk = createAsyncThunk<
-  LoginResponse,
-  loginPayload,
+export const postGetPatientInfoThunk = createAsyncThunk<
+  patientResponse,
+  patientPayload,
   { rejectValue: string }
->("user/postLoginThunk", async (payload, thunkAPI) => {
+>("patient/postGetPatientInfoThunk", async (payload, thunkAPI) => {
   try {
-    const data = await postLogin(payload);
-    const userInfo = data.user?.metadata as LoginResponse;
+    const data = await postGetPatientInfo(payload);
+    const patientInfo = data.patient_info as patientResponse;
 
-    return userInfo;
+    return patientInfo;
   } catch (error: any) {
-    if (error.status === 401) {
-      return thunkAPI.rejectWithValue("Incorrect identifier or password");
+    if (error.status === 404) {
+      return thunkAPI.rejectWithValue("Patient not found");
     }
     if (error.status === 500) {
       return thunkAPI.rejectWithValue(
