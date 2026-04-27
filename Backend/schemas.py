@@ -1,54 +1,63 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class UserBase(BaseModel):
-    full_name: str
+#Person / Account 
+
+class UserCreate(BaseModel):
+    first_name: str
+    last_name: str
+    phone_number: str
+    personnummer: str
+    role: str  
+    username_id: str
+    password: str  
+
+class UserOut(BaseModel):
+    person_id: int
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone_number: Optional[str]
+    personnummer: str
     role: str
 
-class UserCreate(UserBase):
-    password: str  
-    phone_number: str
-    personal_number: str
-
-class User(UserBase):
-    id: int
-    is_active: bool = True
-
     class Config:
         from_attributes = True
 
-class PatientBase(BaseModel):
-    date_of_birth: str
-    medical_id: str
-
-class PatientCreate(PatientBase):
-    user_id: int  
-
-class Patient(PatientBase):
-    id: int
-    is_active: bool = True
-
-    class Config:
-        from_attributes = True
-
-class PatientLogin(BaseModel):
+class UserLogin(BaseModel):
+    personnummer: str
     password: str
-    personalnumber: int
 
-class HealthWorkerBase(BaseModel): 
-    email: str
-    date_of_birth: str
-    worker_id: str
+#Device
 
-class HealthWorkerCreate(HealthWorkerBase):
-    worker_id: str
-
-class HealthWorker(HealthWorkerBase):
-    id: int
-    is_active: bool = True
+class DeviceOut(BaseModel):
+    device_id: int
+    patient_id: int
 
     class Config:
         from_attributes = True
 
-class HealthWorkerLogin(BaseModel):
-    password: str
-    personalnumber: int
+#Measurement
+
+class MeasurementOut(BaseModel):
+    measurement_id: int
+    time: str
+    blood_oxygen: Optional[float]
+    heart_rate: Optional[int]
+    temperature: Optional[float]
+    device_id: int
+
+    class Config:
+        from_attributes = True
+
+#Relatives
+
+class RelativeCreate(BaseModel):
+    relative_fullname: str
+    relative_phone_number: str
+    patient_id: int
+
+class RelativeOut(RelativeCreate):
+    relatives_id: int
+
+    class Config:
+        from_attributes = True
