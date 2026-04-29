@@ -24,7 +24,7 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const raw = String(formData.get("personNumber") ?? "").trim();
-    const personNumber = raw.replace("-", ""); // strip dash if present
+    const personNumber = raw.replace("-", "");
     const password = String(formData.get("password") ?? "");
 
     if (!PERSON_NUMBER_REGEX.test(personNumber)) {
@@ -35,7 +35,7 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
     }
 
     setValidationError(null);
-    onLogin({ personNumber, password }); // always sends 12 digits, no dash
+    onLogin({ personNumber, password });
   }
 
   return (

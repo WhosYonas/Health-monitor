@@ -1,5 +1,5 @@
 import { OverviewPagePresenter } from "@/presenters/overviewPage-presenter";
 
-export default function Login() {
-  return <OverviewPagePresenter/>;
+export default function Overview() {
+  return <OverviewPagePresenter />;
 }

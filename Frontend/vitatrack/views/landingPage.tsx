@@ -2,12 +2,10 @@ import { CarouselSlide } from "@/components/custom/carousel";
 import Link from "next/link";
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-amber-50">
-
+    <div className="min-h-screen bg-linear-to-b from-amber-500 to-amber-100">
       <div className="flex flex-col items-center justify-center">
         {/* Hero Section */}
-        <section
-          className="relative my-8 flex h-[380px] w-full max-w-[90%] items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center shadow-lg bg-teal-500">
+        <section className="relative my-8 flex h-95 w-full max-w-[90%] items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center shadow-lg bg-linear-to-b from-amber-500 to-amber-100">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/25" />
 
@@ -37,15 +35,16 @@ export function LandingPage() {
               <h2 className="text-3xl font-bold max-w-3xl tracking-tight md:text-5xl">
                 Keep track of your health for a better future.
               </h2>
-              <Link href="/login">
-              </Link>
+              <Link href="/login"></Link>
             </div>
 
-            <div className="my-12 h-[1px] w-full bg-white/10 "/>
+            <div className="my-12 h-[1px] w-full bg-white/10 " />
 
             <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Product Features</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Product Features
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>Real-time Vitals</li>
                   <li>Instant Alerts</li>
@@ -53,9 +52,11 @@ export function LandingPage() {
                   <li>Health Trends</li>
                 </ul>
               </div>
-                
+
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Company</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Company
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>About</li>
                   <li>Team</li>
@@ -65,7 +66,9 @@ export function LandingPage() {
               </div>
 
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Support</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Support
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>Guides</li>
                   <li>Help Center</li>

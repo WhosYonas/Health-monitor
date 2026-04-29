@@ -10,6 +10,10 @@ interface LoginResponse {
   access_token: string;
   token_type: string;
   role: "caregiver" | "patient";
+  first_name: string;
+  last_name: string;
+  phone_number: string | null;
+  person_number: string;
 }
 
 const postLogin = async (payload: LoginPayload) => {
