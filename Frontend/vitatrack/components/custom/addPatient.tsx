@@ -1,16 +1,65 @@
+"use client";
+
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
-  FieldGroup,
   FieldLabel,
   FieldLegend,
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export function AddPatient() {
+interface addPatientProps {
+  addLoading: boolean;
+  addSuccess: boolean;
+  addError: string | null;
+  onAddPatient: (patientInfo: {
+    first_name: string | null;
+    last_name: string | null;
+    phone_number: string | null;
+    person_number: string | null;
+    relative_fullname: string | null;
+    relative_phone_number: string | null;
+    critical_level: number | null;
+  }) => void;
+}
+
+export function AddPatient({
+  addLoading,
+  addSuccess,
+  addError,
+  onAddPatient,
+}: addPatientProps) {
+  const [criticalLevel, setCriticalLevel] = React.useState("1");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const patientInfo = {
+      first_name: formData.get("firstName") as string | null,
+      last_name: formData.get("lastName") as string | null,
+      phone_number: formData.get("phoneNumber") as string | null,
+      person_number: formData.get("personNumber") as string | null,
+      relative_fullname: formData.get("relativeName") as string | null,
+      relative_phone_number: formData.get("relativePhoneNumber") as
+        | string
+        | null,
+      critical_level: criticalLevel ? parseInt(criticalLevel) : null,
+    };
+
+    onAddPatient(patientInfo);
+  };
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900">
       <div className="mx-auto w-full max-w-3xl rounded-[1rem] border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200 sm:p-10">
@@ -21,7 +70,7 @@ export function AddPatient() {
           </p>
         </div>
 
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleSubmit}>
           <FieldSet>
             <FieldLegend>Patient information</FieldLegend>
             <FieldDescription>
@@ -107,18 +156,25 @@ export function AddPatient() {
           <FieldSet>
             <FieldLegend>Care settings</FieldLegend>
             <FieldDescription>
-              Enter the patient&apos;s current critical level. A number between
-              1 and 3.
+              Choose the patient&apos;s current critical level.
             </FieldDescription>
 
             <Field>
               <FieldLabel htmlFor="critical-level">Critical level</FieldLabel>
-              <Input
+              <Select
                 id="critical-level"
-                name="criticalLevel"
-                type="text"
-                placeholder="1, 2, or 3"
-              />
+                value={criticalLevel}
+                onValueChange={setCriticalLevel}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1</SelectItem>
+                  <SelectItem value="2">2</SelectItem>
+                  <SelectItem value="3">3</SelectItem>
+                </SelectContent>
+              </Select>
             </Field>
           </FieldSet>
 
