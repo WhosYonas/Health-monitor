@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import users
+from routers import users,patients
 from database import init_db
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,5 +20,6 @@ app.add_middleware(
 
 # ALL ROUTERS HERE 
 app.include_router(users.router, prefix="/users", tags=["Users"])
+app.include_router(patients.router, prefix="/patients", tags=["Patients"])
 
 init_db()
