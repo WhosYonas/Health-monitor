@@ -1,13 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { postAddPatientThunk } from "@/communication/addPatientCommunication";
 
+interface PatientHealthData {
+  pulse: number | null;
+  body_temperature: number | null;
+  blood_oxygen_level: number | null;
+}
+
+interface PatientOverviewItem {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  phone_number: string | null;
+  person_number: string | null;
+  relative_fullname: string | null;
+  relative_phone_number: string | null;
+  critical_level: number | null;
+  health_data?: PatientHealthData | null;
+}
+
 interface PatientManagementState {
+  patients: PatientOverviewItem[]
+
+  listLoading: boolean,
+  listError: string | null,
+
   addLoading: boolean;
   addSuccess: boolean;
   addError: string | null;
 }
 
+
+
 const initialState: PatientManagementState = {
+  patients: [],
+  listLoading: false,
+  listError: null,
+
   addLoading: false,
   addSuccess: false,
   addError: null,
