@@ -35,7 +35,7 @@ def register_patient(data: schemas.PatientCreate, db: Session = Depends(get_db))
 
 
 #=================LOGIN==========================
-@router.post("/login/caregiver")
+@router.post("/login/caregiver", response_model=schemas.CaregiverLoginOut)
 def login_caregiver(
     response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -44,13 +44,17 @@ def login_caregiver(
     account = crud.get_caregiver_by_personnummer(db, form_data.username)
     if not account or not crud.verify_password(form_data.password, account.password_hash):
         raise HTTPException(status_code=401, detail="Incorrect personnummer or password.")
-
     token = create_access_token(personnummer=account.person.personnummer, role="caregiver")
     response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="lax", max_age=3600)
-    
-    return {"access_token": token, "token_type": "bearer", "role": "caregiver"}
+    return {
+        "access_token": token,
+        "token_type":   "bearer",
+        "role":         "caregiver",
+        "user":         account,
+    }
 
-@router.post("/login/patient")
+
+@router.post("/login/patient", response_model=schemas.PatientLoginOut)
 def login_patient(
     response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -59,11 +63,14 @@ def login_patient(
     account = crud.get_patient_by_personnummer(db, form_data.username)
     if not account or not crud.verify_password(form_data.password, account.password_hash):
         raise HTTPException(status_code=401, detail="Incorrect personnummer or password.")
-
     token = create_access_token(personnummer=account.person.personnummer, role="patient")
     response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="lax", max_age=3600)
-    return {"access_token": token, "token_type": "bearer", "role": "patient"}
-
+    return {
+        "access_token": token,
+        "token_type":   "bearer",
+        "role":         "patient",
+        "user":         account,
+    }
 
 #===============ME=================================
 

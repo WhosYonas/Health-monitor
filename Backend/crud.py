@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func, or_
 import models
 import schemas
 import bcrypt
@@ -22,7 +23,6 @@ def get_caregiver_by_personnummer(db: Session, personnummer: str) -> models.Care
         .filter(models.Person.personnummer == personnummer)
         .first()
     )
-
 
 def get_caregiver_by_username(db: Session, username: str) -> models.CaregiverAccount | None:
     return db.query(models.CaregiverAccount).filter(models.CaregiverAccount.username == username).first()
@@ -96,6 +96,11 @@ def assign_patient_to_caregiver(db: Session, caregiver_id: int, patient_id: int)
         caregiver.patients.append(patient)
         db.commit()
 
+def get_patients_by_caregiver(db: Session, caregiver_id: int) -> list[models.PatientAccount]:
+    caregiver = db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    if not caregiver:
+        return []
+    return caregiver.patients
 
 #================DEVICE======================
 
@@ -192,3 +197,58 @@ def get_unacknowledged_alerts_by_patient(db: Session, patient_id: int) -> list[m
         .order_by(models.Alert.triggered_at.desc())
         .all()
     )
+
+
+
+#============PATIENTS BELOW THRESHOLD===========
+
+def get_patients_below_threshold(
+    db: Session,
+    caregiver_id: int,
+    spo2_min:  float | None = None,
+    hr_min:    int   | None = None,
+    temp_max:  float | None = None,
+) -> list[dict]:
+    caregiver = db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    if not caregiver or not caregiver.patients:
+        return []
+
+    results = []
+    for patient in caregiver.patients:
+        # Get latest measurement across all patient devices
+        latest = (
+            db.query(models.Measurement)
+            .join(models.Device)
+            .filter(models.Device.patient_id == patient.patient_id)
+            .order_by(models.Measurement.recorded_at.desc())
+            .first()
+        )
+
+        if not latest:
+            continue
+
+        breaches = False
+        if spo2_min is not None and latest.blood_oxygen is not None:
+            if latest.blood_oxygen < spo2_min:
+                breaches = True
+        if hr_min is not None and latest.heart_rate is not None:
+            if latest.heart_rate < hr_min:
+                breaches = True
+        if temp_max is not None and latest.temperature is not None:
+            if latest.temperature > temp_max:
+                breaches = True
+
+        if breaches:
+            results.append({
+                "patient_id": patient.patient_id,
+                "username":   patient.username,
+                "person":     patient.person,
+                "vitals": {
+                    "blood_oxygen": float(latest.blood_oxygen) if latest.blood_oxygen else None,
+                    "heart_rate":   latest.heart_rate,
+                    "temperature":  float(latest.temperature) if latest.temperature else None,
+                    "recorded_at":  latest.recorded_at,
+                },
+            })
+
+    return results

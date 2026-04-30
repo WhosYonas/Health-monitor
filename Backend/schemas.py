@@ -26,7 +26,6 @@ class CaregiverCreate(BaseModel):
     username:     str
     password:     str
 
-
 class CaregiverOut(BaseModel):
     caregiver_id: int
     username:     str
@@ -35,10 +34,18 @@ class CaregiverOut(BaseModel):
     class Config:
         from_attributes = True
 
-
 class CaregiverLogin(BaseModel):
     personnummer: str
     password:     str
+
+class CaregiverLoginOut(BaseModel):
+    access_token: str
+    token_type:   str
+    role:         str
+    user:         CaregiverOut
+
+    class Config:
+        from_attributes = True
 
 
 #===============PATIENT======================
@@ -51,7 +58,6 @@ class PatientCreate(BaseModel):
     username:     str
     password:     str
 
-
 class PatientOut(BaseModel):
     patient_id: int
     username:   str
@@ -60,11 +66,18 @@ class PatientOut(BaseModel):
     class Config:
         from_attributes = True
 
-
 class PatientLogin(BaseModel):
     personnummer: str
     password:     str
 
+class PatientLoginOut(BaseModel):
+    access_token: str
+    token_type:   str
+    role:         str
+    user:         PatientOut
+
+    class Config:
+        from_attributes = True
 
 #================DEVICE======================
 
@@ -123,6 +136,28 @@ class AlertOut(BaseModel):
     triggered_at:    datetime
     acknowledged:    bool
     acknowledged_by: Optional[int]
+
+    class Config:
+        from_attributes = True
+
+
+#============PATIENTS BELOW THRESHOLD=========
+
+class LatestVitals(BaseModel):
+    blood_oxygen: Optional[float]
+    heart_rate:   Optional[int]
+    temperature:  Optional[float]
+    recorded_at:  Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class PatientBelowThreshold(BaseModel):
+    patient_id: int
+    username:   str
+    person:     PersonOut
+    vitals:     Optional[LatestVitals]
 
     class Config:
         from_attributes = True
