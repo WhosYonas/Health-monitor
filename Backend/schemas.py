@@ -79,6 +79,14 @@ class PatientLoginOut(BaseModel):
     class Config:
         from_attributes = True
 
+class PatientUpdate(BaseModel):
+    first_name:   Optional[str] = None
+    last_name:    Optional[str] = None
+    phone_number: Optional[str] = None
+    personnummer: Optional[str] = None
+    username:     Optional[str] = None
+    password:     Optional[str] = None
+
 #================DEVICE======================
 
 class DeviceCreate(BaseModel):

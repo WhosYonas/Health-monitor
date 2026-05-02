@@ -85,6 +85,41 @@ def create_patient(db: Session, data: schemas.PatientCreate) -> models.PatientAc
     return account
 
 
+def update_patient(db: Session, patient_id: int, data: schemas.PatientUpdate) -> models.PatientAccount | None:
+    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    if not patient:
+        return None
+
+    person = patient.person
+    if data.first_name is not None:
+        person.first_name = data.first_name
+    if data.last_name is not None:
+        person.last_name = data.last_name
+    if data.phone_number is not None:
+        person.phone_number = data.phone_number
+    if data.personnummer is not None:
+        person.personnummer = data.personnummer
+
+    if data.username is not None:
+        patient.username = data.username
+    if data.password is not None:
+        patient.password_hash = hash_password(data.password)
+
+    db.commit()
+    db.refresh(patient)
+    return patient
+
+
+def delete_patient(db: Session, patient_id: int) -> bool:
+    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    if not patient:
+        return False
+    
+    db.delete(patient.person)
+    db.commit()
+    return True
+
+
 #===============CAREGIVER<->PATIENT======================
 
 def assign_patient_to_caregiver(db: Session, caregiver_id: int, patient_id: int) -> None:
