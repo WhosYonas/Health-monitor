@@ -44,7 +44,7 @@ def login_caregiver(
     account = crud.get_caregiver_by_personnummer(db, form_data.username)
     if not account or not crud.verify_password(form_data.password, account.password_hash):
         raise HTTPException(status_code=401, detail="Incorrect personnummer or password.")
-    token = create_access_token(personnummer=account.person.personnummer, role="caregiver")
+    token = create_access_token(account_id=str(account.caregiver_id), role="caregiver")
     response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="lax", max_age=3600)
     return {
         "access_token": token,
@@ -63,7 +63,7 @@ def login_patient(
     account = crud.get_patient_by_personnummer(db, form_data.username)
     if not account or not crud.verify_password(form_data.password, account.password_hash):
         raise HTTPException(status_code=401, detail="Incorrect personnummer or password.")
-    token = create_access_token(personnummer=account.person.personnummer, role="patient")
+    token = create_access_token(account_id=str(account.patient_id), role="patient")
     response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="lax", max_age=3600)
     return {
         "access_token": token,
@@ -79,7 +79,7 @@ def get_me_caregiver(token: str = Depends(caregiver_oauth2_scheme), db: Session 
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Not a caregiver token.")
-    account = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    account = crud.get_caregiver_by_id(db, payload["sub"])
     if not account:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     return account
@@ -90,7 +90,39 @@ def get_me_patient(token: str = Depends(patient_oauth2_scheme), db: Session = De
     payload = decode_access_token(token)
     if payload.get("role") != "patient":
         raise HTTPException(status_code=403, detail="Not a patient token.")
-    account = crud.get_patient_by_personnummer(db, payload["sub"])
+    account = crud.get_patient_by_id(db, int(payload["sub"]))
     if not account:
         raise HTTPException(status_code=404, detail="Patient not found.")
     return account
+
+
+#===================UPDATE PATIENT INFO======
+@router.patch("/patient/{patient_id}", response_model=schemas.PatientOut)
+def update_patient(
+    patient_id: int,
+    data: schemas.PatientUpdate,
+    token: str = Depends(caregiver_oauth2_scheme),
+    db: Session = Depends(get_db),
+):
+    payload = decode_access_token(token)
+    if payload.get("role") != "caregiver":
+        raise HTTPException(status_code=403, detail="Only caregivers can update patients.")
+    patient = crud.update_patient(db, patient_id, data)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found.")
+    return patient
+
+#=======DELETE PATIENT=========
+
+@router.delete("/patient/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_patient(
+    patient_id: int,
+    token: str = Depends(caregiver_oauth2_scheme),
+    db: Session = Depends(get_db),
+):
+    payload = decode_access_token(token)
+    if payload.get("role") != "caregiver":
+        raise HTTPException(status_code=403, detail="Only caregivers can delete patients.")
+    deleted = crud.delete_patient(db, patient_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Patient not found.")
