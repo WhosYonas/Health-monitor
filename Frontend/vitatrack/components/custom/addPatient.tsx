@@ -161,12 +161,8 @@ export function AddPatient({
 
             <Field>
               <FieldLabel htmlFor="critical-level">Critical level</FieldLabel>
-              <Select
-                id="critical-level"
-                value={criticalLevel}
-                onValueChange={setCriticalLevel}
-              >
-                <SelectTrigger>
+              <Select value={criticalLevel} onValueChange={setCriticalLevel}>
+                <SelectTrigger id="critical-level">
                   <SelectValue placeholder="Choose level" />
                 </SelectTrigger>
                 <SelectContent>
