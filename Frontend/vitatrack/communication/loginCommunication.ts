@@ -12,26 +12,35 @@ type LoginResponse = {
   person_number: string | null;
   role: "patient" | "caregiver" | null;
 };
-
 const postLogin = async (payload: loginPayload) => {
-  const response = await fetch(`/api/login`, {
+  const formData = new URLSearchParams();
+  formData.append("username", payload.identifier);
+  formData.append("password", payload.password);
+  formData.append("username", payload.identifier);
+  console.log("sending person_number:", payload.identifier);
+
+  const response = await fetch(`/api/users/login/caregiver`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify(payload),
+    body: formData.toString(),
     credentials: "include",
     redirect: "manual",
   });
 
+  console.log("status:", response.status);
+  console.log("type:", response.type);
+
   const data = await response.json();
+  console.log("data:", data);
+
   if (!response.ok) {
     throw {
       status: response.status,
       detail: data.detail,
     };
   }
-
   return data;
 };
 
@@ -42,8 +51,13 @@ export const postLoginThunk = createAsyncThunk<
 >("user/postLoginThunk", async (payload, thunkAPI) => {
   try {
     const data = await postLogin(payload);
-    const userInfo = data.user?.metadata as LoginResponse;
-
+    const userInfo: LoginResponse = {
+      first_name: data.user.person.first_name,
+      last_name: data.user.person.last_name,
+      phone_number: data.user.person.phone_number,
+      person_number: data.user.person.person_number,
+      role: data.role,
+    };
     return userInfo;
   } catch (error: any) {
     if (error.status === 401) {
