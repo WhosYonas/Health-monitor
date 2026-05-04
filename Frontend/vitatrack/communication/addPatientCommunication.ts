@@ -4,7 +4,7 @@ type patientPayload = {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
-  person_number: string | null;
+  personnummer: string | null;
   relative_fullname: string | null;
   relative_phone_number: string | null;
   critical_level: number | null;
@@ -16,7 +16,7 @@ type addPatientResponse = {
 };
 
 const postAddPatient = async (payload: patientPayload) => {
-  const response = await fetch("http://127.0.0.1:8000/register/patient", {
+  const response = await fetch("/api/users/register/patient", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

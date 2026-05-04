@@ -7,9 +7,11 @@ import { postAddPatientThunk } from "@/communication/addPatientCommunication";
 import { generatePassword } from "@/lib/utils";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function AddPatientPagePresenter() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { addLoading, addSuccess, addError } = useSelector(
     (state: RootState) => state.patientManagement,
   );
@@ -24,7 +26,7 @@ export function AddPatientPagePresenter() {
     first_name: string | null;
     last_name: string | null;
     phone_number: string | null;
-    person_number: string | null;
+    personnummer: string | null;
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
@@ -36,13 +38,14 @@ export function AddPatientPagePresenter() {
           first_name: patientInfo.first_name,
           last_name: patientInfo.last_name,
           phone_number: patientInfo.phone_number,
-          person_number: patientInfo.person_number,
+          personnummer: patientInfo.personnummer,
           relative_fullname: patientInfo.relative_fullname,
           relative_phone_number: patientInfo.relative_phone_number,
           critical_level: patientInfo.critical_level,
           password: generatePassword(),
         }),
       ).unwrap();
+      router.push("/overview");
       console.log("Patient added successfully");
     } catch (error) {
       console.log("Add patient failed", error);

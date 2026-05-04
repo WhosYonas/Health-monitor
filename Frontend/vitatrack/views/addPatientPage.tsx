@@ -8,7 +8,7 @@ interface addPatientProps {
     first_name: string | null;
     last_name: string | null;
     phone_number: string | null;
-    person_number: string | null;
+    personnummer: string | null;
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
