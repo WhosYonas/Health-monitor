@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Optional
 from database import get_db
-import crud, schemas
+import crud, schemas, models
 from .auth import caregiver_oauth2_scheme, decode_access_token
 
 router = APIRouter()
@@ -46,14 +46,13 @@ def assign_patient(
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Caregivers only.")
-    caregiver = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
     if not caregiver:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     try:
         crud.assign_patient_to_caregiver(db, caregiver.caregiver_id, patient_id)
     except ValueError:
         raise HTTPException(status_code=404, detail="Patient not found.")
-    
 
 #================GET PATIENTS UNDER CAREGIVER===============
 @router.get("/", response_model=list[schemas.PatientOut])
@@ -64,7 +63,7 @@ def get_my_patients(
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Caregivers only.")
-    caregiver = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
     if not caregiver:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     return crud.get_patients_by_caregiver(db, caregiver.caregiver_id)
