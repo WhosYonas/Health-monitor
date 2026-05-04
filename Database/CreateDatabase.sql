@@ -1,6 +1,3 @@
--- ─────────────────────────────────────────
--- PERSON (shared identity base)
--- ─────────────────────────────────────────
 CREATE TABLE person (
     person_id        INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     first_name       VARCHAR(100)  NOT NULL,
@@ -11,9 +8,7 @@ CREATE TABLE person (
     CONSTRAINT UQ_person_personnummer UNIQUE (personnummer)
 );
 
--- ─────────────────────────────────────────
--- ACCOUNTS (separate tables per role)
--- ─────────────────────────────────────────
+
 CREATE TABLE caregiver_account (
     caregiver_id    INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     person_id       INT           NOT NULL,
@@ -40,9 +35,6 @@ CREATE TABLE patient_account (
         REFERENCES person (person_id) ON DELETE CASCADE
 );
 
--- ─────────────────────────────────────────
--- CAREGIVER ↔ PATIENT  (many-to-many)
--- ─────────────────────────────────────────
 CREATE TABLE caregiver_patient (
     caregiver_id    INT NOT NULL,
     patient_id      INT NOT NULL,
@@ -54,9 +46,6 @@ CREATE TABLE caregiver_patient (
         REFERENCES patient_account (patient_id) ON DELETE CASCADE
 );
 
--- ─────────────────────────────────────────
--- RELATIVES (emergency contacts for patient)
--- ─────────────────────────────────────────
 CREATE TABLE relative (
     relative_id     INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     patient_id      INT           NOT NULL,
@@ -67,9 +56,6 @@ CREATE TABLE relative (
         REFERENCES patient_account (patient_id) ON DELETE CASCADE
 );
 
--- ─────────────────────────────────────────
--- DEVICE (ESP32, paired to a patient)
--- ─────────────────────────────────────────
 CREATE TABLE device (
     device_id       INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     patient_id      INT           NOT NULL,
@@ -82,34 +68,28 @@ CREATE TABLE device (
         REFERENCES patient_account (patient_id) ON DELETE CASCADE
 );
 
--- ─────────────────────────────────────────
--- MEASUREMENT (sensor readings from ESP32)
--- ─────────────────────────────────────────
 CREATE TABLE measurement (
     measurement_id  INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     device_id       INT           NOT NULL,
     recorded_at     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    blood_oxygen    DECIMAL(5, 2),   -- SpO2 %
-    heart_rate      INT,             -- BPM
-    temperature     DECIMAL(4, 2),   -- °C
+    blood_oxygen    DECIMAL(5, 2),   
+    heart_rate      INT,             
+    temperature     DECIMAL(4, 2),   
     CONSTRAINT PK_measurement       PRIMARY KEY (measurement_id),
     CONSTRAINT FK_measurement_device FOREIGN KEY (device_id)
         REFERENCES device (device_id) ON DELETE CASCADE
 );
 
--- ─────────────────────────────────────────
--- ALERT (abnormal reading events)
--- ─────────────────────────────────────────
 CREATE TABLE alert (
     alert_id        INT GENERATED ALWAYS AS IDENTITY NOT NULL,
     measurement_id  INT           NOT NULL,
     patient_id      INT           NOT NULL,
-    alert_type      VARCHAR(50)   NOT NULL,  -- 'heart_rate' | 'blood_oxygen' | 'temperature'
-    severity        VARCHAR(20)   NOT NULL DEFAULT 'warning', -- 'warning' | 'critical'
+    alert_type      VARCHAR(50)   NOT NULL,  
+    severity        VARCHAR(20)   NOT NULL DEFAULT 'warning', 
     message         TEXT,
     triggered_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     acknowledged    BOOLEAN       NOT NULL DEFAULT FALSE,
-    acknowledged_by INT,                     -- caregiver_id who cleared it
+    acknowledged_by INT,                     
     CONSTRAINT PK_alert             PRIMARY KEY (alert_id),
     CONSTRAINT CHK_alert_type       CHECK (alert_type IN ('heart_rate', 'blood_oxygen', 'temperature')),
     CONSTRAINT CHK_alert_severity   CHECK (severity IN ('warning', 'critical')),

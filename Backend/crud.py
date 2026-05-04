@@ -1,8 +1,9 @@
+from http.client import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_
 import models
 import schemas
 import bcrypt
+
 
 
 def hash_password(password: str) -> str:
@@ -26,6 +27,10 @@ def get_caregiver_by_personnummer(db: Session, personnummer: str) -> models.Care
 
 def get_caregiver_by_username(db: Session, username: str) -> models.CaregiverAccount | None:
     return db.query(models.CaregiverAccount).filter(models.CaregiverAccount.username == username).first()
+
+
+def get_caregiver_by_id(db: Session, caregiver_id: int) -> models.CaregiverAccount | None:
+    return db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
 
 
 def create_caregiver(db: Session, data: schemas.CaregiverCreate) -> models.CaregiverAccount:
@@ -59,6 +64,8 @@ def get_patient_by_personnummer(db: Session, personnummer: str) -> models.Patien
         .first()
     )
 
+def get_patient_by_id(db: Session, patient_id: int) -> models.PatientAccount | None:
+    return db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
 
 def get_patient_by_username(db: Session, username: str) -> models.PatientAccount | None:
     return db.query(models.PatientAccount).filter(models.PatientAccount.username == username).first()
@@ -287,3 +294,45 @@ def get_patients_below_threshold(
             })
 
     return results
+
+
+#=====UPDATE PATIENT======
+def update_patient(db: Session, patient_id: int, data: schemas.PatientUpdate) -> models.PatientAccount | None:
+    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    if not patient:
+        return None
+
+    person = patient.person
+    if data.first_name is not None:
+        person.first_name = data.first_name
+    if data.last_name is not None:
+        person.last_name = data.last_name
+    if data.phone_number is not None:
+        person.phone_number = data.phone_number
+    if data.personnummer is not None:
+        person.personnummer = data.personnummer
+
+    if data.username is not None:
+        taken = db.query(models.PatientAccount).filter_by(username=data.username).first()
+        if taken and taken.patient_id != patient_id:
+            raise HTTPException(status_code=400, detail="Username already taken")
+        patient.username = data.username
+    if data.password is not None:
+        patient.password_hash = hash_password(data.password)
+
+    db.commit()
+    db.refresh(patient)
+    return patient
+
+#===========DELETE PATIENT==========
+
+def delete_patient(db: Session, patient_id: int) -> bool:
+    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    if not patient:
+        return False
+    person = patient.person
+    db.delete(patient)
+    db.flush()      
+    db.delete(person)
+    db.commit()
+    return True

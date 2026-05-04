@@ -1,12 +1,13 @@
 "use client";
-
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import { LoginPage } from "@/views/loginPage";
 import { postLoginThunk } from "@/communication/loginCommunication";
 import type { AppDispatch, RootState } from "@/lib/store";
 
 export function LoginPagePresenter() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { loading, error_message } = useSelector(
     (state: RootState) => state.user,
   );
@@ -22,7 +23,7 @@ export function LoginPagePresenter() {
           password: credentials.password,
         }),
       ).unwrap();
-      console.log("Login successful", credentials);
+      router.push("/overview");
     } catch (error) {
       console.log("Login failed", error);
     }

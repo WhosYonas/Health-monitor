@@ -20,10 +20,10 @@ caregiver_oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login/caregiver")
 patient_oauth2_scheme   = OAuth2PasswordBearer(tokenUrl="users/login/patient")
 
 
-def create_access_token(personnummer: str, role: str, expires_delta: int = ACCESS_TOKEN_EXPIRE_MINUTES) -> str:
+def create_access_token(account_id: str, role: str, expires_delta: int = ACCESS_TOKEN_EXPIRE_MINUTES) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=expires_delta)
     payload = {
-        "sub":  personnummer,
+        "sub":  str(account_id),
         "role": role,          
         "exp":  expire,
     }
@@ -31,7 +31,7 @@ def create_access_token(personnummer: str, role: str, expires_delta: int = ACCES
 
 
 def decode_access_token(token: str) -> dict:
-    """Returns the full payload dict with 'sub' (personnummer) and 'role'."""
+    """Returns the full payload dict with 'sub' (account_id) and 'role'."""
     try:
         payload = jwt.decode(token, KEY, algorithms=[ALGORITHM])
         if not payload.get("sub"):
