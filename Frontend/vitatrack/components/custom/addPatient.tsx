@@ -31,6 +31,7 @@ interface addPatientProps {
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
+    password: string | null;
   }) => void;
 }
 
@@ -56,6 +57,7 @@ export function AddPatient({
         | string
         | null,
       critical_level: criticalLevel ? parseInt(criticalLevel) : null,
+      password: null,
     };
 
     onAddPatient(patientInfo);

@@ -12,6 +12,7 @@ interface addPatientProps {
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
+    password: string | null;
   }) => void;
 }
 

@@ -9,7 +9,7 @@ type LoginResponse = {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
-  personnummer: string | null;
+  person_number: string | null;
   role: "patient" | "caregiver" | null;
 };
 const postLogin = async (payload: loginPayload) => {
@@ -17,7 +17,7 @@ const postLogin = async (payload: loginPayload) => {
   formData.append("username", payload.identifier);
   formData.append("password", payload.password);
   formData.append("username", payload.identifier.replace("-", ""));
-  console.log("sending personnummer:", payload.identifier);
+  console.log("sending person_number:", payload.identifier);
 
   const response = await fetch(`/api/users/login/caregiver`, {
     method: "POST",
@@ -55,7 +55,7 @@ export const postLoginThunk = createAsyncThunk<
       first_name: data.user.person.first_name,
       last_name: data.user.person.last_name,
       phone_number: data.user.person.phone_number,
-      personnummer: data.user.person.personnummer,
+      person_number: data.user.person.person_number,
       role: data.role,
     };
     return userInfo;
