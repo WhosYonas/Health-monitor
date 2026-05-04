@@ -1,4 +1,3 @@
-from http.client import HTTPException
 from sqlalchemy.orm import Session
 import models
 import schemas
@@ -67,10 +66,6 @@ def get_patient_by_personnummer(db: Session, personnummer: str) -> models.Patien
 def get_patient_by_id(db: Session, patient_id: int) -> models.PatientAccount | None:
     return db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
 
-def get_patient_by_username(db: Session, username: str) -> models.PatientAccount | None:
-    return db.query(models.PatientAccount).filter(models.PatientAccount.username == username).first()
-
-
 def create_patient(db: Session, data: schemas.PatientCreate) -> models.PatientAccount:
     person = models.Person(
         first_name=data.first_name,
@@ -83,8 +78,8 @@ def create_patient(db: Session, data: schemas.PatientCreate) -> models.PatientAc
 
     account = models.PatientAccount(
         person_id=person.person_id,
-        username=data.username,
         password_hash=hash_password(data.password),
+        critical_level=data.critical_level
     )
     db.add(account)
     db.commit()
@@ -249,7 +244,6 @@ def get_patients_below_threshold(
             results.append({
                 "patient_id": patient.patient_id,
                 "username":   patient.username,
-                "person":     patient.person,
                 "vitals": {
                     "blood_oxygen": float(latest.blood_oxygen) if latest.blood_oxygen else None,
                     "heart_rate":   latest.heart_rate,
@@ -277,11 +271,6 @@ def update_patient(db: Session, patient_id: int, data: schemas.PatientUpdate) ->
     if data.personnummer is not None:
         person.personnummer = data.personnummer
 
-    if data.username is not None:
-        taken = db.query(models.PatientAccount).filter_by(username=data.username).first()
-        if taken and taken.patient_id != patient_id:
-            raise HTTPException(status_code=400, detail="Username already taken")
-        patient.username = data.username
     if data.password is not None:
         patient.password_hash = hash_password(data.password)
 

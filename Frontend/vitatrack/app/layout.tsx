@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Aleo } from "next/font/google"
+import { Aleo } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/StoreProvider";
-import {HeaderPagePresenter} from '@/presenters/headerPage-presenter';
+import { HeaderPagePresenter } from "@/presenters/headerPage-presenter";
+import { Toaster } from "@/components/ui/sonner";
 
 const aleoSans = Aleo({
   variable: "--font-aleo-sans",
   subsets: ["latin"],
-}); 
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,12 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`h-full antialiased`}
-    >
+    <html lang="en" className={`h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <StoreProvider>
+          <Toaster />
           <HeaderPagePresenter>{children}</HeaderPagePresenter>
         </StoreProvider>
       </body>

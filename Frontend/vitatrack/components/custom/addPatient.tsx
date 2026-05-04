@@ -27,10 +27,11 @@ interface addPatientProps {
     first_name: string | null;
     last_name: string | null;
     phone_number: string | null;
-    person_number: string | null;
+    personnummer: string | null;
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
+    password: string | null;
   }) => void;
 }
 
@@ -50,12 +51,13 @@ export function AddPatient({
       first_name: formData.get("firstName") as string | null,
       last_name: formData.get("lastName") as string | null,
       phone_number: formData.get("phoneNumber") as string | null,
-      person_number: formData.get("personNumber") as string | null,
+      personnummer: formData.get("personNumber") as string | null,
       relative_fullname: formData.get("relativeName") as string | null,
       relative_phone_number: formData.get("relativePhoneNumber") as
         | string
         | null,
       critical_level: criticalLevel ? parseInt(criticalLevel) : null,
+      password: null,
     };
 
     onAddPatient(patientInfo);

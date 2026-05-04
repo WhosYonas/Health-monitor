@@ -29,8 +29,6 @@ def register_caregiver(data: schemas.CaregiverCreate, db: Session = Depends(get_
 def register_patient(data: schemas.PatientCreate, db: Session = Depends(get_db)):
     if crud.get_patient_by_personnummer(db, data.personnummer):
         raise HTTPException(status_code=409, detail="A patient account with this personnummer already exists.")
-    if crud.get_patient_by_username(db, data.username):
-        raise HTTPException(status_code=409, detail="Username already taken.")
     return crud.create_patient(db, data)
 
 

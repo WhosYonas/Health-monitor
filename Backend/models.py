@@ -45,16 +45,16 @@ class CaregiverAccount(Base):
 class PatientAccount(Base):
     __tablename__ = "patient_account"
 
-    patient_id    = Column(Integer, primary_key=True, index=True)
-    person_id     = Column(Integer, ForeignKey("person.person_id", ondelete="CASCADE"), nullable=False, unique=True)
-    username      = Column(String(100), unique=True, nullable=False)
-    password_hash = Column(String(255), nullable=False)
-    created_at    = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
+    patient_id     = Column(Integer, primary_key=True, index=True)
+    person_id      = Column(Integer, ForeignKey("person.person_id", ondelete="CASCADE"), nullable=False, unique=True)
+    password_hash  = Column(String(255), nullable=False)
+    critical_level = Column(Integer, nullable=False, default=1)  # added
+    created_at     = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
 
-    person    = relationship("Person", back_populates="patient_account")
+    person     = relationship("Person", back_populates="patient_account")
     caregivers = relationship("CaregiverAccount", secondary=caregiver_patient, back_populates="patients")
-    devices   = relationship("Device",   back_populates="patient", cascade="all, delete")
-    relatives = relationship("Relative", back_populates="patient", cascade="all, delete")
+    devices    = relationship("Device",   back_populates="patient", cascade="all, delete")
+    relatives  = relationship("Relative", back_populates="patient", cascade="all, delete")
 
 
 class Device(Base):
@@ -62,7 +62,7 @@ class Device(Base):
 
     device_id     = Column(Integer, primary_key=True, index=True)
     patient_id    = Column(Integer, ForeignKey("patient_account.patient_id", ondelete="CASCADE"), nullable=False)
-    device_uid    = Column(String(100), unique=True, nullable=False)  # hardware/MQTT identifier
+    device_uid    = Column(String(100), unique=True, nullable=False)
     registered_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
     is_active     = Column(Boolean, nullable=False, default=True)
 
@@ -101,8 +101,8 @@ class Alert(Base):
     alert_id        = Column(Integer, primary_key=True, index=True)
     measurement_id  = Column(Integer, ForeignKey("measurement.measurement_id", ondelete="CASCADE"), nullable=False)
     patient_id      = Column(Integer, ForeignKey("patient_account.patient_id", ondelete="CASCADE"), nullable=False)
-    alert_type      = Column(String(50),  nullable=False)   # 'heart_rate' | 'blood_oxygen' | 'temperature'
-    severity        = Column(String(20),  nullable=False, default="warning")  # 'warning' | 'critical'
+    alert_type      = Column(String(50),  nullable=False)
+    severity        = Column(String(20),  nullable=False, default="warning")
     message         = Column(Text)
     triggered_at    = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
     acknowledged    = Column(Boolean, nullable=False, default=False)
