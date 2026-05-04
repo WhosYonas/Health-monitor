@@ -35,7 +35,7 @@ export function LoginForm({ onLogin, loading }: LoginFormProps) {
     }
 
     setValidationError(null);
-    onLogin({ personNumber, password });
+    onLogin({ personNumber: personNumber.replace("-", ""), password });
   }
 
   return (
