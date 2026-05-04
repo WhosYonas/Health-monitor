@@ -55,12 +55,14 @@ class PatientCreate(BaseModel):
     last_name:    str
     phone_number: Optional[str] = None
     personnummer: str
-    username:     str
+    relative_fullname: str
+    relative_phone_number: Optional[str] = None
+    critical_level: int
     password:     str
+
 
 class PatientOut(BaseModel):
     patient_id: int
-    username:   str
     person:     PersonOut
 
     class Config:
