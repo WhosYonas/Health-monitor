@@ -14,6 +14,7 @@ interface userState {
   is_authenticated: boolean;
   loading: boolean;
   error_message: string | null;
+  token: string | null;
 }
 
 const initialState: userState = {
@@ -21,6 +22,7 @@ const initialState: userState = {
   is_authenticated: false,
   loading: false,
   error_message: null,
+  token: null,
 };
 
 export const userSlice = createSlice({
@@ -33,16 +35,17 @@ export const userSlice = createSlice({
         state.loading = true;
         state.error_message = null;
       })
-      .addCase(postLoginThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.is_authenticated = true;
-        state.user = action.payload;
-        state.error_message = null;
-      })
       .addCase(postLoginThunk.rejected, (state, action) => {
         state.loading = false;
         state.error_message =
           action.payload ?? action.error.message ?? "Unknown error";
+      })
+      .addCase(postLoginThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.is_authenticated = true;
+        state.user = action.payload;
+        state.token = action.payload.token;
+        state.error_message = null;
       });
   },
 });

@@ -11,6 +11,7 @@ type LoginResponse = {
   phone_number: string | null;
   person_number: string | null;
   role: "patient" | "caregiver" | null;
+  token: string | null;
 };
 const postLogin = async (payload: loginPayload) => {
   const formData = new URLSearchParams();
@@ -57,6 +58,7 @@ export const postLoginThunk = createAsyncThunk<
       phone_number: data.user.person.phone_number,
       person_number: data.user.person.person_number,
       role: data.role,
+      token: data.access_token,
     };
     return userInfo;
   } catch (error: any) {
