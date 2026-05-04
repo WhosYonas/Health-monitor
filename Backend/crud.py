@@ -37,7 +37,7 @@ def create_caregiver(db: Session, data: schemas.CaregiverCreate) -> models.Careg
         first_name=data.first_name,
         last_name=data.last_name,
         phone_number=data.phone_number,
-        personnummer=data.personnummer,
+        personnummer=data.personnummer.replace("-", ""),
     )
     db.add(person)
     db.flush()
