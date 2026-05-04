@@ -1,47 +1,52 @@
 import { PatientOverview } from "@/components/custom/patientOverview";
 import Link from "next/link";
 
+
+
 export function OverviewPage() {
   return (
-    <div className="min-h-screen bg-[#f8f9fa] p-5">
+    <div className="min-h-screen bg-gradient-to-b from-[#E6F5F2] to-[#F4FAF8] p-5">
       <div className="mx-auto max-w-[1600px] space-y-5">
-        <header className="rounded-[8px] border border-white/40 bg-gradient-to-br from-white to-[#f5f7f8] px-6 py-5 shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
-          <div className="flex items-center justify-between">
+        <header className="rounded-[8px] border border-white/40 bg-gradient-to-br from-white to-[#f5f7f8] px-4 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.08)] sm:px-6 sm:py-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-[#6b7280]">
+              <p className="text-[12px] sm:text-[13px] font-medium uppercase tracking-[0.18em] text-[#6b7280]">
                 VitaTrack Monitor
               </p>
-              <h1 className="mt-1 text-[35px] font-bold tracking-[-0.03em] text-[#111827]">
+              <h1 className="mt-1 text-[26px] sm:text-[32px] md:text-[35px] font-bold tracking-[-0.03em] text-[#111827]">
                 Patients Overview
               </h1>
-              <p className="mt-1 text-[15px] text-[#6b7280]">
+              <p className="mt-1 text-[14px] sm:text-[15px] text-[#6b7280]">
                 Live patient monitoring, notifications and tasks.
               </p>
             </div>
-            <Link href="/addpatient">
-              <button className="rounded-2xl bg-[#00C281] px-5 py-3 font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
-                Add Patinet
-              </button>
-            </Link>
+            <div className="flex justify-start sm:justify-end">
+              <Link href="/addpatient">
+                <button className="rounded-2xl bg-[#00C281] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
+                  Add Patinet
+                </button>
+              </Link>
+            </div>
           </div>
         </header>
+
         {/* General statistics section */}
-        <section className="grid grid-cols-4 gap-4">
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-[8px] border border-white/40 bg-white p-4 shadow-sm">
             <p className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#6b7280]">
               Total Patients
             </p>
-            <h2 className="mt-3 text-[30px] font-bold tracking-[-0.03em] text-[#111827]">
+            <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#111827]">
               24
             </h2>
-            <p>Currently monitored</p>
+            <p className="mt-1 text-sm text-[#6b7280]">Currently monitored</p>
           </div>
 
           <div className="rounded-[8px] border border-white/40 bg-white p-4 shadow-sm">
             <p className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#6b7280]">
               Critical Alerts
             </p>
-            <h2 className="mt-3 text-[30px] font-bold tracking-[-0.03em] text-[#dc2626]">
+            <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#dc2626]">
               03
             </h2>
             <p className="mt-1 flex items-center gap-2 text-sm text-[#6b7280]">
@@ -57,7 +62,7 @@ export function OverviewPage() {
             <p className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#6b7280]">
               Pending Tasks
             </p>
-            <h2 className="mt-3 text-[30px] font-bold tracking-[-0.03em] text-[#111827]">
+            <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#111827]">
               08
             </h2>
             <p className="mt-1 text-sm text-[#6b7280]">Follow-ups and notes</p>
@@ -67,7 +72,7 @@ export function OverviewPage() {
             <p className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#6b7280]">
               System Status
             </p>
-            <h2 className="mt-3 text-[30px] font-bold tracking-[-0.03em] text-[#00C281]">
+            <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#00C281]">
               Stable
             </h2>
             <p className="mt-1 text-sm text-[#6b7280]">
@@ -75,20 +80,22 @@ export function OverviewPage() {
             </p>
           </div>
         </section>
-        <div className="flex gap-5">
+
+        {/* Main + sidebar */}
+        <div className="flex flex-col gap-5 lg:flex-row">
           {/* List of patients section */}
-          <section className="w-[70%] rounded-[8px] border border-white/35 bg-white p-5 shadow-[0_12px_32px_rgba(15,23,42,0.07)]">
-            <div className="mb-5 flex items-center justify-between">
+          <section className="w-full lg:w-[70%] rounded-[8px] border border-white/35 bg-white p-4 sm:p-5 shadow-[0_12px_32px_rgba(15,23,42,0.07)]">
+            <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-[#6b7280]">
                   Patient List
                 </p>
-                <h2 className="mt-1 text-[26px] font-bold tracking-[-0.03em] text-[#111827]">
+                <h2 className="mt-1 text-[22px] sm:text-[24px] md:text-[26px] font-bold tracking-[-0.03em] text-[#111827]">
                   Active Monitoring
                 </h2>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="relative">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -104,14 +111,14 @@ export function OverviewPage() {
                   <input
                     type="text"
                     placeholder="Search patients..."
-                    className="w-[220px] rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-10 pr-4 text-sm text-[#111827] outline-none transition-all duration-300 placeholder:text-[#9ca3af] focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
+                    className="w-full min-w-[220px] rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-10 pr-4 text-sm text-[#111827] outline-none transition-all duration-300 placeholder:text-[#9ca3af] focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
                   />
                 </div>
 
                 <div className="relative">
                   <select
                     defaultValue="priority"
-                    className="appearance-none rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-4 pr-10 text-sm font-medium text-[#6b7280] outline-none transition-all duration-300 hover:border-[#d1d5db] hover:bg-white hover:shadow-sm focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
+                    className="w-full rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-4 pr-10 text-sm font-medium text-[#6b7280] outline-none transition-all duration-300 hover:border-[#d1d5db] hover:bg-white hover:shadow-sm focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
                   >
                     <option value="priority">Sort by priority</option>
                     <option value="name">Sort by name</option>
@@ -147,11 +154,12 @@ export function OverviewPage() {
               {PatientOverview()}
             </div>
           </section>
+
           {/* Sidebar section  */}
-          <div className="flex w-[30%] flex-col gap-5">
+          <div className="flex w-full flex-col gap-5 lg:w-[30%]">
             {/* Notification section */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between gap-2">
                 <p className="text-[15px] font-semibold text-[#111827]">
                   Notifications
                 </p>
@@ -180,14 +188,15 @@ export function OverviewPage() {
                 </div>
               </div>
             </section>
+
             {/* Tasks section */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between gap-2">
                 <p className="text-[15px] font-semibold text-[#111827]">
                   Tasks
                 </p>
 
-                <button className="rounded-2xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm">
+                <button className="whitespace-nowrap rounded-2xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm">
                   Add task
                 </button>
               </div>
