@@ -96,6 +96,14 @@ def get_me_patient(token: str = Depends(patient_oauth2_scheme), db: Session = De
     return account
 
 
+#=================LOGOUT==========================
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="lax")
+    return {"detail": "Successfully logged out"}
+
+
 #===================UPDATE PATIENT INFO======
 @router.patch("/patient/{patient_id}", response_model=schemas.PatientOut)
 def update_patient(
