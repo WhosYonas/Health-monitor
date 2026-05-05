@@ -1,5 +1,4 @@
-import { LoginForm } from "@/components/custom/loginForm";
-import Link from "next/link";
+import { PatientLoginForm } from "@/components/custom/patientLoginForm";
 
 type LoginPageProps = {
   onLogin: (credentials: { personNumber: string; password: string }) => void;
@@ -7,7 +6,7 @@ type LoginPageProps = {
   login_error_message?: string | null;
 };
 
-export function LoginPage({
+export function PatientLoginPage({
   onLogin,
   loading,
   login_error_message,
@@ -17,33 +16,27 @@ export function LoginPage({
       <div className="mx-auto w-full max-w-lg rounded-[1rem] border border-slate-200 bg-white p-8 sm:p-10">
         <div className="mb-8 text-center">
           <h1 className="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">
-            Caregiver Login
+            Patient Login
           </h1>
-
-          <Link
-            href="/patientlogin"
-            className="mt-2 inline-block text-sm font-medium text-blue-600 underline hover:text-blue-800 transition-colors"
-          >
-            Login as a patient
-          </Link>
-
-          <p className="mt-4 text-sm leading-6 text-slate-600 sm:text-base">
+          <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
             Log in to your account and continue monitoring your health metrics
             in one place.
           </p>
         </div>
 
-        <LoginForm onLogin={onLogin} loading={loading} />
+        <PatientLoginForm onLogin={onLogin} loading={loading} />
 
         {login_error_message ? (
-          <div className="mt-4 mb-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 border border-red-100">
+          <div className="mb-6 rounded-lg px-4 py-3 text-sm text-red-700">
             {login_error_message}
           </div>
         ) : null}
 
         <div className="mt-8 text-center text-sm text-slate-600">
           Don&apos;t have an account?{" "}
-          <span className="font-semibold text-slate-900">Contact us</span>
+          <span className="font-semibold text-slate-900">
+            Contact your caregiver
+          </span>
         </div>
       </div>
     </div>

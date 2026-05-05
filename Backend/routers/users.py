@@ -1,3 +1,5 @@
+from typing import Union
+
 import crud
 import schemas
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
@@ -10,7 +12,6 @@ from .auth import (
     caregiver_oauth2_scheme,
     create_access_token,
     decode_access_token,
-    patient_oauth2_scheme,
 )
 
 router = APIRouter()
@@ -113,9 +114,8 @@ def login_patient(
 # ===============ME=================================
 
 
-@router.get("/me/caregiver", response_model=schemas.CaregiverOut)
-def get_me_caregiver(request: Request, db: Session = Depends(get_db)):
-
+@router.get("/me", response_model=Union[schemas.CaregiverOut, schemas.PatientOut])
+def get_me(request: Request, db: Session = Depends(get_db)):
     access_token = request.cookies.get("access_token")
 
     if not access_token:
@@ -123,31 +123,66 @@ def get_me_caregiver(request: Request, db: Session = Depends(get_db)):
 
     try:
         payload = decode_access_token(access_token)
+        role = payload.get("role")
+        user_id = payload.get("sub")
 
-        if payload.get("role") != "caregiver":
-            raise HTTPException(status_code=403, detail="Not a caregiver token.")
+        if role == "caregiver":
+            account = crud.get_caregiver_by_id(db, user_id)
+            if not account:
+                raise HTTPException(status_code=404, detail="Caregiver not found")
+            account.role = "caregiver"
+            return account
 
-        account = crud.get_caregiver_by_id(db, payload["sub"])
-        if not account:
-            raise HTTPException(status_code=404, detail="Caregiver not found.")
+        elif role == "patient":
+            account = crud.get_patient_by_id(db, int(user_id))
+            if not account:
+                raise HTTPException(status_code=404, detail="Patient not found")
+            account.role = "patient"
+            return account
 
-        return account
+        raise HTTPException(status_code=400, detail="Invalid role in token")
 
-    except Exception:
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in /me: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@router.get("/me/patient", response_model=schemas.PatientOut)
-def get_me_patient(
-    token: str = Depends(patient_oauth2_scheme), db: Session = Depends(get_db)
-):
-    payload = decode_access_token(token)
-    if payload.get("role") != "patient":
-        raise HTTPException(status_code=403, detail="Not a patient token.")
-    account = crud.get_patient_by_id(db, int(payload["sub"]))
-    if not account:
-        raise HTTPException(status_code=404, detail="Patient not found.")
-    return account
+# @router.get("/me/caregiver", response_model=schemas.CaregiverOut)
+# def get_me_caregiver(request: Request, db: Session = Depends(get_db)):
+
+#     access_token = request.cookies.get("access_token")
+
+#     if not access_token:
+#         raise HTTPException(status_code=401, detail="Not logged in")
+
+#     try:
+#         payload = decode_access_token(access_token)
+
+#         if payload.get("role") != "caregiver":
+#             raise HTTPException(status_code=403, detail="Not a caregiver token.")
+
+#         account = crud.get_caregiver_by_id(db, payload["sub"])
+#         if not account:
+#             raise HTTPException(status_code=404, detail="Caregiver not found.")
+
+#         return account
+
+#     except Exception:
+#         raise HTTPException(status_code=500, detail="Internal server error")
+
+
+# @router.get("/me/patient", response_model=schemas.PatientOut)
+# def get_me_patient(request: Request, db: Session = Depends(get_db)):
+#     access_token = request.cookies.get("access_token")
+#     payload = decode_access_token(access_token)
+#     if payload.get("role") != "patient":
+#         raise HTTPException(status_code=403, detail="Not a patient token.")
+#     account = crud.get_patient_by_id(db, int(payload["sub"]))
+#     if not account:
+#         raise HTTPException(status_code=404, detail="Patient not found.")
+#     return account
 
 
 # ===================UPDATE PATIENT INFO======

@@ -19,7 +19,7 @@ const postLogin = async (payload: loginPayload) => {
   formData.append("username", payload.identifier);
   console.log("sending person_number:", payload.identifier);
 
-  const response = await fetch(`/api/users/login/caregiver`, {
+  const response = await fetch(`/api/users/login/patient`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -44,11 +44,11 @@ const postLogin = async (payload: loginPayload) => {
   return data;
 };
 
-export const postLoginThunk = createAsyncThunk<
+export const postPatientLoginThunk = createAsyncThunk<
   LoginResponse,
   loginPayload,
   { rejectValue: string }
->("user/postLoginThunk", async (payload, thunkAPI) => {
+>("user/postPatientLoginThunk", async (payload, thunkAPI) => {
   try {
     const data = await postLogin(payload);
     const userInfo: LoginResponse = {

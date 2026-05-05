@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { postLoginThunk } from "@/communication/loginCommunication";
 import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
+import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 
 interface userProfile {
   first_name: string | null;
@@ -14,14 +15,16 @@ interface userState {
   user: userProfile | null;
   is_authenticated: boolean;
   loading: boolean;
-  error_message: string | null;
+  login_error_message: string | null;
+  profile_error_message: string | null;
 }
 
 const initialState: userState = {
   user: null,
   is_authenticated: false,
   loading: false,
-  error_message: null,
+  login_error_message: null,
+  profile_error_message: null,
 };
 
 export const userSlice = createSlice({
@@ -32,38 +35,53 @@ export const userSlice = createSlice({
     builder
       .addCase(postLoginThunk.pending, (state) => {
         state.loading = true;
-        state.error_message = null;
+        state.login_error_message = null;
       })
       .addCase(postLoginThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.is_authenticated = true;
         state.user = action.payload;
-        state.error_message = null;
+        state.login_error_message = null;
       })
       .addCase(postLoginThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error_message =
+        state.login_error_message =
           action.payload ?? action.error.message ?? "Unknown error";
       })
       .addCase(getUserInfoThunk.pending, (state) => {
         state.loading = true;
-        state.error_message = null;
+        state.profile_error_message = null;
         console.log("Loading user info...");
       })
       .addCase(getUserInfoThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.is_authenticated = true;
         state.user = action.payload;
-        state.error_message = null;
+        state.profile_error_message = null;
         console.log("User info loaded successfully");
       })
       .addCase(getUserInfoThunk.rejected, (state, action) => {
         state.loading = false;
         state.is_authenticated = false;
         state.user = null;
-        state.error_message =
+        state.profile_error_message =
           action.payload?.message ?? action.error.message ?? "Unknown error";
-        console.log("Failed to load user info:", state.error_message);
+        console.log("Failed to load user info:", state.profile_error_message);
+      })
+      .addCase(postPatientLoginThunk.pending, (state) => {
+        state.loading = true;
+        state.login_error_message = null;
+      })
+      .addCase(postPatientLoginThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.is_authenticated = true;
+        state.user = action.payload;
+        state.login_error_message = null;
+      })
+      .addCase(postPatientLoginThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.login_error_message =
+          action.payload ?? action.error.message ?? "Unknown error";
       });
   },
 });

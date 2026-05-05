@@ -57,10 +57,12 @@ export function HeaderPage({
 
         <div className="ml-auto flex items-center gap-4">
           {loading ? (
-            <span className="text-white/50 animate-pulse">Laddar...</span>
+            <span className="text-white/50 animate-pulse">Loading...</span>
           ) : name ? (
             <>
-              <span className="text-white font-medium mr-2">Hej, {name}!</span>
+              <span className="text-white font-medium mr-2">
+                Hello, {name}!
+              </span>
               <Button
                 variant="destructive"
                 onClick={onLogout}
