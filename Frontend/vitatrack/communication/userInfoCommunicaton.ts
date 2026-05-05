@@ -10,6 +10,7 @@ interface UserInfoResponse {
     phone_number: string;
     personnummer: string;
   };
+  role: "patient" | "caregiver";
 }
 
 interface GetInfoError {
@@ -26,7 +27,7 @@ interface UserProfile {
 }
 
 const getUserInfo = async (): Promise<UserInfoResponse> => {
-  const response = await fetch("/api/users/me/caregiver", {
+  const response = await fetch("/api/users/me", {
     method: "GET",
     credentials: "include",
   });
@@ -52,7 +53,7 @@ export const getUserInfoThunk = createAsyncThunk<
       last_name: data.person.last_name,
       phone_number: data.person.phone_number,
       personnummer: data.person.personnummer,
-      role: "caregiver",
+      role: data.role,
     };
   } catch (error: any) {
     if (error.status === 404) {

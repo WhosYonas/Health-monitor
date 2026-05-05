@@ -33,6 +33,7 @@ class CaregiverOut(BaseModel):
     caregiver_id: int
     username: str
     person: PersonOut
+    role: str = "caregiver"
 
     class Config:
         from_attributes = True
@@ -70,6 +71,7 @@ class PatientCreate(BaseModel):
 class PatientOut(BaseModel):
     patient_id: int
     person: PersonOut
+    role: str = "patient"
 
     class Config:
         from_attributes = True

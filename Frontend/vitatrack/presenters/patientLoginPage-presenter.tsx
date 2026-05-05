@@ -1,11 +1,11 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { LoginPage } from "@/views/loginPage";
-import { postLoginThunk } from "@/communication/loginCommunication";
+import { PatientLoginPage } from "@/views/patientLogin";
+import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 import type { AppDispatch, RootState } from "@/lib/store";
 
-export function LoginPagePresenter() {
+export function PatientLoginPagePresenter() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { loading, login_error_message } = useSelector(
@@ -18,7 +18,7 @@ export function LoginPagePresenter() {
   }) {
     try {
       await dispatch(
-        postLoginThunk({
+        postPatientLoginThunk({
           identifier: credentials.personNumber,
           password: credentials.password,
         }),
@@ -30,7 +30,7 @@ export function LoginPagePresenter() {
   }
 
   return (
-    <LoginPage
+    <PatientLoginPage
       onLogin={handleLogin}
       loading={loading}
       login_error_message={login_error_message}
