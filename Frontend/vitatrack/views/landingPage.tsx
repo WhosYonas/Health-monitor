@@ -65,14 +65,20 @@ export function LandingPage() {
         <div className="flex flex-col w-full space-y-5 p-3 bg-teal-950">
           <div id="vitals" className="flex flex-row w-full h-90">
             <div className="w-[90%] h-full bg-teal-800">
-              <h1 className="text-center text-2xl text-white font-bold p-3 font-semibold">Real-Time Vitals</h1>
-              <div className="w-[60%] px-5">
-                <h1 className="text-white text-xl">
-                While patients are wearing the VitaTrack device their temperature, pulse and blood oxygen level is being constantly measured. This data is sent to the
-                application where caregivers bababababababb
-                </h1>
+              <div className="flex flex-row w-full h-full">
+                <div className="w-[60%] px-5">
+                  <h1 className="text-center text-3xl text-white font-bold p-3 font-semibold">Real-Time Vitals</h1>
+                  <h1 className="text-white text-2xl p-5">
+                  While patients are wearing the VitaTrack device their temperature, pulse and blood oxygen level is being constantly measured. This data is sent to the
+                  application where caregivers bababababababb
+                  </h1>
+                </div>
+                <div className="flex w-[40%] h-full justify-center items-center">
+                  <div className="bg-[url(/vitalspreview.png)] bg-cover w-[90%] h-[90%] rounded-lg overflow-hidden">
+                    <div className="bg-teal-800/50 h-full w-full mix-blend-multiply"></div>
+                  </div>
+                </div>
               </div>
-              <div className="h-[40%]"></div>
             </div>
             <div className="w-[10%] h-full"></div>
           </div>
@@ -80,13 +86,39 @@ export function LandingPage() {
           <div id="alerts" className="flex flex-row w-full h-90">
             <div className="w-[10%] h-full"></div>
             <div className="w-[90%] h-full bg-teal-800">
-              <h1 className="text-center text-2xl text-white font-bold p-3 font-semibold">Instant Alerts</h1>
+              <div className="flex flex-row w-full h-full">
+                <div className="flex w-[40%] h-full justify-center items-center">
+                  <div className="bg-[url(/vitalspreview.png)] bg-cover w-[90%] h-[90%] rounded-lg overflow-hidden">
+                    <div className="bg-teal-800/50 h-full w-full mix-blend-multiply"></div>
+                  </div>
+                </div>
+
+                <div className="w-[60%] px-5">
+                  <h1 className="text-center text-3xl text-white font-bold p-3 font-semibold">Instant Alerts</h1>
+                  <h1 className="text-white text-xl">
+                  texttext text text text text text text text text texttext text texttexttext text text text text texttext texttext texttexttexttext text text text  
+                  </h1>
+                </div>
+              </div>
             </div>
           </div>
 
+          <div className="flex flex-col w-full space-y-5 p-3 bg-teal-950">
           <div id="dashboard" className="flex flex-row w-full h-90">
             <div className="w-[90%] h-full bg-teal-800">
-              <h1 className="text-center text-2xl text-white font-bold p-3 font-semibold">Caregiver Dashboard</h1>
+              <div className="flex flex-row w-full h-full">
+                <div className="w-[60%] px-5">
+                  <h1 className="text-center text-3xl text-white font-bold p-3 font-semibold">Caregiver Dashboard</h1>
+                  <h1 className="text-white text-2xl p-5">
+                  texttext text text text text text text text text texttext text texttexttext text text text text texttext texttext texttexttexttext text text text  
+                  </h1>
+                </div>
+                <div className="flex w-[40%] h-full justify-center items-center">
+                  <div className="bg-[url(/vitalspreview.png)] bg-cover w-[90%] h-[90%] rounded-lg overflow-hidden">
+                    <div className="bg-teal-800/50 h-full w-full mix-blend-multiply"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="w-[10%] h-full"></div>
           </div>
@@ -94,8 +126,25 @@ export function LandingPage() {
           <div id="trends" className="flex flex-row w-full h-90">
             <div className="w-[10%] h-full"></div>
             <div className="w-[90%] h-full bg-teal-800">
-              <h1 className="text-center text-2xl text-white font-bold p-3">Health Trends</h1>
+              <div className="flex flex-row w-full h-full">
+                <div className="flex w-[40%] h-full justify-center items-center">
+                  <div className="bg-[url(/vitalspreview.png)] bg-cover w-[90%] h-[90%] rounded-lg overflow-hidden">
+                    <div className="bg-teal-800/50 h-full w-full mix-blend-multiply"></div>
+                  </div>
+                </div>
+
+                <div className="w-[60%] px-5">
+                  <h1 className="text-center text-3xl text-white font-bold p-3 font-semibold">Health Trends</h1>
+                  <h1 className="text-white text-xl">
+                  texttext text text text text text text text text texttext text texttexttext text text text text texttext texttext texttexttexttext text text text  
+                  </h1>
+                </div>
+              </div>
             </div>
+          </div>
+
+          
+
           </div>
         </div>
         

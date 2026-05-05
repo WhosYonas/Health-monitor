@@ -1,10 +1,6 @@
 import Link from "next/link"
 
 export function featureCard(label:string, description:string, image:string, icon:string, link:string = "") {
-    let backDivStyle: string = "relative transform-transition flex w-[450px] h-[550px] bg-[url(@/../public/"
-    backDivStyle += image
-    backDivStyle += ")] bg-center rounded-lg overflow-hidden items-center justify-center bg-cover"
-
     return ( 
     <Link href={link}>
         <div className="flex group relative w-[450px] h-[550px] items-center justify-center rounded-lg overflow-hidden">
