@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <StoreProvider>
           <UserSync />
-          <Toaster />
+          <Toaster position="top-center" />
           <HeaderPagePresenter>{children}</HeaderPagePresenter>
         </StoreProvider>
       </body>
