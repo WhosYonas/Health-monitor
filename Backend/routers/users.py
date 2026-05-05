@@ -186,3 +186,10 @@ def delete_patient(
     deleted = crud.delete_patient(db, patient_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Patient not found.")
+
+#=================LOGOUT==========================
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="lax")
+    return {"detail": "Successfully logged out"}
