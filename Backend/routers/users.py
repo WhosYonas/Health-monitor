@@ -95,15 +95,6 @@ def get_me_patient(token: str = Depends(patient_oauth2_scheme), db: Session = De
         raise HTTPException(status_code=404, detail="Patient not found.")
     return account
 
-
-#=================LOGOUT==========================
-
-@router.post("/logout")
-def logout(response: Response):
-    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="lax")
-    return {"detail": "Successfully logged out"}
-
-
 #===================UPDATE PATIENT INFO======
 @router.patch("/patient/{patient_id}", response_model=schemas.PatientOut)
 def update_patient(
@@ -134,3 +125,10 @@ def delete_patient(
     deleted = crud.delete_patient(db, patient_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Patient not found.")
+    
+#=================LOGOUT==========================
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="lax")
+    return {"detail": "Successfully logged out"}
