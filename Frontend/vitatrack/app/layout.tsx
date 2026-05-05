@@ -5,6 +5,7 @@ import "./globals.css";
 import StoreProvider from "@/lib/StoreProvider";
 import { HeaderPagePresenter } from "@/presenters/headerPage-presenter";
 import { Toaster } from "@/components/ui/sonner";
+import UserSync from "@/utils/userSync";
 
 const aleoSans = Aleo({
   variable: "--font-aleo-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en" className={`h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <StoreProvider>
+          <UserSync />
           <Toaster />
           <HeaderPagePresenter>{children}</HeaderPagePresenter>
         </StoreProvider>

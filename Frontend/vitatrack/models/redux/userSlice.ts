@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { postLoginThunk } from "@/communication/loginCommunication";
+import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
 
 interface userProfile {
   first_name: string | null;
@@ -43,6 +44,26 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error_message =
           action.payload ?? action.error.message ?? "Unknown error";
+      })
+      .addCase(getUserInfoThunk.pending, (state) => {
+        state.loading = true;
+        state.error_message = null;
+        console.log("Loading user info...");
+      })
+      .addCase(getUserInfoThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.is_authenticated = true;
+        state.user = action.payload;
+        state.error_message = null;
+        console.log("User info loaded successfully");
+      })
+      .addCase(getUserInfoThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.is_authenticated = false;
+        state.user = null;
+        state.error_message =
+          action.payload?.message ?? action.error.message ?? "Unknown error";
+        console.log("Failed to load user info:", state.error_message);
       });
   },
 });
