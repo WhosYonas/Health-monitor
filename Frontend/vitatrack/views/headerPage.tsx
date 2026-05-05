@@ -1,11 +1,23 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-export function HeaderPage({ children }: { children: React.ReactNode }) {
+
+type headerPageProps = {
+  name: string | null | undefined;
+  loading: boolean;
+  children: React.ReactNode;
+  onLogout?: () => void;
+};
+
+export function HeaderPage({
+  name,
+  loading,
+  children,
+  onLogout,
+}: headerPageProps) {
   return (
     <>
       <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-white/10 bg-linear-to-r from-slate-950/90 via-teal-950/85 to-cyan-950/80 px-5 backdrop-blur-md">
         <div className="relative flex items-center bg-lime-400 shadow-lg shadow-cyan-500/50 rounded-sm p-1 overflow-hidden">
-          {/* ECG/Pulse SVG background */}
           <svg
             className="absolute inset-0 w-full h-full opacity-50"
             viewBox="0 0 120 40"
@@ -23,30 +35,53 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
           </svg>
           <Link href="/">
             <h1 className="relative z-10 font-bold tracking-wide text-black">
-            VitaTrack
-          </h1>
+              VitaTrack
+            </h1>
           </Link>
-          
         </div>
 
         <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-6">
-          <a href="#about" className="text-xl font-semibold text-white/80 transition hover:text-white">
+          <a
+            href="#about"
+            className="text-xl font-semibold text-white/80 transition hover:text-white"
+          >
             About
           </a>
-          <a href="#how-it-works" className="text-xl font-semibold text-white/80 transition hover:text-cyan-300">
+          <a
+            href="#how-it-works"
+            className="text-xl font-semibold text-white/80 transition hover:text-cyan-300"
+          >
             How it works
           </a>
         </div>
-        <Link href="/login" className="ml-auto" >
 
-          <Button variant="outline" className="px-5 py-3 cursor-pointer transition hover:bg-lime-300">
-          Log in
-          </Button>
-        </Link>
-        
+        <div className="ml-auto flex items-center gap-4">
+          {loading ? (
+            <span className="text-white/50 animate-pulse">Laddar...</span>
+          ) : name ? (
+            <>
+              <span className="text-white font-medium mr-2">Hej, {name}!</span>
+              <Button
+                variant="destructive"
+                onClick={onLogout}
+                className="px-5 py-3 cursor-pointer transition hover:bg-red-300"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Link href="/login">
+              <Button
+                variant="outline"
+                className="px-5 py-3 cursor-pointer transition hover:bg-lime-300"
+              >
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
       </nav>
 
-      {/* Page content renders here */}
       <main>{children}</main>
     </>
   );
