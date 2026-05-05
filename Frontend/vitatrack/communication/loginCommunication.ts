@@ -16,7 +16,6 @@ const postLogin = async (payload: loginPayload) => {
   const formData = new URLSearchParams();
   formData.append("username", payload.identifier);
   formData.append("password", payload.password);
-  formData.append("username", payload.identifier);
   console.log("sending person_number:", payload.identifier);
 
   const response = await fetch(`/api/users/login/caregiver`, {
@@ -26,7 +25,7 @@ const postLogin = async (payload: loginPayload) => {
     },
     body: formData.toString(),
     credentials: "include",
-    redirect: "manual",
+    //redirect: "manual",
   });
 
   console.log("status:", response.status);

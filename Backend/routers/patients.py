@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import Optional
 from database import get_db
-import crud, schemas
+import crud, schemas, models
 from .auth import caregiver_oauth2_scheme, decode_access_token
 
 router = APIRouter()
@@ -16,6 +16,7 @@ def get_patients_below_threshold(
     token: str = Depends(caregiver_oauth2_scheme),
     db: Session = Depends(get_db),
 ):
+  
     if all(v is None for v in (spo2_min, hr_min, temp_max)):
         raise HTTPException(status_code=422, detail="Provide at least one threshold parameter.")
 
@@ -43,28 +44,40 @@ def assign_patient(
     token: str = Depends(caregiver_oauth2_scheme),
     db: Session = Depends(get_db),
 ):
+    
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Caregivers only.")
-    caregiver = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
     if not caregiver:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     try:
         crud.assign_patient_to_caregiver(db, caregiver.caregiver_id, patient_id)
     except ValueError:
         raise HTTPException(status_code=404, detail="Patient not found.")
-    
 
 #================GET PATIENTS UNDER CAREGIVER===============
+@router.get("", response_model=list[schemas.PatientOut])
 @router.get("/", response_model=list[schemas.PatientOut])
 def get_my_patients(
-    token: str = Depends(caregiver_oauth2_scheme),
+    request: Request,
     db: Session = Depends(get_db),
 ):
+    # Read token from header or cookie
+    token = None
+    auth_header = request.headers.get("authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
+    else:
+        token = request.cookies.get("access_token")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Caregivers only.")
-    caregiver = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
     if not caregiver:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     return crud.get_patients_by_caregiver(db, caregiver.caregiver_id)

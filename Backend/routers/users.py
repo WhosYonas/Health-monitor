@@ -5,6 +5,7 @@ import schemas
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from starlette.requests import Request
 
 from database import get_db
 
@@ -41,13 +42,24 @@ def register_caregiver(data: schemas.CaregiverCreate, db: Session = Depends(get_
     response_model=schemas.PatientOut,
     status_code=status.HTTP_201_CREATED,
 )
-def register_patient(data: schemas.PatientCreate, db: Session = Depends(get_db)):
+def register_patient(data: schemas.PatientCreate, request: Request, db: Session = Depends(get_db)):
     if crud.get_patient_by_personnummer(db, data.personnummer):
         raise HTTPException(
             status_code=409,
             detail="A patient account with this personnummer already exists.",
         )
-    return crud.create_patient(db, data)
+    patient = crud.create_patient(db, data)
+    
+    # Auto-assign to the caregiver who registered them
+    token = request.cookies.get("access_token")
+    if token:
+        payload = decode_access_token(token)
+        if payload.get("role") == "caregiver":
+            caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
+            if caregiver:
+                crud.assign_patient_to_caregiver(db, caregiver.caregiver_id, patient.patient_id)
+    
+    return patient
 
 
 # =================LOGIN==========================
@@ -67,8 +79,8 @@ def login_caregiver(
     token = create_access_token(account_id=str(account.caregiver_id), role="caregiver")
     response.set_cookie(
         key="access_token",
-        value=token,
         httponly=True,
+        value=token,
         secure=True,
         samesite="lax",
         max_age=3600,

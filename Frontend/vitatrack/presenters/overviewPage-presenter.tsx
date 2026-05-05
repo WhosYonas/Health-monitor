@@ -1,5 +1,5 @@
-import { OverviewPage } from "@/views/overviewPage";
+import OverviewPage from "@/views/overviewPage";
 
-export function OverviewPagePresenter(){
-    return <OverviewPage/>
+export function OverviewPagePresenter() {
+  return <OverviewPage />;
 }

@@ -19,7 +19,7 @@ export function HeaderPage({
       <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-white/10 bg-linear-to-r from-slate-950/90 via-teal-950/85 to-cyan-950/80 px-5 backdrop-blur-md">
         <div className="relative flex items-center bg-lime-400 shadow-lg shadow-cyan-500/50 rounded-sm p-1 overflow-hidden">
           <svg
-            className="absolute inset-0 w-full h-full opacity-50"
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-45"
             viewBox="0 0 120 40"
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -27,8 +27,8 @@ export function HeaderPage({
             <polyline
               points="0,20 15,20 20,5 25,35 30,20 40,20 45,12 50,28 55,20 70,20 75,2 80,38 85,20 100,20 105,14 110,26 115,20 120,20"
               fill="none"
-              stroke="white"
-              strokeWidth="2.5"
+              stroke="#2f6f73"
+              strokeWidth="2.3"
               strokeLinecap="round"
               strokeLinejoin="round"
             />

@@ -23,18 +23,11 @@ const postAddPatient = async (payload: patientPayload) => {
     },
     body: JSON.stringify(payload),
     credentials: "include",
-    redirect: "manual",
   });
-
   const data = await response.json();
-  console.log(data);
   if (!response.ok) {
-    throw {
-      status: response.status,
-      detail: data.detail,
-    };
+    throw { status: response.status, detail: data.detail };
   }
-
   return data;
 };
 
@@ -45,16 +38,13 @@ export const postAddPatientThunk = createAsyncThunk<
 >("patientManagement/postAddPatientThunk", async (payload, thunkAPI) => {
   try {
     const data = await postAddPatient(payload);
-    const response_message = data.response_message as addPatientResponse;
-
-    return response_message;
+    return data.response_message as addPatientResponse;
   } catch (error: any) {
     if (error.status === 409) {
       return thunkAPI.rejectWithValue(
         "Patient with this person number already exists",
       );
     }
-
     return thunkAPI.rejectWithValue("Unknown error");
   }
 });
