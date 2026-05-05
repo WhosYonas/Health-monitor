@@ -73,15 +73,25 @@ def login_patient(
 #===============ME=================================
 
 @router.get("/me/caregiver", response_model=schemas.CaregiverOut)
-def get_me_caregiver(token: str = Depends(caregiver_oauth2_scheme), db: Session = Depends(get_db)):
+def get_me_caregiver(request: Request, db: Session = Depends(get_db)):
+    # Try Authorization header first, then cookie
+    token = None
+    auth_header = request.headers.get("authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
+    else:
+        token = request.cookies.get("access_token")
+    
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
     payload = decode_access_token(token)
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Not a caregiver token.")
-    account = crud.get_caregiver_by_id(db, payload["sub"])
+    account = crud.get_caregiver_by_id(db, int(payload["sub"]))
     if not account:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
     return account
-
 
 @router.get("/me/patient", response_model=schemas.PatientOut)
 def get_me_patient(token: str = Depends(patient_oauth2_scheme), db: Session = Depends(get_db)):
