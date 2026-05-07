@@ -4,6 +4,9 @@ import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 
 interface userProfile {
+  caregiver_id?: number | null;
+  patient_id?: number | null;
+
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
