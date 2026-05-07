@@ -1,27 +1,64 @@
 import { CarouselSlide } from "@/components/custom/carousel";
 import Link from "next/link";
-export function LandingPage() {
+import { userProfile } from "@/models/redux/userSlice";
+interface LandingPageProps {
+  is_authenticated: boolean;
+  user: userProfile | null;
+  loading: boolean;
+}
+
+export function LandingPage({
+  is_authenticated,
+  user,
+  loading,
+}: LandingPageProps) {
   return (
     <div className="min-h-screen bg-amber-50">
-
       <div className="flex flex-col items-center justify-center">
         {/* Hero Section */}
-        <section
-          className="relative my-8 flex h-[380px] w-full max-w-[90%] items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center shadow-lg bg-teal-500">
+        <section className="relative my-8 flex h-[380px] w-full max-w-[90%] items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center shadow-lg bg-teal-500">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/25" />
 
           {/* Content */}
           <div className="relative z-10 flex max-w-3xl flex-col items-center px-6 text-center text-white">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight  text-white text-shadow-lg text-balance md:text-5xl">
-              Real-time health monitoring for safer elderly care.
-            </h1>
-
-            <div className="mt-6 flex gap-4">
-              <button className="rounded-lg bg-fuchsia-300 px-8 py-5 font-semibold text-black transition hover:bg-fuchsia-200 text-xl cursor-pointer">
-                Get started
-              </button>
-            </div>
+            {is_authenticated ? (
+              <>
+                <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+                  Welcome back, {user?.first_name || "User"}!
+                </h1>
+                {user?.role === "caregiver" ? (
+                  <div className="mt-6 flex gap-4">
+                    <Link
+                      href="/overview"
+                      className="rounded-lg bg-fuchsia-300 px-8 py-5 font-semibold text-black transition hover:bg-fuchsia-200 text-xl cursor-pointer"
+                    >
+                      Go to overview
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="mt-6 flex gap-4">
+                    <Link
+                      href="/details"
+                      className="rounded-lg bg-fuchsia-300 px-8 py-5 font-semibold text-black transition hover:bg-fuchsia-200 text-xl cursor-pointer"
+                    >
+                      Go to details
+                    </Link>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight  text-white text-shadow-lg text-balance md:text-5xl">
+                  Real-time health monitoring for safer elderly care.
+                </h1>
+                <div className="mt-6 flex gap-4">
+                  <button className="rounded-lg bg-fuchsia-300 px-8 py-5 font-semibold text-black transition hover:bg-fuchsia-200 text-xl cursor-pointer">
+                    Get started
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </section>
 
@@ -37,15 +74,16 @@ export function LandingPage() {
               <h2 className="text-3xl font-bold max-w-3xl tracking-tight md:text-5xl">
                 Keep track of your health for a better future.
               </h2>
-              <Link href="/login">
-              </Link>
+              <Link href="/login"></Link>
             </div>
 
-            <div className="my-12 h-[1px] w-full bg-white/10 "/>
+            <div className="my-12 h-[1px] w-full bg-white/10 " />
 
             <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Product Features</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Product Features
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>Real-time Vitals</li>
                   <li>Instant Alerts</li>
@@ -53,9 +91,11 @@ export function LandingPage() {
                   <li>Health Trends</li>
                 </ul>
               </div>
-                
+
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Company</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Company
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>About</li>
                   <li>Team</li>
@@ -65,7 +105,9 @@ export function LandingPage() {
               </div>
 
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-white">Support</h3>
+                <h3 className="mb-4 text-sm font-semibold text-white">
+                  Support
+                </h3>
                 <ul className="space-y-3 text-sm text-white/60">
                   <li>Guides</li>
                   <li>Help Center</li>

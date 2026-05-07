@@ -23,7 +23,7 @@ export function PatientLoginPagePresenter() {
           password: credentials.password,
         }),
       ).unwrap();
-      router.push("/overview");
+      router.push("/details");
     } catch (error) {
       console.log("Login failed", error);
     }
