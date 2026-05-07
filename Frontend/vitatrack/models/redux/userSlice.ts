@@ -3,7 +3,7 @@ import { postLoginThunk } from "@/communication/loginCommunication";
 import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 
-interface userProfile {
+export interface userProfile {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
@@ -22,7 +22,7 @@ interface userState {
 const initialState: userState = {
   user: null,
   is_authenticated: false,
-  loading: false,
+  loading: true,
   login_error_message: null,
   profile_error_message: null,
 };

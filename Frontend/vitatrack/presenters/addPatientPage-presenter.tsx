@@ -18,11 +18,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { NotAuthenticatedPagePresenter } from "./notAuthenticatedPage-presenter";
 
 export function AddPatientPagePresenter() {
   const dispatch = useDispatch<AppDispatch>();
   const { addLoading, addSuccess, addError } = useSelector(
     (state: RootState) => state.patientManagement,
+  );
+  const { is_authenticated, user, loading } = useSelector(
+    (state: RootState) => state.user,
   );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [createdPatient, setCreatedPatient] = useState<{
@@ -72,6 +76,13 @@ export function AddPatientPagePresenter() {
       console.log("Add patient failed", error);
       console.log("Patient info", patientInfo);
     }
+  }
+  if (loading) {
+    return null;
+  }
+
+  if (!is_authenticated || user?.role !== "caregiver") {
+    return <NotAuthenticatedPagePresenter userRole={user?.role || null} />;
   }
 
   return (
