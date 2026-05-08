@@ -199,20 +199,21 @@ def get_measurements_by_device(
 
     # ================RELATIVE=================
 
-    def create_relative(
-        db: Session,
-        patient_id: int,
-        data: schemas.RelativeCreate,
-    ) -> models.Relative:
-        rel = models.Relative(
-            patient_id=patient_id,
-            full_name=data.full_name,
-            phone_number=data.phone_number,
-        )
-        db.add(rel)
-        db.commit()
-        db.refresh(rel)
-        return rel
+
+def create_relative(
+    db: Session,
+    patient_id: int,
+    data: schemas.RelativeCreate,
+) -> models.Relative:
+    rel = models.Relative(
+        patient_id=patient_id,
+        full_name=data.full_name,
+        phone_number=data.phone_number,
+    )
+    db.add(rel)
+    db.commit()
+    db.refresh(rel)
+    return rel
 
 
 # =============ALERT===========
