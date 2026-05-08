@@ -19,7 +19,6 @@ export default function OverviewPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E6F5F2] to-[#F4FAF8] p-5">
       <div className="mx-auto max-w-[1600px] space-y-5">
-
         {/* Header */}
         <header className="rounded-[8px] border border-white/40 bg-gradient-to-br from-white to-[#f5f7f8] px-4 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.08)] sm:px-6 sm:py-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -36,7 +35,7 @@ export default function OverviewPage() {
             </div>
             <div className="flex justify-start sm:justify-end">
               <Link href="/addpatient">
-                <button className="rounded-2xl bg-[#00C281] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
+                <button className="cursor-pointer rounded-2xl bg-[#00C281] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
                   Add Patient
                 </button>
               </Link>
@@ -89,13 +88,14 @@ export default function OverviewPage() {
             <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#00C281]">
               Stable
             </h2>
-            <p className="mt-1 text-sm text-[#6b7280]">Monitoring stream active</p>
+            <p className="mt-1 text-sm text-[#6b7280]">
+              Monitoring stream active
+            </p>
           </div>
         </section>
 
         {/* Main + Sidebar */}
         <div className="flex flex-col gap-5 lg:flex-row">
-
           {/* Patient list */}
           <section className="w-full lg:w-[70%] rounded-[8px] border border-white/35 bg-white p-4 sm:p-5 shadow-[0_12px_32px_rgba(15,23,42,0.07)]">
             <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -170,23 +170,32 @@ export default function OverviewPage() {
 
           {/* Sidebar */}
           <div className="flex w-full flex-col gap-5 lg:w-[30%]">
-
             {/* Notifications */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="text-[15px] font-semibold text-[#111827]">Notifications</p>
+                <p className="text-[15px] font-semibold text-[#111827]">
+                  Notifications
+                </p>
                 <span className="rounded-full bg-[#00C281] px-2.5 py-1 text-[12px] font-semibold text-white">
                   2 new
                 </span>
               </div>
               <div className="space-y-3">
                 <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">Patient 14 needs attention</p>
-                  <p className="mt-1 text-sm text-[#6b7280]">Heart rate threshold exceeded 2 minutes ago.</p>
+                  <p className="text-sm font-semibold text-[#111827]">
+                    Patient 14 needs attention
+                  </p>
+                  <p className="mt-1 text-sm text-[#6b7280]">
+                    Heart rate threshold exceeded 2 minutes ago.
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">Lab update received</p>
-                  <p className="mt-1 text-sm text-[#6b7280]">New blood panel data is available for review.</p>
+                  <p className="text-sm font-semibold text-[#111827]">
+                    Lab update received
+                  </p>
+                  <p className="mt-1 text-sm text-[#6b7280]">
+                    New blood panel data is available for review.
+                  </p>
                 </div>
               </div>
             </section>
@@ -194,7 +203,9 @@ export default function OverviewPage() {
             {/* Tasks */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="text-[15px] font-semibold text-[#111827]">Tasks</p>
+                <p className="text-[15px] font-semibold text-[#111827]">
+                  Tasks
+                </p>
                 <button className="whitespace-nowrap rounded-2xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm">
                   Add task
                 </button>
@@ -225,12 +236,13 @@ export default function OverviewPage() {
               </p>
               <div className="mt-5 flex items-center gap-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-white" />
-                <span className="text-sm font-medium text-white">Connected to live feed</span>
+                <span className="text-sm font-medium text-white">
+                  Connected to live feed
+                </span>
               </div>
             </section>
           </div>
         </div>
-
       </div>
     </div>
   );

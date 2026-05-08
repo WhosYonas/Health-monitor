@@ -42,14 +42,26 @@ def register_caregiver(data: schemas.CaregiverCreate, db: Session = Depends(get_
     response_model=schemas.PatientOut,
     status_code=status.HTTP_201_CREATED,
 )
-def register_patient(data: schemas.PatientCreate, request: Request, db: Session = Depends(get_db)):
+def register_patient(
+    data: schemas.PatientCreate, request: Request, db: Session = Depends(get_db)
+):
     if crud.get_patient_by_personnummer(db, data.personnummer):
         raise HTTPException(
             status_code=409,
             detail="A patient account with this personnummer already exists.",
         )
     patient = crud.create_patient(db, data)
-    
+
+    #  full_name: str
+    # phone_number: Optional[str] = None
+
+    relative_data = schemas.RelativeCreate(
+        full_name=data.relative_fullname,
+        phone_number=data.relative_phone_number,
+    )
+
+    crud.create_relative(db, data=relative_data, patient_id=patient.patient_id)
+
     # Auto-assign to the caregiver who registered them
     token = request.cookies.get("access_token")
     if token:
@@ -57,8 +69,10 @@ def register_patient(data: schemas.PatientCreate, request: Request, db: Session 
         if payload.get("role") == "caregiver":
             caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
             if caregiver:
-                crud.assign_patient_to_caregiver(db, caregiver.caregiver_id, patient.patient_id)
-    
+                crud.assign_patient_to_caregiver(
+                    db, caregiver.caregiver_id, patient.patient_id
+                )
+
     return patient
 
 
@@ -234,9 +248,13 @@ def delete_patient(
     if not deleted:
         raise HTTPException(status_code=404, detail="Patient not found.")
 
-#=================LOGOUT==========================
+
+# =================LOGOUT==========================
+
 
 @router.post("/logout")
 def logout(response: Response):
-    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="lax")
+    response.delete_cookie(
+        key="access_token", httponly=True, secure=True, samesite="lax"
+    )
     return {"detail": "Successfully logged out"}

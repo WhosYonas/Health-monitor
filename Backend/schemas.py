@@ -72,6 +72,8 @@ class PatientOut(BaseModel):
     patient_id: int
     person: PersonOut
     role: str = "patient"
+    critical_level: int
+    relatives: list[RelativeOut] = []
 
     class Config:
         from_attributes = True
