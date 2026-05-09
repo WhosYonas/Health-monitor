@@ -1,0 +1,39 @@
+2026-05-09 16:23:26 | INFO | services.mqtt_client | Connected to MQTT broker
+2026-05-09 16:23:26 | INFO | services.mqtt_client | Subscribed to topic: esp32/health
+2026-05-09 16:24:05 | INFO | services.mqtt_client | Valid reading: device_id='abc-123' patient_id=1 heart_rate=72 spo2=98.5 temperature=36.6 timestamp=datetime.datetime(2026, 5, 9, 16, 24, 5, 361801)
+2026-05-09 16:24:05 | INFO | services.db_service | Inserted reading for device abc-123
+2026-05-09 20:52:39 | INFO | services.mqtt_client | Connected to MQTT broker
+2026-05-09 20:52:39 | INFO | services.mqtt_client | Subscribed to topic: esp32/health
+2026-05-09 20:52:42 | ERROR | utils.parser | Invalid payload: 3 validation errors for SensorReading
+heart_rate
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+spo2
+  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+temperature
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=29.1875, input_type=float]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+2026-05-09 20:52:42 | WARNING | services.mqtt_client | Skipping invalid reading
+2026-05-09 20:52:48 | ERROR | utils.parser | Invalid payload: 3 validation errors for SensorReading
+heart_rate
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+spo2
+  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+temperature
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=29, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+2026-05-09 20:52:48 | WARNING | services.mqtt_client | Skipping invalid reading
+2026-05-09 20:52:53 | ERROR | utils.parser | Invalid payload: 3 validation errors for SensorReading
+heart_rate
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+spo2
+  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+temperature
+  Input should be greater than or equal to 30 [type=greater_than_equal, input_value=28.875, input_type=float]
+    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal
+2026-05-09 20:52:53 | WARNING | services.mqtt_client | Skipping invalid reading
