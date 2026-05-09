@@ -4,7 +4,7 @@ from routers import patients, users
 
 from database import init_db
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 app.add_middleware(
     CORSMiddleware,
