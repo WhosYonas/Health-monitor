@@ -8,3 +8,5 @@ mqtt-certs/
 
 
 pyrightconfig.json
+mosquitto/certs/*.key
+mosquitto/certs/*.csr

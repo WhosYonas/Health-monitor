@@ -11,18 +11,23 @@ def get_connection():
     return psycopg2.connect(db.dsn)
 
 def insert_reading(reading: SensorReading) -> bool:
-    #Persist a parsed sensor reading to the database.
-    #Returns True on success, False on failure.
-    sql = """
-        INSERT INTO measurements (heart_rate, spo2, temp, timestamp)
-        VALUES (%(heart_rate)s, %(spo2)s, %(temp)s, %(timestamp)s)
+    sql_lookup = "SELECT device_id FROM device WHERE device_uid = %s"
+    sql_insert = """
+        INSERT INTO measurement (device_id, blood_oxygen, heart_rate, temperature)
+        VALUES (%s, %s, %s, %s)
     """
     try:
         with get_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(sql, reading.model_dump())
+                cur.execute(sql_lookup, (reading.device_id,))
+                row = cur.fetchone()
+                if row is None:
+                    logger.error(f"No device found for uid: {reading.device_id}")
+                    return False
+                device_pk = row[0]
+                cur.execute(sql_insert, (device_pk, reading.spo2, reading.heart_rate, reading.temperature))
             conn.commit()
-        logger.info(f"Inserted reading at {reading.timestamp}")
+        logger.info(f"Inserted reading for device {reading.device_id}")
         return True
     except psycopg2.Error as e:
         logger.error(f"Failed to insert reading: {e}")

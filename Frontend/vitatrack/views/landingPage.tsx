@@ -1,7 +1,16 @@
 import Link from "next/link";
-import { featureCard } from "@/components/custom/featureCard";
 
-export function LandingPage() {
+type LandingPageProps = {
+  is_authenticated: boolean;
+  user?: any;
+  loading?: boolean;
+};
+
+export function LandingPage({
+  is_authenticated,
+  user,
+  loading,
+}: LandingPageProps) {
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
       {/* Hero */}
@@ -25,12 +34,22 @@ export function LandingPage() {
             cracks.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/login"
-              className="rounded-full bg-emerald-600 px-8 py-3 text-base font-medium text-white shadow-sm transition hover:bg-emerald-700"
-            >
-              Get started
-            </Link>
+            {!is_authenticated && (
+              <Link
+                href="/login"
+                className="rounded-full bg-emerald-600 px-8 py-3 text-base font-medium text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                Get started
+              </Link>
+            )}
+            {is_authenticated && (
+              <Link
+                href="/overview"
+                className="rounded-full bg-emerald-600 px-8 py-3 text-base font-medium text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                Go to dashboard
+              </Link>
+            )}
             <a
               href="#vitals"
               className="rounded-full border border-slate-200 bg-white px-8 py-3 text-base font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
@@ -312,12 +331,14 @@ export function LandingPage() {
           Join care facilities that have already moved to continuous,
           data-driven patient monitoring.
         </p>
-        <Link
-          href="/login"
-          className="mt-8 inline-block rounded-full bg-white px-9 py-3 text-base font-semibold text-emerald-700 transition hover:bg-emerald-50"
-        >
-          Get started for free
-        </Link>
+        {!is_authenticated && (
+          <Link
+            href="/login"
+            className="mt-8 inline-block rounded-full bg-white px-9 py-3 text-base font-semibold text-emerald-700 transition hover:bg-emerald-50"
+          >
+            Get started for free
+          </Link>
+        )}
       </section>
 
       {/*  Footer */}

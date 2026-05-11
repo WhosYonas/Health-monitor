@@ -19,7 +19,7 @@ export function HeaderPage({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-black/10 bg-emerald-100 px-5 backdrop-blur-md">
         {/* Logo */}
         <div className="relative flex items-center bg-emerald-200 hover:bg-white shadow-lg shadow-black rounded-sm p-1 overflow-hidden transition-colors">
@@ -43,23 +43,6 @@ export function HeaderPage({
               VitaTrack
             </h1>
           </Link>
-        </div>
-
-        {/* Desktop pill nav — hidden on mobile */}
-        <div className="absolute bg-emerald-200 rounded-full left-1/2 -translate-x-1/2 items-center gap-6 px-10 py-2 hidden md:flex">
-          <a
-            href="#about"
-            className="text-xl font-semibold text-black/80 transition hover:text-white"
-          >
-            About
-          </a>
-
-          <a
-            href="#how-it-works"
-            className="text-xl font-semibold text-black/80 transition hover:text-white"
-          >
-            How it works
-          </a>
         </div>
 
         {/* Right side */}
@@ -91,74 +74,9 @@ export function HeaderPage({
               </Button>
             </Link>
           )}
-
-          {/* Hamburger — mobile only */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-2 transition-transform"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span
-              className={`block h-0.5 w-6 bg-black transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-6 bg-black transition-opacity ${menuOpen ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-6 bg-black transition-transform ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
-            />
-          </button>
         </div>
       </nav>
-
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div className="md:hidden bg-emerald-100 border-b border-black/10 px-6 py-4 flex flex-col gap-4">
-          <a
-            href="#about"
-            className="text-lg font-semibold text-black/80 hover:text-emerald-600"
-            onClick={() => setMenuOpen(false)}
-          >
-            About
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-lg font-semibold text-black/80 hover:text-emerald-600"
-            onClick={() => setMenuOpen(false)}
-          >
-            How it works
-          </a>
-          {loading ? (
-            <span className="text-black/40 animate-pulse text-sm">
-              Loading…
-            </span>
-          ) : name ? (
-            <>
-              <span className="text-emerald-800 font-medium">
-                Hello, {name}!
-              </span>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  onLogout?.();
-                  setMenuOpen(false);
-                }}
-                className="w-full hover:bg-red-300"
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <Link href="/login" onClick={() => setMenuOpen(false)}>
-              <Button variant="outline" className="w-full hover:bg-lime-300">
-                Log in
-              </Button>
-            </Link>
-          )}
-        </div>
-      )}
-
       <main>{children}</main>
-    </>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 #include <Wire.h> // Aktiverar I²C-kommunikation.
 #include <WiFi.h>
-#include <HTTPClient.h>
 #include <ArduinoJson.h>
 
 // MAX30102 raw data reader
@@ -17,11 +16,33 @@
 #include <DallasTemperature.h>
 
 // ---------- WiFi + Backend ----------
-const char *WIFI_SSID = "";
-const char *WIFI_PASSWORD = "";
+const char *WIFI_SSID = "Tele2_424a08";
+const char *WIFI_PASSWORD = "ugnhnjni";
 
 // Byt denna till backend-teamets endpoint
-const char *SERVER_URL = "http://192.168.1.50:5000/api/sensor-data";
+#include <PubSubClient.h>
+
+// Replace your SERVER_URL with these:
+const char* MQTT_SERVER = "192.168.0.53"; // Your laptop's local IP
+const int   MQTT_PORT   = 1883;
+const char* MQTT_TOPIC  = "esp32/health";
+
+WiFiClient   wifiClient;
+PubSubClient mqttClient(wifiClient);
+
+void connectMQTT() {
+    mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+    while (!mqttClient.connected()) {
+        Serial.print("Connecting to MQTT...");
+        if (mqttClient.connect("esp32_001")) {
+            Serial.println("connected");
+        } else {
+            Serial.print("failed, rc=");
+            Serial.println(mqttClient.state());
+            delay(2000);
+        }
+    }
+}
 
 const char *DEVICE_ID = "esp32_001";
 const int PATIENT_ID = 1;
@@ -196,36 +217,6 @@ String createSensorJson()
     String jsonData;
     serializeJson(doc, jsonData);
     return jsonData;
-}
-
-void sendToBackend()
-{
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        Serial.println("WiFi disconnected. Reconnecting...");
-        WiFi.reconnect();
-        return;
-    }
-
-    HTTPClient http;
-    http.begin(SERVER_URL);
-    http.addHeader("Content-Type", "application/json");
-
-    String json = createSensorJson();
-    int responseCode = http.POST(json);
-
-    if (responseCode > 0)
-    {
-        Serial.print("Backend response: ");
-        Serial.println(responseCode);
-    }
-    else
-    {
-        Serial.print("HTTP failed: ");
-        Serial.println(http.errorToString(responseCode));
-    }
-
-    http.end();
 }
 
 //---------------------------------------
@@ -413,13 +404,16 @@ void loop()
     }
 
     //------------Jsondata------------------
-    String json = createSensorJson();
-    Serial.println(json);
+    if (!mqttClient.connected()) connectMQTT();
+      mqttClient.loop();
 
     if (millis() - lastBackendSend >= backendSendInterval)
     {
-        lastBackendSend = millis();
-        sendToBackend();
+      lastBackendSend = millis();
+      String json = createSensorJson();
+      Serial.println(json);
+      mqttClient.publish(MQTT_TOPIC, json.c_str());
+      Serial.println("Published via MQTT");
     }
 
     //-----------------------------------------------
