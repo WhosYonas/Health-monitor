@@ -242,3 +242,42 @@ def acknowledge_alert(
     except Exception as e:
         print(f"crash in acknowledge_alert: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
+#GET MEASUREMENT
+
+
+@router.post("/health_data", response_model=schemas.HealthDataOut, status_code=status.HTTP_200_OK)
+def get_patient_health_data(
+    data: schemas.HealthDataRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") not in ("caregiver", "patient"):
+            raise HTTPException(status_code=403, detail="Invalid role.")
+
+        patient = crud.get_patient_by_personnummer(db, data.person_number)
+        if not patient:
+            raise HTTPException(status_code=404, detail="Patient not found.")
+
+        latest = crud.get_latest_health_data(db, patient.patient_id)
+        if not latest:
+            raise HTTPException(status_code=404, detail="No measurements found.")
+
+        return schemas.HealthDataOut(
+            pulse=latest.heart_rate,
+            body_temperature=float(latest.temperature) if latest.temperature else None,
+            blood_oxygen_level=float(latest.blood_oxygen) if latest.blood_oxygen else None,
+        )
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in /health_data: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

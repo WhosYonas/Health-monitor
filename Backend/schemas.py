@@ -125,6 +125,16 @@ class MeasurementOut(BaseModel):
     class Config:
         from_attributes = True
 
+class HealthDataOut(BaseModel):
+    pulse: Optional[int]
+    body_temperature: Optional[float]
+    blood_oxygen_level: Optional[float]
+
+    class Config:
+        from_attributes = True
+
+class HealthDataRequest(BaseModel):
+    person_number: str
 
 # ================RELATIVE=================
 
