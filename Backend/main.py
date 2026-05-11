@@ -5,7 +5,7 @@ import models
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import patients, users
+from routers import patients, users, health
 
 from database import SessionLocal, init_db
 
@@ -111,5 +111,7 @@ app.add_middleware(
 # ALL ROUTERS HERE
 app.include_router(users.router, prefix="/users", tags=["Users"])
 app.include_router(patients.router, prefix="/patients", tags=["Patients"])
+app.include_router(health.router, prefix="/health", tags=["Health"])
+
 
 init_db()

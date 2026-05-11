@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { HealthDataGraph } from "@/components/ui/HealthDataGraph";
+import { MeasurementPoint } from "@/communication/patientHealthHistoryCommunication";
 
 type HealthData = {
   pulse: number | null;
@@ -50,6 +51,8 @@ interface DetailsPageProps {
   role: string | null;
   healthData?: HealthData | null;
   healthLoading?: boolean;
+  healthHistory?: MeasurementPoint[];
+  historyLoading?: boolean;
 }
 
 function InfoCard({
@@ -146,6 +149,8 @@ export const DetailsPage = ({
   role,
   healthData,
   healthLoading,
+  healthHistory,
+  historyLoading,
 }: DetailsPageProps) => {
   const [graphOpen, setGraphOpen] = useState<HealthGraphType | null>(null);
 
@@ -322,7 +327,11 @@ export const DetailsPage = ({
                 {graphOpen}
               </h3>
               <div className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
-                <HealthDataGraph title={graphOpen} />
+                <HealthDataGraph
+                  title={graphOpen}
+                  history={healthHistory ?? []}
+                  historyLoading={historyLoading ?? false}
+                />{" "}
               </div>
             </div>
           )}

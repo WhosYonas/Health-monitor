@@ -3,6 +3,10 @@ import { postGetPatientInfoThunk } from "@/communication/patientInfoCommunicatio
 import { postGetPatientHealthDataThunk } from "@/communication/patientHealthDataCommunication";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 import { postDeletePatientThunk } from "@/communication/patientDeleteCommunication";
+import {
+  fetchPatientHealthHistoryThunk,
+  MeasurementPoint,
+} from "@/communication/patientHealthHistoryCommunication";
 
 interface patientHealthData {
   pulse: number | null;
@@ -28,6 +32,9 @@ interface patientState {
   healthLoading: boolean;
   info_error_message: string | null;
   health_error_message: string | null;
+  health_history: MeasurementPoint[];
+  historyLoading: boolean;
+  history_error_message: string | null;
 }
 
 const initialState: patientState = {
@@ -37,6 +44,9 @@ const initialState: patientState = {
   info_error_message: null,
   healthLoading: false,
   health_error_message: null,
+  health_history: [],
+  historyLoading: false,
+  history_error_message: null,
 };
 
 export const patientSlice = createSlice({
@@ -98,6 +108,24 @@ export const patientSlice = createSlice({
       state.info_error_message = action.payload as string;
       state.infoLoading = false;
     });
+    builder.addCase(fetchPatientHealthHistoryThunk.pending, (state) => {
+      state.historyLoading = true;
+      state.history_error_message = null;
+    });
+    builder.addCase(
+      fetchPatientHealthHistoryThunk.fulfilled,
+      (state, action) => {
+        state.health_history = action.payload;
+        state.historyLoading = false;
+      },
+    );
+    builder.addCase(
+      fetchPatientHealthHistoryThunk.rejected,
+      (state, action) => {
+        state.history_error_message = action.payload as string;
+        state.historyLoading = false;
+      },
+    );
   },
 });
 

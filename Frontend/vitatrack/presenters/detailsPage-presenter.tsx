@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { postGetPatientInfoThunk } from "@/communication/patientInfoCommunication";
 import { postGetPatientHealthDataThunk } from "@/communication/patientHealthDataCommunication";
 import { postDeletePatientThunk } from "@/communication/patientDeleteCommunication";
+import { fetchPatientHealthHistoryThunk } from "@/communication/patientHealthHistoryCommunication";
 import { useEffect } from "react";
 
 export const DetailsPagePresenter = () => {
@@ -14,9 +15,13 @@ export const DetailsPagePresenter = () => {
   const params = useParams();
   const router = useRouter();
 
-  const { patient_info, health_data, healthLoading } = useSelector(
-    (state: RootState) => state.patient,
-  );
+  const {
+    patient_info,
+    health_data,
+    healthLoading,
+    health_history,
+    historyLoading,
+  } = useSelector((state: RootState) => state.patient);
   const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -32,6 +37,16 @@ export const DetailsPagePresenter = () => {
     if (patient_info?.person_number) {
       dispatch(
         postGetPatientHealthDataThunk({
+          person_number: patient_info.person_number,
+        }),
+      );
+    }
+  }, [patient_info?.person_number]);
+
+  useEffect(() => {
+    if (patient_info?.person_number) {
+      dispatch(
+        fetchPatientHealthHistoryThunk({
           person_number: patient_info.person_number,
         }),
       );
@@ -63,6 +78,8 @@ export const DetailsPagePresenter = () => {
       role={user?.role ?? null}
       healthData={health_data}
       healthLoading={healthLoading}
+      healthHistory={health_history}
+      historyLoading={historyLoading}
     />
   );
 };

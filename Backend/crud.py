@@ -196,7 +196,22 @@ def get_latest_health_data(db: Session, patient_id: int):
         .first()
     )
 
-    # ================RELATIVE=================
+
+
+#========HISTORY=========
+
+def get_health_history(db: Session, patient_id: int, limit: int = 20):
+    from sqlalchemy import desc
+    return (
+        db.query(models.Measurement)
+        .join(models.Device, models.Measurement.device_id == models.Device.device_id)
+        .filter(models.Device.patient_id == patient_id)
+        .order_by(desc(models.Measurement.recorded_at))
+        .limit(limit)
+        .all()
+    )
+
+# ================RELATIVE=================
 
 
 def create_relative(
