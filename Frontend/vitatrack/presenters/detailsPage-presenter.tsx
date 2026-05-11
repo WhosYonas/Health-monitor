@@ -15,6 +15,8 @@ export const DetailsPagePresenter = () => {
   const router = useRouter();
   const { patient_info } = useSelector((state: RootState) => state.patient);
 
+  const { user } = useSelector((state: RootState) => state.user);
+
   const onLoad = (id: string) => {
     const personId = Number(id);
     if (!isNaN(personId)) {
@@ -51,6 +53,7 @@ export const DetailsPagePresenter = () => {
       patient_info={patient_info}
       onOverviewClick={onOverviewClick}
       onDeletePatient={onDeletePatient}
+      role={user?.role ?? null}
     />
   );
 };

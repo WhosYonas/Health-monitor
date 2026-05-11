@@ -39,7 +39,7 @@ export function LandingPage({
                 ) : (
                   <div className="mt-6 flex gap-4">
                     <Link
-                      href="/details"
+                      href={`/patients/${user?.patient_id ?? null}`}
                       className="rounded-lg bg-fuchsia-300 px-8 py-5 font-semibold text-black transition hover:bg-fuchsia-200 text-xl cursor-pointer"
                     >
                       Go to details

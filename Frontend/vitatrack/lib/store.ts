@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "@/models/redux/userSlice";
 import patientReducer from "@/models/redux/patientSlice";
 import patientManagementReducer from "@/models/redux/patientManagementSlice";
+import alertReducer from "@/models/redux/alertSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       user: userReducer,
       patient: patientReducer,
       patientManagement: patientManagementReducer,
+      alerts: alertReducer,
     },
   });
 };

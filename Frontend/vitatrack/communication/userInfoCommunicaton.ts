@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 interface UserInfoResponse {
-  caregiver_id: number;
-  username: string;
+  caregiver_id?: number;
+  patient_id?: number;
+  username?: string;
   person: {
     person_id: number;
     first_name: string;
@@ -19,6 +20,8 @@ interface GetInfoError {
 }
 
 interface UserProfile {
+  caregiver_id?: number | null;
+  patient_id?: number | null;
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
@@ -49,6 +52,8 @@ export const getUserInfoThunk = createAsyncThunk<
   try {
     const data = await getUserInfo();
     return {
+      caregiver_id: data.caregiver_id ?? null,
+      patient_id: data.patient_id ?? null,
       first_name: data.person.first_name,
       last_name: data.person.last_name,
       phone_number: data.person.phone_number,

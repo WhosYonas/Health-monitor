@@ -87,6 +87,7 @@ CREATE TABLE alert (
     message         TEXT,
     triggered_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     acknowledged    BOOLEAN       NOT NULL DEFAULT FALSE,
+    notified    BOOLEAN       NOT NULL DEFAULT FALSE,
     acknowledged_by INT,
     CONSTRAINT PK_alert             PRIMARY KEY (alert_id),
     CONSTRAINT CHK_alert_type       CHECK (alert_type IN ('heart_rate', 'blood_oxygen', 'temperature')),

@@ -39,6 +39,7 @@ interface DetailsPageProps {
   patient_info: patientInformation | null;
   onOverviewClick: () => void;
   onDeletePatient: () => void;
+  role: string | null;
 }
 
 function InfoCard({
@@ -95,6 +96,7 @@ export const DetailsPage = ({
   patient_info,
   onOverviewClick,
   onDeletePatient,
+  role,
 }: DetailsPageProps) => {
   if (!patient_info) {
     return (
@@ -107,16 +109,18 @@ export const DetailsPage = ({
   return (
     <div className="w-full min-h-[100dvh] bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={onOverviewClick}
-            className="border-white/20 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white"
-          >
-            <ArrowLeft className="mr-2 size-4" />
-            Back to overview
-          </Button>
-        </div>
+        {role == "caregiver" && (
+          <div className="mb-6">
+            <Button
+              variant="outline"
+              onClick={onOverviewClick}
+              className="border-white/20 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white"
+            >
+              <ArrowLeft className="mr-2 size-4" />
+              Back to overview
+            </Button>
+          </div>
+        )}
 
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl">
           <div className="border-b border-slate-100 bg-white px-8 py-8 sm:flex sm:items-center sm:justify-between">
@@ -134,53 +138,55 @@ export const DetailsPage = ({
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col items-end gap-3 sm:mt-0">
-              <CriticalStatus level={patient_info.critical_level} />
-              <div className="flex gap-2">
-                <Link href={`/patients/${patient_info.patient_id}/edit`}>
-                  <Button
-                    variant="outline"
-                    className="border-slate-200 hover:bg-slate-50"
-                  >
-                    <Pencil className="mr-2 size-4" />
-                    Edit Profile
-                  </Button>
-                </Link>
-
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
+            {role == "caregiver" && (
+              <div className="mt-4 flex flex-col items-end gap-3 sm:mt-0">
+                <CriticalStatus level={patient_info.critical_level} />
+                <div className="flex gap-2">
+                  <Link href={`/patients/${patient_info.patient_id}/edit`}>
                     <Button
                       variant="outline"
-                      className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="border-slate-200 hover:bg-slate-50"
                     >
-                      <Trash2 className="mr-2 size-4" />
-                      Delete
+                      <Pencil className="mr-2 size-4" />
+                      Edit Profile
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Delete patient?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will permanently delete{" "}
-                        <span className="font-semibold">
-                          {patient_info.first_name} {patient_info.last_name}
-                        </span>{" "}
-                        and all of their data. This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={onDeletePatient}
-                        className="bg-red-600 text-white hover:bg-red-700"
+                  </Link>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
                       >
+                        <Trash2 className="mr-2 size-4" />
                         Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete patient?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete{" "}
+                          <span className="font-semibold">
+                            {patient_info.first_name} {patient_info.last_name}
+                          </span>{" "}
+                          and all of their data. This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={onDeletePatient}
+                          className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="p-8 bg-white">

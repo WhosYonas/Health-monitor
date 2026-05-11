@@ -1,6 +1,7 @@
 from typing import Optional
 
 import crud
+import models
 import schemas
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -99,10 +100,8 @@ def get_my_patients(
 def get_patient(
     request: Request,
     patient_id: int,
-    # token: str = Depends(caregiver_oauth2_scheme),
     db: Session = Depends(get_db),
 ):
-
     access_token = request.cookies.get("access_token")
 
     if not access_token:
@@ -113,8 +112,13 @@ def get_patient(
         role = payload.get("role")
         user_id = payload.get("sub")
 
-        if role != "caregiver":
-            raise HTTPException(status_code=403, detail="Caregivers only.")
+        if role == "patient" and int(user_id) != patient_id:
+            raise HTTPException(
+                status_code=403, detail="You can only view your own information."
+            )
+
+        if role not in ("caregiver", "patient"):
+            raise HTTPException(status_code=403, detail="Invalid role.")
 
         patient = crud.get_patient_by_id(db, patient_id)
 
@@ -122,7 +126,6 @@ def get_patient(
             raise HTTPException(status_code=404, detail="Patient not found.")
 
         relatives = crud.get_patient_relatives(db, patient.patient_id)
-
         patient.relatives = relatives
 
         return patient
@@ -130,5 +133,112 @@ def get_patient(
     except HTTPException as e:
         raise e
     except Exception as e:
-        print(f"crash in /me: {e}")
+        print(f"crash in get_patient: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+# ================GET PATIENT ALERTS===============
+
+
+@router.get("/alerts", response_model=list[schemas.AlertOut])
+def get_alerts(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") != "caregiver":
+            raise HTTPException(status_code=403, detail="Caregivers only.")
+
+        caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
+        if not caregiver:
+            raise HTTPException(status_code=404, detail="Caregiver not found.")
+
+        patient_ids = [p.patient_id for p in caregiver.patients]
+        if not patient_ids:
+            return []
+
+        results = (
+            db.query(
+                models.Alert,
+                models.Person.first_name,
+                models.Person.last_name,
+                models.Person.personnummer,
+            )
+            .join(
+                models.PatientAccount,
+                models.Alert.patient_id == models.PatientAccount.patient_id,
+            )
+            .join(
+                models.Person,
+                models.PatientAccount.person_id == models.Person.person_id,
+            )
+            .filter(
+                models.Alert.patient_id.in_(patient_ids),
+                models.Alert.acknowledged == False,
+            )
+            .order_by(models.Alert.triggered_at.desc())
+            .all()
+        )
+
+        alerts_with_info = []
+        for alert, first_name, last_name, personnummer in results:
+            alert_dict = {
+                "alert_id": alert.alert_id,
+                "patient_id": alert.patient_id,
+                "measurement_id": alert.measurement_id,
+                "alert_type": alert.alert_type,
+                "severity": alert.severity,
+                "message": alert.message,
+                "triggered_at": alert.triggered_at,
+                "acknowledged": alert.acknowledged,
+                "notified": alert.notified,
+                "first_name": first_name,
+                "last_name": last_name,
+                "personnummer": personnummer,
+            }
+            alerts_with_info.append(alert_dict)
+
+        return alerts_with_info
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in /alerts: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@router.patch("/alerts/{alert_id}/acknowledge", status_code=status.HTTP_200_OK)
+def acknowledge_alert(
+    alert_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") != "caregiver":
+            raise HTTPException(status_code=403, detail="Caregivers only.")
+
+        caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
+        if not caregiver:
+            raise HTTPException(status_code=404, detail="Caregiver not found.")
+
+        alert = crud.acknowledge_alert(db, alert_id, caregiver.caregiver_id)
+        if not alert:
+            raise HTTPException(status_code=404, detail="Alert not found.")
+
+        return {"message": "Alert acknowledged"}
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in acknowledge_alert: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")

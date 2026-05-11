@@ -4,6 +4,9 @@ import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 
 export interface userProfile {
+  caregiver_id?: number | null;
+  patient_id?: number | null;
+
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
@@ -22,7 +25,7 @@ interface userState {
 const initialState: userState = {
   user: null,
   is_authenticated: false,
-  loading: true,
+  loading: false,
   login_error_message: null,
   profile_error_message: null,
 };

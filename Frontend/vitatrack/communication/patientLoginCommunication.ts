@@ -29,7 +29,8 @@ export type LoginResponse = {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
-  person_number: string | null;
+  personnummer: string | null;
+  role: "patient";
   relative_fullname: string | null;
   relative_phone_number: string | null;
   critical_level: number | null;
@@ -81,7 +82,8 @@ export const postPatientLoginThunk = createAsyncThunk<
       first_name: user.person.first_name,
       last_name: user.person.last_name,
       phone_number: user.person.phone_number,
-      person_number: user.person.personnummer,
+      personnummer: user.person.personnummer,
+      role: "patient" as const,
       critical_level: user.critical_level,
       relative_fullname: firstRelative ? firstRelative.full_name : null,
       relative_phone_number: firstRelative ? firstRelative.phone_number : null,
