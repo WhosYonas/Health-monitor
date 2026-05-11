@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAlertsThunk } from "@/communication/getAlertsCommunication";
+import {
+  getAlertsThunk,
+  acknowledgeAlertThunk,
+} from "@/communication/getAlertsCommunication";
 
 export interface Alert {
   alert_id: number;
@@ -55,6 +58,9 @@ export const alertsSlice = createSlice({
           (action.payload as string) ??
           action.error.message ??
           "Failed to fetch alerts";
+      })
+      .addCase(acknowledgeAlertThunk.fulfilled, (state, action) => {
+        state.items = state.items.filter((a) => a.alert_id !== action.payload);
       });
   },
 });

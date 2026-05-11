@@ -3,8 +3,7 @@ import { postLoginThunk } from "@/communication/loginCommunication";
 import { getUserInfoThunk } from "@/communication/userInfoCommunicaton";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
 
-
-interface userProfile {
+export interface userProfile {
   caregiver_id?: number | null;
   patient_id?: number | null;
 

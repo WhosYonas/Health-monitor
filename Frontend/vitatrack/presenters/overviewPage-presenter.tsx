@@ -6,7 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/lib/store";
 import { getMyPatientsThunk } from "@/communication/getPatientsCommunication";
 import { NotAuthenticatedPagePresenter } from "./notAuthenticatedPage-presenter";
-import { getAlertsThunk } from "@/communication/getAlertsCommunication";
+
+import {
+  getAlertsThunk,
+  acknowledgeAlertThunk,
+} from "@/communication/getAlertsCommunication";
+import { toast } from "sonner";
 
 type SortOption = "priority" | "name" | "latest";
 
@@ -25,6 +30,22 @@ export function OverviewPagePresenter() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("priority");
 
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [newAlertIds, setNewAlertIds] = useState<Set<number>>(new Set());
+
+  const onRefreshAlerts = () => {
+    const currentIds = new Set(alerts.map((a) => a.alert_id));
+
+    dispatch(getAlertsThunk())
+      .unwrap()
+      .then((freshAlerts) => {
+        setLastUpdated(new Date());
+        const freshIds = freshAlerts.map((a) => a.alert_id);
+        const brandNew = freshIds.filter((id) => !currentIds.has(id));
+        setNewAlertIds(new Set(brandNew));
+      });
+  };
+
   useEffect(() => {
     if (is_authenticated && user?.role === "caregiver") {
       dispatch(getMyPatientsThunk());
@@ -32,13 +53,31 @@ export function OverviewPagePresenter() {
   }, [dispatch, is_authenticated, user?.role]);
 
   useEffect(() => {
-    dispatch(getAlertsThunk());
+    if (!is_authenticated || user?.role !== "caregiver") return;
+
+    dispatch(getAlertsThunk())
+      .unwrap()
+      .then(() => setLastUpdated(new Date()));
+
     const interval = setInterval(() => {
-      dispatch(getAlertsThunk());
+      dispatch(getAlertsThunk())
+        .unwrap()
+        .then(() => setLastUpdated(new Date()));
     }, 60000);
 
-    return () => clearInterval(interval); // Städa upp vid unmount
-  }, [dispatch]);
+    return () => clearInterval(interval);
+  }, [dispatch, is_authenticated, user?.role]);
+
+  const onAcknowledgeAlert = (alertId: number) => {
+    dispatch(acknowledgeAlertThunk(alertId))
+      .unwrap()
+      .then(() => {
+        toast.success("Alert acknowledged");
+      })
+      .catch((err) => {
+        toast.error(err ?? "Failed to acknowledge alert");
+      });
+  };
 
   const filteredAndSortedPatients = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -107,6 +146,10 @@ export function OverviewPagePresenter() {
       onSearchChange={setSearchQuery}
       sortBy={sortBy}
       onSortChange={setSortBy}
+      onAcknowledgeAlert={onAcknowledgeAlert}
+      onRefreshAlerts={onRefreshAlerts}
+      lastUpdated={lastUpdated}
+      newAlertIds={newAlertIds}
     />
   );
 }

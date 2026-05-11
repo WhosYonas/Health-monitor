@@ -44,3 +44,37 @@ export const getAlertsThunk = createAsyncThunk<
     return thunkAPI.rejectWithValue(errorMessage);
   }
 });
+
+const acknowledgeAlert = async (alertId: number): Promise<void> => {
+  const response = await fetch(`/api/patients/alerts/${alertId}/acknowledge`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    redirect: "manual",
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw {
+      status: response.status,
+      detail: data.detail || "Unknown error",
+    };
+  }
+};
+
+export const acknowledgeAlertThunk = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>("alerts/acknowledgeAlertThunk", async (alertId, thunkAPI) => {
+  try {
+    await acknowledgeAlert(alertId);
+    return alertId;
+  } catch (error: any) {
+    if (error.status === 404)
+      return thunkAPI.rejectWithValue("Alert not found");
+    return thunkAPI.rejectWithValue("Failed to acknowledge alert");
+  }
+});

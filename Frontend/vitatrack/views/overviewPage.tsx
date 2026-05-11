@@ -36,6 +36,10 @@ interface OverviewPageProps {
   onSortChange: (value: SortOption) => void;
   alert_loading: boolean;
   alerts: Alert[];
+  onAcknowledgeAlert: (alertId: number) => void;
+  onRefreshAlerts: () => void;
+  lastUpdated: Date | null;
+  newAlertIds: Set<number>;
 }
 
 export default function OverviewPage({
@@ -49,6 +53,10 @@ export default function OverviewPage({
   onSortChange,
   alert_loading,
   alerts,
+  onAcknowledgeAlert,
+  onRefreshAlerts,
+  lastUpdated,
+  newAlertIds,
 }: OverviewPageProps) {
   const { user, is_authenticated } = useSelector((state: any) => state.user);
 
@@ -461,14 +469,50 @@ export default function OverviewPage({
           <div className="flex w-full flex-col gap-5 lg:w-[30%]">
             {/* Notifications */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
-              <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="text-[15px] font-semibold text-[#111827]">
-                  Notifications
-                </p>
-                {newAlertsCount > 0 && (
-                  <span className="rounded-full bg-[#00C281] px-2.5 py-1 text-[12px] font-semibold text-white">
-                    {newAlertsCount} new
-                  </span>
+              <div className="mb-4 flex flex-col gap-2">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[15px] font-semibold text-[#111827]">
+                    Notifications
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {alerts.length > 0 && (
+                      <span className="rounded-full bg-red-500 px-2.5 py-1 text-[12px] font-semibold text-white">
+                        {alerts.length}
+                      </span>
+                    )}
+                    <button
+                      onClick={onRefreshAlerts}
+                      disabled={alert_loading}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9ca3af] transition-all duration-200 hover:bg-[#f3f4f6] hover:text-[#111827] disabled:opacity-50"
+                      title="Refresh notifications"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={alert_loading ? "animate-spin" : ""}
+                      >
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                        <path d="M21 3v5h-5" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                {lastUpdated && (
+                  <p className="text-[11px] text-[#9ca3af]">
+                    Last updated:{" "}
+                    {lastUpdated.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </p>
                 )}
               </div>
 
@@ -488,11 +532,16 @@ export default function OverviewPage({
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between items-start">
                           <div className="flex flex-col">
-                            <p
-                              className={`text-[14px] font-bold ${alert.severity === "critical" ? "text-red-700" : "text-[#111827]"}`}
-                            >
-                              {alert.first_name} {alert.last_name}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <p
+                                className={`text-[14px] font-bold ${alert.severity === "critical" ? "text-red-700" : "text-[#111827]"}`}
+                              >
+                                {alert.first_name} {alert.last_name}
+                              </p>
+                              {newAlertIds.has(alert.alert_id) && (
+                                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                              )}
+                            </div>
                             <p className="text-[11px] font-medium text-[#9ca3af]">
                               {alert.personnummer}
                             </p>
@@ -525,6 +574,12 @@ export default function OverviewPage({
                         >
                           {alert.message}
                         </p>
+                        <button
+                          onClick={() => onAcknowledgeAlert(alert.alert_id)}
+                          className="mt-3 w-full rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-[#6b7280] border border-[#e5e7eb] hover:bg-[#f3f4f6] hover:text-[#111827] transition-colors"
+                        >
+                          Dismiss
+                        </button>
                       </div>
                     </div>
                   ))
