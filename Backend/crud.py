@@ -308,7 +308,8 @@ def get_patients_below_threshold(
             results.append(
                 {
                     "patient_id": patient.patient_id,
-                    "username": patient.username,
+                    "username": f"{patient.person.first_name} {patient.person.last_name}",
+                    "person": patient.person,
                     "vitals": {
                         "blood_oxygen": float(latest.blood_oxygen)
                         if latest.blood_oxygen
