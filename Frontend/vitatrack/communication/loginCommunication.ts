@@ -6,6 +6,9 @@ type loginPayload = {
 };
 
 type LoginResponse = {
+  caregiver_id?: number | null;
+  patient_id?: number | null;
+  
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
@@ -51,10 +54,13 @@ export const postLoginThunk = createAsyncThunk<
   try {
     const data = await postLogin(payload);
     const userInfo: LoginResponse = {
+      caregiver_id: data.user.caregiver_id ?? null,
+      patient_id: data.user.patient_id ?? null,
+
       first_name: data.user.person.first_name,
       last_name: data.user.person.last_name,
       phone_number: data.user.person.phone_number,
-      personnummer: data.user.person.person_number,
+      personnummer: data.user.person.personnummer,
       role: data.user.role,
     };
     return userInfo;

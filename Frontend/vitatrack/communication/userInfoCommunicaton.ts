@@ -49,6 +49,8 @@ export const getUserInfoThunk = createAsyncThunk<
   try {
     const data = await getUserInfo();
     return {
+      caregiver_id: data.caregiver_id ?? null,
+      patient_id: null,
       first_name: data.person.first_name,
       last_name: data.person.last_name,
       phone_number: data.person.phone_number,
