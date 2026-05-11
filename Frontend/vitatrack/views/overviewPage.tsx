@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { PatientOverview } from "@/components/custom/patientOverview";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   getTasksForCaregiver,
   createTaskForCaregiver,
+  updateTaskForCaregiver,
   deleteTaskForCaregiver,
 } from "@/lib/caregiverTasks";
 
@@ -21,6 +22,7 @@ type Patient = {
 };
 
 type SortOption = "priority" | "name" | "latest";
+type TaskSortOption = "priority_due" | "due_date" | "latest" | "oldest";
 
 interface OverviewPageProps {
   patients: Patient[];
@@ -43,7 +45,6 @@ export default function OverviewPage({
   sortBy,
   onSortChange,
 }: OverviewPageProps) {
-  // --- Task-related state from Version2 ---
   const { user, is_authenticated } = useSelector((state: any) => state.user);
 
   const caregiverId =
@@ -57,7 +58,26 @@ export default function OverviewPage({
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [newTaskPriority, setNewTaskPriority] = useState<
+    "low" | "medium" | "high"
+  >("medium");
+  const [newTaskPatientId, setNewTaskPatientId] = useState("");
+  const [newTaskDueAt, setNewTaskDueAt] = useState("");
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [taskSortBy, setTaskSortBy] = useState<TaskSortOption>("priority_due");
+
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editTaskTitle, setEditTaskTitle] = useState("");
+  const [editTaskDescription, setEditTaskDescription] = useState("");
+  const [editTaskPriority, setEditTaskPriority] = useState<
+    "low" | "medium" | "high"
+  >("medium");
+  const [editTaskStatus, setEditTaskStatus] = useState<
+    "open" | "in_progress" | "done"
+  >("open");
+  const [editTaskPatientId, setEditTaskPatientId] = useState("");
+  const [editTaskDueAt, setEditTaskDueAt] = useState("");
+  const [taskSaving, setTaskSaving] = useState(false);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -88,6 +108,171 @@ export default function OverviewPage({
   const pendingTasksCount = tasks.filter(
     (task) => task.status !== "done",
   ).length;
+
+  const formatTaskDate = (value: any) => {
+    if (!value) return null;
+
+    try {
+      const date =
+        typeof value?.toDate === "function"
+          ? value.toDate()
+          : value instanceof Date
+            ? value
+            : new Date(value);
+
+      if (Number.isNaN(date.getTime())) return null;
+
+      return new Intl.DateTimeFormat("sv-SE", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(date);
+    } catch {
+      return null;
+    }
+  };
+
+  const formatForDateTimeInput = (value: any) => {
+    if (!value) return "";
+
+    try {
+      const date =
+        typeof value?.toDate === "function"
+          ? value.toDate()
+          : value instanceof Date
+            ? value
+            : new Date(value);
+
+      if (Number.isNaN(date.getTime())) return "";
+
+      const pad = (num: number) => String(num).padStart(2, "0");
+
+      const year = date.getFullYear();
+      const month = pad(date.getMonth() + 1);
+      const day = pad(date.getDate());
+      const hours = pad(date.getHours());
+      const minutes = pad(date.getMinutes());
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    } catch {
+      return "";
+    }
+  };
+
+  const getTaskDateValue = (value: any) => {
+    if (!value) return null;
+
+    try {
+      const date =
+        typeof value?.toDate === "function"
+          ? value.toDate()
+          : value instanceof Date
+            ? value
+            : new Date(value);
+
+      if (Number.isNaN(date.getTime())) return null;
+
+      return date.getTime();
+    } catch {
+      return null;
+    }
+  };
+
+  const getPriorityClasses = (priority?: string) => {
+    switch (priority) {
+      case "high":
+        return "bg-red-100 text-red-700";
+      case "low":
+        return "bg-[#E8F8F2] text-[#00875A]";
+      default:
+        return "bg-amber-100 text-amber-700";
+    }
+  };
+
+  const getStatusClasses = (status?: string) => {
+    switch (status) {
+      case "done":
+        return "bg-[#E8F8F2] text-[#00875A]";
+      case "in_progress":
+        return "bg-blue-100 text-blue-700";
+      default:
+        return "bg-[#e5e7eb] text-[#6b7280]";
+    }
+  };
+
+  const getPriorityRank = (priority?: string) => {
+    switch (priority) {
+      case "high":
+        return 0;
+      case "medium":
+        return 1;
+      case "low":
+        return 2;
+      default:
+        return 1;
+    }
+  };
+
+  const startEditingTask = (task: any) => {
+    setEditingTaskId(task.id);
+    setEditTaskTitle(task.title ?? "");
+    setEditTaskDescription(task.description ?? "");
+    setEditTaskPriority(task.priority ?? "medium");
+    setEditTaskStatus(task.status ?? "open");
+    setEditTaskPatientId(
+      task.patient_id !== null && task.patient_id !== undefined
+        ? String(task.patient_id)
+        : "",
+    );
+    setEditTaskDueAt(formatForDateTimeInput(task.due_at));
+  };
+
+  const cancelEditingTask = () => {
+    setEditingTaskId(null);
+    setEditTaskTitle("");
+    setEditTaskDescription("");
+    setEditTaskPriority("medium");
+    setEditTaskStatus("open");
+    setEditTaskPatientId("");
+    setEditTaskDueAt("");
+  };
+
+  const sortedTasks = useMemo(() => {
+    const sorted = [...tasks];
+
+    sorted.sort((a, b) => {
+      const aDue = getTaskDateValue(a.due_at);
+      const bDue = getTaskDateValue(b.due_at);
+      const aCreated = getTaskDateValue(a.created_at) ?? 0;
+      const bCreated = getTaskDateValue(b.created_at) ?? 0;
+
+      if (taskSortBy === "due_date") {
+        if (aDue !== null && bDue !== null) return aDue - bDue;
+        if (aDue !== null) return -1;
+        if (bDue !== null) return 1;
+        return bCreated - aCreated;
+      }
+
+      if (taskSortBy === "latest") {
+        return bCreated - aCreated;
+      }
+
+      if (taskSortBy === "oldest") {
+        return aCreated - bCreated;
+      }
+
+      const priorityDiff =
+        getPriorityRank(a.priority) - getPriorityRank(b.priority);
+      if (priorityDiff !== 0) return priorityDiff;
+
+      if (aDue !== null && bDue !== null) return aDue - bDue;
+      if (aDue !== null) return -1;
+      if (bDue !== null) return 1;
+
+      return bCreated - aCreated;
+    });
+
+    return sorted;
+  }, [tasks, taskSortBy]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E6F5F2] to-[#F4FAF8] p-5">
@@ -284,63 +469,98 @@ export default function OverviewPage({
               </div>
             </section>
 
-            {/* Tasks (dynamic, from Version2) */}
+            {/* Tasks */}
             {caregiverId && (
               <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-[15px] font-semibold text-[#111827]">
                     Tasks
                   </p>
-                  <button
-                    className="flex items-center gap-1.5 rounded-xl bg-[#111827] px-3 py-1.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm"
-                    onClick={() => setShowTaskForm((prev) => !prev)}
-                  >
-                    {showTaskForm ? (
-                      <>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                        Cancel
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                        Add task
-                      </>
-                    )}
-                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <select
+                        value={taskSortBy}
+                        onChange={(e) =>
+                          setTaskSortBy(e.target.value as TaskSortOption)
+                        }
+                        className="w-full appearance-none rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-4 pr-10 text-sm font-medium text-[#6b7280] outline-none transition-all duration-300 hover:border-[#d1d5db] hover:bg-white hover:shadow-sm focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
+                      >
+                        <option value="priority_due">
+                          Priority + due date
+                        </option>
+                        <option value="due_date">Due date</option>
+                        <option value="latest">Latest</option>
+                        <option value="oldest">Oldest</option>
+                      </select>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9ca3af]"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0l-4.25-4.51a.75.75 0 0 1 .02-1.06Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+
+                    <button
+                      className="flex items-center gap-1.5 rounded-xl bg-[#111827] px-3 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm"
+                      onClick={() => {
+                        setShowTaskForm((prev) => !prev);
+                        if (editingTaskId) cancelEditingTask();
+                      }}
+                    >
+                      {showTaskForm ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                          Cancel
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                          Add task
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
-                {/* new task form */}
                 {showTaskForm && (
                   <div className="mb-5 flex flex-col gap-2 rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-[#6b7280]">
                       New task
                     </p>
+
                     <input
                       type="text"
                       placeholder="Task title"
@@ -348,6 +568,7 @@ export default function OverviewPage({
                       onChange={(e) => setNewTaskTitle(e.target.value)}
                       className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 placeholder:text-[#9ca3af] focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
                     />
+
                     <input
                       type="text"
                       placeholder="Description (optional)"
@@ -355,20 +576,71 @@ export default function OverviewPage({
                       onChange={(e) => setNewTaskDescription(e.target.value)}
                       className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 placeholder:text-[#9ca3af] focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
                     />
+
+                    <select
+                      value={newTaskPriority}
+                      onChange={(e) =>
+                        setNewTaskPriority(
+                          e.target.value as "low" | "medium" | "high",
+                        )
+                      }
+                      className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                    >
+                      <option value="low">Low priority</option>
+                      <option value="medium">Medium priority</option>
+                      <option value="high">High priority</option>
+                    </select>
+
+                    <select
+                      value={newTaskPatientId}
+                      onChange={(e) => setNewTaskPatientId(e.target.value)}
+                      className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                    >
+                      <option value="">No linked patient</option>
+                      {patients.map((patient) => (
+                        <option
+                          key={patient.patient_id}
+                          value={patient.patient_id}
+                        >
+                          {patient.person.first_name} {patient.person.last_name}{" "}
+                          ( #{patient.patient_id})
+                        </option>
+                      ))}
+                    </select>
+
+                    <input
+                      type="datetime-local"
+                      value={newTaskDueAt}
+                      onChange={(e) => setNewTaskDueAt(e.target.value)}
+                      className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                    />
+
                     <button
                       className="self-end whitespace-nowrap rounded-xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={!newTaskTitle.trim()}
                       onClick={async () => {
                         if (!caregiverId) return;
+
                         try {
                           setTasksError(null);
+
                           await createTaskForCaregiver(caregiverId, {
                             title: newTaskTitle.trim(),
                             description: newTaskDescription.trim() || undefined,
+                            priority: newTaskPriority,
+                            patient_id: newTaskPatientId
+                              ? Number(newTaskPatientId)
+                              : null,
+                            dueAt: newTaskDueAt ? new Date(newTaskDueAt) : null,
                           });
+
                           setNewTaskTitle("");
                           setNewTaskDescription("");
+                          setNewTaskPriority("medium");
+                          setNewTaskPatientId("");
+                          setNewTaskDueAt("");
                           setShowTaskForm(false);
+
                           const updated =
                             await getTasksForCaregiver(caregiverId);
                           setTasks(updated);
@@ -396,67 +668,275 @@ export default function OverviewPage({
                   </p>
                 )}
 
-                <div className="space-y-3">
-                  {tasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 text-sm text-[#374151] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <p className="font-semibold text-[#111827]">
-                            {task.title}
-                          </p>
-                          {task.description && (
-                            <p className="mt-1 text-xs sm:text-sm text-[#6b7280]">
-                              {task.description}
-                            </p>
+                <div className="max-h-[420px] overflow-y-auto pr-1">
+                  <div className="space-y-3">
+                    {sortedTasks.map((task) => {
+                      const dueAt = formatTaskDate(task.due_at);
+                      const createdAt = formatTaskDate(task.created_at);
+                      const showStatusBadge =
+                        task.status && task.status !== "open";
+                      const isEditing = editingTaskId === task.id;
+
+                      return (
+                        <div
+                          key={task.id}
+                          className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-5 text-sm text-[#374151] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]"
+                        >
+                          {isEditing ? (
+                            <div className="flex flex-col gap-2">
+                              <input
+                                type="text"
+                                value={editTaskTitle}
+                                onChange={(e) =>
+                                  setEditTaskTitle(e.target.value)
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                                placeholder="Task title"
+                              />
+
+                              <input
+                                type="text"
+                                value={editTaskDescription}
+                                onChange={(e) =>
+                                  setEditTaskDescription(e.target.value)
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                                placeholder="Description (optional)"
+                              />
+
+                              <select
+                                value={editTaskPriority}
+                                onChange={(e) =>
+                                  setEditTaskPriority(
+                                    e.target.value as "low" | "medium" | "high",
+                                  )
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                              >
+                                <option value="low">Low priority</option>
+                                <option value="medium">Medium priority</option>
+                                <option value="high">High priority</option>
+                              </select>
+
+                              <select
+                                value={editTaskStatus}
+                                onChange={(e) =>
+                                  setEditTaskStatus(
+                                    e.target.value as
+                                      | "open"
+                                      | "in_progress"
+                                      | "done",
+                                  )
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                              >
+                                <option value="open">Open</option>
+                                <option value="in_progress">In progress</option>
+                                <option value="done">Done</option>
+                              </select>
+
+                              <select
+                                value={editTaskPatientId}
+                                onChange={(e) =>
+                                  setEditTaskPatientId(e.target.value)
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                              >
+                                <option value="">No linked patient</option>
+                                {patients.map((patient) => (
+                                  <option
+                                    key={patient.patient_id}
+                                    value={patient.patient_id}
+                                  >
+                                    {patient.person.first_name}{" "}
+                                    {patient.person.last_name} (#
+                                    {patient.patient_id})
+                                  </option>
+                                ))}
+                              </select>
+
+                              <input
+                                type="datetime-local"
+                                value={editTaskDueAt}
+                                onChange={(e) =>
+                                  setEditTaskDueAt(e.target.value)
+                                }
+                                className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 text-sm text-[#111827] outline-none transition-all duration-300 focus:border-[#00C281] focus:shadow-[0_0_0_3px_rgba(0,194,129,0.10)]"
+                              />
+
+                              <div className="mt-2 flex items-center justify-end gap-2">
+                                <button
+                                  type="button"
+                                  className="rounded-xl border border-[#d1d5db] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition-all duration-300 hover:bg-[#f3f4f6]"
+                                  onClick={cancelEditingTask}
+                                  disabled={taskSaving}
+                                >
+                                  Cancel
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className="rounded-xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-[#1f2937] disabled:cursor-not-allowed disabled:opacity-60"
+                                  disabled={!editTaskTitle.trim() || taskSaving}
+                                  onClick={async () => {
+                                    if (!caregiverId) return;
+
+                                    try {
+                                      setTaskSaving(true);
+                                      setTasksError(null);
+
+                                      await updateTaskForCaregiver(
+                                        caregiverId,
+                                        task.id,
+                                        {
+                                          title: editTaskTitle.trim(),
+                                          description:
+                                            editTaskDescription.trim() || "",
+                                          priority: editTaskPriority,
+                                          status: editTaskStatus,
+                                          patient_id: editTaskPatientId
+                                            ? Number(editTaskPatientId)
+                                            : null,
+                                          dueAt: editTaskDueAt
+                                            ? new Date(editTaskDueAt)
+                                            : null,
+                                        },
+                                      );
+
+                                      const updated =
+                                        await getTasksForCaregiver(caregiverId);
+                                      setTasks(updated);
+                                      cancelEditingTask();
+                                    } catch (err) {
+                                      console.error(
+                                        "Failed to update task",
+                                        err,
+                                      );
+                                      setTasksError("Could not update task");
+                                    } finally {
+                                      setTaskSaving(false);
+                                    }
+                                  }}
+                                >
+                                  Save changes
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <p className="font-semibold text-[#111827]">
+                                    {task.title}
+                                  </p>
+
+                                  {showStatusBadge && (
+                                    <span
+                                      className={`rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${getStatusClasses(
+                                        task.status,
+                                      )}`}
+                                    >
+                                      {task.status}
+                                    </span>
+                                  )}
+
+                                  <span
+                                    className={`rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${getPriorityClasses(
+                                      task.priority,
+                                    )}`}
+                                  >
+                                    {task.priority ?? "medium"}
+                                  </span>
+                                </div>
+
+                                {task.description && (
+                                  <p className="mt-1 text-xs sm:text-sm text-[#6b7280]">
+                                    {task.description}
+                                  </p>
+                                )}
+
+                                <div className="mt-3 space-y-1 text-xs text-[#6b7280]">
+                                  {task.patient_id !== null &&
+                                    task.patient_id !== undefined && (
+                                      <p>Patient ID: #{task.patient_id}</p>
+                                    )}
+                                  {dueAt && <p>Due: {dueAt}</p>}
+                                  {createdAt && <p>Created: {createdAt}</p>}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  aria-label="Edit task"
+                                  className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9ca3af] transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+                                  onClick={() => {
+                                    setShowTaskForm(false);
+                                    startEditingTask(task);
+                                  }}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z" />
+                                  </svg>
+                                </button>
+
+                                <button
+                                  aria-label="Remove task"
+                                  className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9ca3af] transition-all duration-200 hover:bg-red-50 hover:text-red-500"
+                                  onClick={async () => {
+                                    if (!caregiverId) return;
+                                    try {
+                                      await deleteTaskForCaregiver(
+                                        caregiverId,
+                                        task.id,
+                                      );
+                                      setTasks((prev) =>
+                                        prev.filter((t) => t.id !== task.id),
+                                      );
+                                    } catch (err) {
+                                      console.error(
+                                        "Failed to delete task",
+                                        err,
+                                      );
+                                      setTasksError("Could not delete task");
+                                    }
+                                  }}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <polyline points="3 6 5 6 21 6" />
+                                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                    <path d="M10 11v6M14 11v6" />
+                                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
                           )}
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <span className="rounded-full bg-[#e5e7eb] px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-[#6b7280]">
-                            {task.status ?? "open"}
-                          </span>
-                          <button
-                            aria-label="Remove task"
-                            className="flex h-7 w-7 items-center justify-center rounded-lg text-[#9ca3af] transition-all duration-200 hover:bg-red-50 hover:text-red-500"
-                            onClick={async () => {
-                              if (!caregiverId) return;
-                              try {
-                                await deleteTaskForCaregiver(
-                                  caregiverId,
-                                  task.id,
-                                );
-                                setTasks((prev) =>
-                                  prev.filter((t) => t.id !== task.id),
-                                );
-                              } catch (err) {
-                                console.error("Failed to delete task", err);
-                                setTasksError("Could not delete task");
-                              }
-                            }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="15"
-                              height="15"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="3 6 5 6 21 6" />
-                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                              <path d="M10 11v6M14 11v6" />
-                              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
               </section>
             )}

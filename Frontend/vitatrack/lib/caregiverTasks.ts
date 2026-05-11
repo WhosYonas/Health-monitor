@@ -6,7 +6,7 @@ import {
   orderBy,
   updateDoc,
   doc,
-  deleteDoc, 
+  deleteDoc,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
@@ -50,7 +50,32 @@ export async function getTasksForCaregiver(caregiverId: number | string) {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
-// Update status (e.g. mark as done)
+// Update entire editable task fields
+export async function updateTaskForCaregiver(
+  caregiverId: number | string,
+  taskId: string,
+  data: {
+    title: string;
+    description?: string;
+    status?: "open" | "in_progress" | "done";
+    priority?: "low" | "medium" | "high";
+    patient_id?: number | null;
+    dueAt?: Date | null;
+  }
+) {
+  const taskRef = doc(db, "caregivers", String(caregiverId), "tasks", taskId);
+
+  await updateDoc(taskRef, {
+    title: data.title,
+    description: data.description ?? "",
+    status: data.status ?? "open",
+    priority: data.priority ?? "medium",
+    patient_id: data.patient_id ?? null,
+    due_at: data.dueAt ?? null,
+    updated_at: serverTimestamp(),
+  });
+}
+
 export async function updateTaskStatus(
   caregiverId: number | string,
   taskId: string,

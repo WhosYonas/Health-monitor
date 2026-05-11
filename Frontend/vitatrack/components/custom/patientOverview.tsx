@@ -14,49 +14,107 @@ type Props = {
   patient: Patient;
 };
 
-export function PatientOverview({ patient }: Props) {
+function StatCard({
+  label,
+  value,
+  unit,
+  tone = "slate",
+}: {
+  label: string;
+  value: string;
+  unit: string;
+  tone?: "rose" | "orange" | "sky" | "slate";
+}) {
+  const toneStyles = {
+    rose: "bg-rose-50 text-rose-600 border-rose-100",
+    orange: "bg-orange-50 text-orange-600 border-orange-100",
+    sky: "bg-sky-50 text-sky-600 border-sky-100",
+    slate: "bg-slate-100 text-slate-600 border-slate-200",
+  };
+
   return (
-    <div className="group h-[88px] bg-[#f3f6f8] border border-[#b6bec7] rounded-2xl px-4 py-3 flex items-center gap-4 shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#aab6c5] hover:-translate-y-[1px]">
-      <img
-        src="/user_default.png"
-        alt="Patient profile"
-        className="h-[56px] w-[56px] rounded-full border border-[#c8d0d8] object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-      />
-
-      <div className="w-[38%] h-[52px] px-4 rounded-xl bg-[#dfe5ea] border border-[#d4dbe2] flex items-center text-[20px] font-medium text-[#1f2933] tracking-[-0.01em] transition-colors duration-300 group-hover:bg-[#d4dae1]">
-        {patient.person.first_name} {patient.person.last_name}
-      </div>
-
-      <div className="flex flex-row gap-2 w-[32%]">
-        {/* Heart rate */}
-        <div className="group/card relative overflow-hidden h-[60px] w-1/3 rounded-xl bg-[#dfe5ea] border border-[#d4dbe2] flex items-end justify-center gap-1 px-3 py-3 transition-all duration-300 hover:bg-[#d0d8df] hover:border-[#b6bec7] hover:shadow-sm hover:-translate-y-[1px]">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-100/60 via-transparent to-transparent opacity-80" />
-            <svg
-              viewBox="0 0 24 24"
-              className="absolute right-1 top-1 h-9 w-9 text-red-400/10 animate-pulse"
-              fill="currentColor"
-              aria-hidden="true"
-            >
+    <div className="min-w-0 rounded-[5px] border border-slate-200 bg-white px-3 py-3 shadow-sm">
+      <div className="mb-2 flex items-center gap-2">
+        <div
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border ${toneStyles[tone]}`}
+          aria-hidden="true"
+        >
+          {label === "Heart rate" && (
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
               <path d="M12 21s-6.716-4.35-9.193-8.183C.917 9.89 2.02 5.77 5.63 4.45c2.06-.753 4.153.03 5.37 1.648 1.217-1.618 3.31-2.401 5.37-1.648 3.61 1.32 4.713 5.44 2.823 8.367C18.716 16.65 12 21 12 21z" />
             </svg>
-            <div className="absolute inset-0 rounded-xl ring-1 ring-red-400/0 transition-all duration-300 group-hover/card:ring-red-400/10" />
-          </div>
-          <h1 className="relative z-10 text-[18px] font-semibold text-[#1f2933] tabular-nums transition-transform duration-300 group-hover/card:scale-[1.03]">
-            83
-          </h1>
-          <h1 className="relative z-10 text-[13px] font-medium text-[#53616c]">
-            bpm
-          </h1>
-        </div>
-
-        {/* Temperature */}
-        <div className="group/card relative overflow-hidden h-[60px] w-1/3 rounded-xl bg-[#dfe5ea] border border-[#d4dbe2] flex items-end justify-center gap-1 px-3 py-3 transition-all duration-300 hover:bg-[#d0d8df] hover:border-[#b6bec7] hover:shadow-sm hover:-translate-y-[1px]">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-100/60 via-transparent to-transparent opacity-80" />
+          )}
+          {label === "Temperature" && (
             <svg
               viewBox="0 0 24 24"
-              className="absolute right-1 top-1 h-9 w-9 text-orange-400/20 transition-transform duration-500 group-hover/card:scale-110 group-hover/card:-translate-y-0.5"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14 14.76V5a2 2 0 10-4 0v9.76a4 4 0 104 0z"
+              />
+            </svg>
+          )}
+          {label === "SpO2" && (
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2.5C10.8 4.9 9.6 6.8 8.5 8.5C7 10.9 6 12.7 6 14.8C6 18.2 8.7 21 12 21C15.3 21 18 18.2 18 14.8C18 12.7 17 10.9 15.5 8.5C14.4 6.8 13.2 4.9 12 2.5Z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <text
+                x="12"
+                y="15.2"
+                textAnchor="middle"
+                fontSize="6.2"
+                fontWeight="600"
+                fill="currentColor"
+                stroke="none"
+                letterSpacing="-0.3"
+              >
+                O2
+              </text>
+            </svg>
+          )}
+        </div>
+
+        <span className="truncate text-xs font-medium text-slate-500">
+          {label}
+        </span>
+      </div>
+
+      <div className="flex items-baseline gap-1">
+        <span className="text-base font-semibold text-slate-900 tabular-nums">
+          {value}
+        </span>
+        <span className="text-xs font-medium text-slate-500">{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+export function PatientOverview({ patient }: Props) {
+  const fullName = `${patient.person.first_name} ${patient.person.last_name}`;
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md">
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-500 shadow-inner">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-7 w-7"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.7"
@@ -65,47 +123,31 @@ export function PatientOverview({ patient }: Props) {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M14 14.76V5a2 2 0 10-4 0v9.76a4 4 0 104 0z"
+                d="M12 12a4 4 0 100-8 4 4 0 000 8zm-7 9a7 7 0 0114 0"
               />
             </svg>
-            <div className="absolute inset-0 rounded-xl ring-1 ring-orange-400/0 transition-all duration-300 group-hover/card:ring-orange-400/10" />
           </div>
-          <h1 className="relative z-10 text-[18px] font-semibold text-[#1f2933] tabular-nums transition-transform duration-300 group-hover/card:scale-[1.03]">
-            36.5
-          </h1>
-          <h1 className="relative z-10 text-[13px] font-medium text-[#53616c]">
-            °C
-          </h1>
+
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold text-slate-900">
+              {fullName}
+            </p>
+          </div>
         </div>
 
-        {/* SpO2 */}
-        <div className="group/card relative overflow-hidden h-[60px] w-1/3 rounded-xl bg-[#dfe5ea] border border-[#d4dbe2] flex items-end justify-center gap-1 px-3 py-3 transition-all duration-300 hover:bg-[#d0d8df] hover:border-[#b6bec7] hover:shadow-sm hover:-translate-y-[1px]">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-sky-100/70 via-transparent to-transparent opacity-80" />
-            <svg
-              viewBox="0 0 24 24"
-              className="absolute right-1 top-1 h-9 w-9 text-sky-400/20 transition-all duration-500 group-hover/card:scale-110 group-hover/card:-translate-y-0.5"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 2.5C9.5 6.1 6 9.8 6 13.4A6 6 0 0018 13.4C18 9.8 14.5 6.1 12 2.5z" />
-            </svg>
-            <div className="absolute inset-0 rounded-xl ring-1 ring-sky-400/0 transition-all duration-300 group-hover/card:ring-sky-400/10" />
-          </div>
-          <h1 className="relative z-10 text-[18px] font-semibold text-[#1f2933] tabular-nums transition-transform duration-300 group-hover/card:scale-[1.03]">
-            98%
-          </h1>
-          <h1 className="relative z-10 text-[13px] font-medium text-[#53616c]">
-            SpO2
-          </h1>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 xl:w-[420px] xl:max-w-[420px]">
+          <StatCard label="Heart rate" value="83" unit="bpm" tone="rose" />
+          <StatCard label="Temperature" value="36.5" unit="°C" tone="orange" />
+          <StatCard label="SpO2" value="98" unit="%" tone="sky" />
         </div>
-      </div>
 
-      <Link href={`/patients/${patient.patient_id}`}>
-        <button className="ml-auto h-[52px] px-5 rounded-xl bg-[#1f2933] text-white font-medium text-[14px] tracking-[-0.01em] hover:bg-[#17212b] transition-all duration-300 hover:shadow-lg hover:-translate-y-[1px] active:translate-y-0 cursor-pointer">
+        <Link
+          href={`/patients/${patient.patient_id}`}
+          className="inline-flex h-11 shrink-0 items-center justify-center rounded-2xl bg-slate-900 px-4 text-sm font-medium text-white transition-colors duration-200 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+        >
           Show details
-        </button>
-      </Link>
+        </Link>
+      </div>
     </div>
   );
 }
