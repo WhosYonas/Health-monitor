@@ -23,27 +23,33 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
           </svg>
           <Link href="/">
             <h1 className="relative z-10 font-bold tracking-wide text-black">
-            VitaTrack
-          </h1>
+              VitaTrack
+            </h1>
           </Link>
-          
         </div>
 
         <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-6">
-          <a href="#about" className="text-xl font-semibold text-white/80 transition hover:text-white">
+          <a
+            href="#about"
+            className="text-xl font-semibold text-white/80 transition hover:text-white"
+          >
             About
           </a>
-          <a href="#how-it-works" className="text-xl font-semibold text-white/80 transition hover:text-cyan-300">
+          <a
+            href="#how-it-works"
+            className="text-xl font-semibold text-white/80 transition hover:text-cyan-300"
+          >
             How it works
           </a>
         </div>
-        <Link href="/login" className="ml-auto" >
-
-          <Button variant="outline" className="px-5 py-3 cursor-pointer transition hover:bg-lime-300">
-          Log in
+        <Link href="/login" className="ml-auto">
+          <Button
+            variant="outline"
+            className="px-5 py-3 cursor-pointer transition hover:bg-lime-300"
+          >
+            Log in
           </Button>
         </Link>
-        
       </nav>
 
       {/* Page content renders here */}
