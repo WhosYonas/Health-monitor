@@ -1,6 +1,7 @@
 from typing import Optional
 
 import crud
+import models
 import schemas
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -131,4 +132,82 @@ def get_patient(
         raise e
     except Exception as e:
         print(f"crash in /me: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+# ================GET PATIENT ALERTS===============
+
+
+@router.get("/alerts", response_model=list[schemas.AlertOut])
+def get_alerts(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") != "caregiver":
+            raise HTTPException(status_code=403, detail="Caregivers only.")
+
+        caregiver = crud.get_caregiver_by_id(db, int(payload["sub"]))
+        if not caregiver:
+            raise HTTPException(status_code=404, detail="Caregiver not found.")
+
+        patient_ids = [p.patient_id for p in caregiver.patients]
+        if not patient_ids:
+            return []
+
+        # JOIN: Alert -> PatientAccount -> Person
+        results = (
+            db.query(
+                models.Alert,
+                models.Person.first_name,
+                models.Person.last_name,
+                models.Person.personnummer,
+            )
+            .join(
+                models.PatientAccount,
+                models.Alert.patient_id == models.PatientAccount.patient_id,
+            )
+            .join(
+                models.Person,
+                models.PatientAccount.person_id == models.Person.person_id,
+            )
+            .filter(
+                models.Alert.patient_id.in_(patient_ids),
+                models.Alert.acknowledged == False,
+            )
+            .order_by(models.Alert.triggered_at.desc())
+            .all()
+        )
+
+        # Vi mappar resultatet (som nu är tuples) till AlertOut-formatet
+        alerts_with_info = []
+        for alert, first_name, last_name, personnummer in results:
+            # Skapa en dict av alert-objektet och lägg till de extra fälten
+            alert_dict = {
+                "alert_id": alert.alert_id,
+                "patient_id": alert.patient_id,
+                "measurement_id": alert.measurement_id,
+                "alert_type": alert.alert_type,
+                "severity": alert.severity,
+                "message": alert.message,
+                "triggered_at": alert.triggered_at,
+                "acknowledged": alert.acknowledged,
+                "notified": alert.notified,
+                "first_name": first_name,
+                "last_name": last_name,
+                "personnummer": personnummer,
+            }
+            alerts_with_info.append(alert_dict)
+
+        return alerts_with_info
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in /alerts: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")

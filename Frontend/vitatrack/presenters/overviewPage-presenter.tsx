@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/lib/store";
 import { getMyPatientsThunk } from "@/communication/getPatientsCommunication";
 import { NotAuthenticatedPagePresenter } from "./notAuthenticatedPage-presenter";
+import { getAlertsThunk } from "@/communication/getAlertsCommunication";
 
 type SortOption = "priority" | "name" | "latest";
 
@@ -17,6 +18,9 @@ export function OverviewPagePresenter() {
   const { patients, patientsLoading, patientsError } = useSelector(
     (state: RootState) => state.patientManagement,
   );
+  const { items: alerts, alert_loading } = useSelector(
+    (state: RootState) => state.alerts,
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("priority");
@@ -26,6 +30,15 @@ export function OverviewPagePresenter() {
       dispatch(getMyPatientsThunk());
     }
   }, [dispatch, is_authenticated, user?.role]);
+
+  useEffect(() => {
+    dispatch(getAlertsThunk());
+    const interval = setInterval(() => {
+      dispatch(getAlertsThunk());
+    }, 60000);
+
+    return () => clearInterval(interval); // Städa upp vid unmount
+  }, [dispatch]);
 
   const filteredAndSortedPatients = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -84,6 +97,8 @@ export function OverviewPagePresenter() {
 
   return (
     <OverviewPage
+      alert_loading={alert_loading}
+      alerts={alerts}
       patients={patients}
       filteredPatients={filteredAndSortedPatients}
       patientsLoading={patientsLoading}

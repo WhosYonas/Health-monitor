@@ -10,6 +10,7 @@ import {
   updateTaskForCaregiver,
   deleteTaskForCaregiver,
 } from "@/lib/caregiverTasks";
+import { Alert } from "@/communication/getAlertsCommunication";
 
 type Patient = {
   patient_id: number;
@@ -33,6 +34,8 @@ interface OverviewPageProps {
   onSearchChange: (value: string) => void;
   sortBy: SortOption;
   onSortChange: (value: SortOption) => void;
+  alert_loading: boolean;
+  alerts: Alert[];
 }
 
 export default function OverviewPage({
@@ -44,6 +47,8 @@ export default function OverviewPage({
   onSearchChange,
   sortBy,
   onSortChange,
+  alert_loading,
+  alerts,
 }: OverviewPageProps) {
   const { user, is_authenticated } = useSelector((state: any) => state.user);
 
@@ -274,6 +279,12 @@ export default function OverviewPage({
     return sorted;
   }, [tasks, taskSortBy]);
 
+  const criticalAlertsCount = alerts.filter(
+    (a) => a.severity === "critical",
+  ).length;
+
+  const newAlertsCount = alerts.filter((a) => !a.acknowledged).length;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E6F5F2] to-[#F4FAF8] p-5">
       <div className="mx-auto max-w-[1600px] space-y-5">
@@ -308,24 +319,33 @@ export default function OverviewPage({
               Total Patients
             </p>
             <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#111827]">
-              {patients.length}
+              {patients.length.toString().padStart(2, "0")}
             </h2>
             <p className="mt-1 text-sm text-[#6b7280]">Currently monitored</p>
           </div>
 
+          {/* ÄNDRAD RÄKNARE HÄR */}
           <div className="rounded-[8px] border border-white/40 bg-white p-4 shadow-sm">
             <p className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#6b7280]">
-              Critical Alerts
+              Active Alerts
             </p>
-            <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#dc2626]">
-              03
+            <h2
+              className={`mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] ${newAlertsCount > 0 ? "text-[#dc2626]" : "text-[#111827]"}`}
+            >
+              {newAlertsCount.toString().padStart(2, "0")}
             </h2>
             <p className="mt-1 flex items-center gap-2 text-sm text-[#6b7280]">
-              <span className="relative flex h-3 w-3">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600" />
-              </span>
-              <span>Requires immediate review</span>
+              {newAlertsCount > 0 ? (
+                <>
+                  <span className="relative flex h-3 w-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600" />
+                  </span>
+                  <span>New notifications pending</span>
+                </>
+              ) : (
+                <span>No active alerts</span>
+              )}
             </p>
           </div>
 
@@ -437,7 +457,7 @@ export default function OverviewPage({
             </div>
           </section>
 
-          {/* Sidebar */}
+          {/* Sidebar - ORÖRD */}
           <div className="flex w-full flex-col gap-5 lg:w-[30%]">
             {/* Notifications */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
@@ -445,27 +465,74 @@ export default function OverviewPage({
                 <p className="text-[15px] font-semibold text-[#111827]">
                   Notifications
                 </p>
-                <span className="rounded-full bg-[#00C281] px-2.5 py-1 text-[12px] font-semibold text-white">
-                  2 new
-                </span>
+                {newAlertsCount > 0 && (
+                  <span className="rounded-full bg-[#00C281] px-2.5 py-1 text-[12px] font-semibold text-white">
+                    {newAlertsCount} new
+                  </span>
+                )}
               </div>
-              <div className="space-y-3">
-                <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">
-                    Patient 14 needs attention
+
+              <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1 custom-scrollbar">
+                {alert_loading && alerts.length === 0 ? (
+                  <p className="text-sm text-[#6b7280]">Loading alerts...</p>
+                ) : alerts.length > 0 ? (
+                  alerts.slice(0, 10).map((alert) => (
+                    <div
+                      key={alert.alert_id}
+                      className={`rounded-2xl border p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)] ${
+                        alert.severity === "critical"
+                          ? "border-red-100 bg-red-50/50"
+                          : "border-[#e5e7eb] bg-[#f9fafb]"
+                      }`}
+                    >
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between items-start">
+                          <div className="flex flex-col">
+                            <p
+                              className={`text-[14px] font-bold ${alert.severity === "critical" ? "text-red-700" : "text-[#111827]"}`}
+                            >
+                              {alert.first_name} {alert.last_name}
+                            </p>
+                            <p className="text-[11px] font-medium text-[#9ca3af]">
+                              {alert.personnummer}
+                            </p>
+                          </div>
+                          <span className="text-[10px] font-medium text-[#9ca3af] bg-white/50 px-2 py-0.5 rounded-full border border-gray-100">
+                            {new Date(alert.triggered_at).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
+                          </span>
+                        </div>
+
+                        <div className="mt-2 flex items-center gap-2">
+                          <span
+                            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                              alert.severity === "critical"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-gray-200 text-gray-700"
+                            }`}
+                          >
+                            {alert.alert_type.replace("_", " ")}
+                          </span>
+                        </div>
+
+                        <p
+                          className={`mt-1.5 text-sm leading-relaxed ${alert.severity === "critical" ? "text-red-900/80" : "text-[#6b7280]"}`}
+                        >
+                          {alert.message}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-[#6b7280]">
+                    No active notifications.
                   </p>
-                  <p className="mt-1 text-sm text-[#6b7280]">
-                    Heart rate threshold exceeded 2 minutes ago.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">
-                    Lab update received
-                  </p>
-                  <p className="mt-1 text-sm text-[#6b7280]">
-                    New blood panel data is available for review.
-                  </p>
-                </div>
+                )}
               </div>
             </section>
 

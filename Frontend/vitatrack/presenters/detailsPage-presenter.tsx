@@ -15,6 +15,8 @@ export const DetailsPagePresenter = () => {
   const router = useRouter();
   const { patient_info } = useSelector((state: RootState) => state.patient);
 
+  // const { role } = useSelector((state: RootState) => state.user);
+
   const onLoad = (id: string) => {
     const personId = Number(id);
     if (!isNaN(personId)) {

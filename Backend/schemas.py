@@ -154,7 +154,11 @@ class AlertOut(BaseModel):
     message: Optional[str]
     triggered_at: datetime
     acknowledged: bool
-    acknowledged_by: Optional[int]
+    acknowledged_by: Optional[int] = None
+    notified: bool
+    first_name: Optional[str]
+    last_name: Optional[str]
+    personnummer: Optional[str]
 
     class Config:
         from_attributes = True

@@ -11,19 +11,25 @@ export function PatientLoginPagePresenter() {
   const { loading, login_error_message } = useSelector(
     (state: RootState) => state.user,
   );
+  const { patient_info } = useSelector((state: RootState) => state.patient);
 
   async function handleLogin(credentials: {
     personNumber: string;
     password: string;
   }) {
     try {
-      await dispatch(
+      const result = await dispatch(
         postPatientLoginThunk({
           identifier: credentials.personNumber,
           password: credentials.password,
         }),
       ).unwrap();
-      router.push("/details");
+
+      if (result && result.patient_id) {
+        router.push(`/patients/${result.patient_id}`);
+      } else {
+        console.error("Inget patient_id returnerades");
+      }
     } catch (error) {
       console.log("Login failed", error);
     }
