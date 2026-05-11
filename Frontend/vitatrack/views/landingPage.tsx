@@ -67,7 +67,7 @@ export function LandingPage() {
           {[
             {
               title: "Real-Time Vitals",
-              desc: "Continuous temperature, pulse, and SpO₂ — always up to date.",
+              desc: "Continuous temperature, pulse, and SpO₂, always up to date.",
               href: "#vitals",
             },
             {
