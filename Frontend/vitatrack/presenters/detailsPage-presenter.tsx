@@ -9,6 +9,7 @@ import { postGetPatientHealthDataThunk } from "@/communication/patientHealthData
 import { postDeletePatientThunk } from "@/communication/patientDeleteCommunication";
 import { fetchPatientHealthHistoryThunk } from "@/communication/patientHealthHistoryCommunication";
 import { useEffect } from "react";
+import { clearHealthData } from "@/models/redux/patientSlice";
 
 export const DetailsPagePresenter = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +38,31 @@ export const DetailsPagePresenter = () => {
     if (patient_info?.person_number) {
       dispatch(
         postGetPatientHealthDataThunk({
+          person_number: patient_info.person_number,
+        }),
+      );
+    }
+  }, [patient_info?.person_number]);
+
+  useEffect(() => {
+    if (params?.id) {
+      const personId = Number(params.id);
+      if (!isNaN(personId)) {
+        dispatch(clearHealthData()); // clear stale data immediately
+        dispatch(postGetPatientInfoThunk({ person_id: personId }));
+      }
+    }
+  }, [params?.id]);
+
+  useEffect(() => {
+    if (patient_info?.person_number) {
+      dispatch(
+        postGetPatientHealthDataThunk({
+          person_number: patient_info.person_number,
+        }),
+      );
+      dispatch(
+        fetchPatientHealthHistoryThunk({
           person_number: patient_info.person_number,
         }),
       );

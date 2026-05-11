@@ -321,7 +321,13 @@ export const DetailsPage = ({
             />
           </div>
 
-          {graphOpen && (
+          {!healthLoading && !healthData && (
+            <p className="mt-6 text-sm text-slate-400 text-center">
+              No measurements available for this patient.
+            </p>
+          )}
+
+          {graphOpen && healthHistory && healthHistory.length > 0 && (
             <div className="mt-8">
               <h3 className="text-sm font-semibold text-slate-700 mb-3">
                 {graphOpen}
@@ -331,7 +337,7 @@ export const DetailsPage = ({
                   title={graphOpen}
                   history={healthHistory ?? []}
                   historyLoading={historyLoading ?? false}
-                />{" "}
+                />
               </div>
             </div>
           )}

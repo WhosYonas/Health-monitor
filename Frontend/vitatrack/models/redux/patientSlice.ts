@@ -52,7 +52,14 @@ const initialState: patientState = {
 export const patientSlice = createSlice({
   name: "patient",
   initialState,
-  reducers: {},
+  reducers: {
+    clearHealthData: (state) => {
+      state.health_data = null;
+      state.health_history = [];
+      state.healthLoading = false;
+      state.historyLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(postGetPatientInfoThunk.pending, (state) => {
       state.infoLoading = true;
@@ -130,3 +137,4 @@ export const patientSlice = createSlice({
 });
 
 export default patientSlice.reducer;
+export const { clearHealthData } = patientSlice.actions;
