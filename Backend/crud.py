@@ -186,18 +186,32 @@ def create_measurement(
     return m
 
 
-def get_measurements_by_device(
-    db: Session, device_id: int, limit: int = 100
-) -> list[models.Measurement]:
+def get_latest_health_data(db: Session, patient_id: int):
+    from sqlalchemy import desc
     return (
         db.query(models.Measurement)
-        .filter_by(device_id=device_id)
-        .order_by(models.Measurement.recorded_at.desc())
+        .join(models.Device, models.Measurement.device_id == models.Device.device_id)
+        .filter(models.Device.patient_id == patient_id)
+        .order_by(desc(models.Measurement.recorded_at))
+        .first()
+    )
+
+
+
+#========HISTORY=========
+
+def get_health_history(db: Session, patient_id: int, limit: int = 20):
+    from sqlalchemy import desc
+    return (
+        db.query(models.Measurement)
+        .join(models.Device, models.Measurement.device_id == models.Device.device_id)
+        .filter(models.Device.patient_id == patient_id)
+        .order_by(desc(models.Measurement.recorded_at))
         .limit(limit)
         .all()
     )
 
-    # ================RELATIVE=================
+# ================RELATIVE=================
 
 
 def create_relative(

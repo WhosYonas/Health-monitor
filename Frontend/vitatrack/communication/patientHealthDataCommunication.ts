@@ -11,7 +11,7 @@ type healthDataResponse = {
 };
 
 const postGetPatientHealthData = async (payload: patientPayload) => {
-  const response = await fetch(`/api/patient_health_data`, {
+  const response = await fetch(`/api/patients/health_data`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export const postGetPatientHealthDataThunk = createAsyncThunk<
 >("patient/postGetPatientHealthDataThunk", async (payload, thunkAPI) => {
   try {
     const data = await postGetPatientHealthData(payload);
-    const healthData = data.health_data as healthDataResponse;
+    const healthData = data as healthDataResponse;
 
     return healthData;
   } catch (error: any) {
