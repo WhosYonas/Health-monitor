@@ -30,7 +30,7 @@ def get_patients_below_threshold(
     if payload.get("role") != "caregiver":
         raise HTTPException(status_code=403, detail="Caregivers only.")
 
-    caregiver = crud.get_caregiver_by_personnummer(db, payload["sub"])
+    caregiver = crud.get_caregiver_by_id(db, payload["sub"])
     if not caregiver:
         raise HTTPException(status_code=404, detail="Caregiver not found.")
 
