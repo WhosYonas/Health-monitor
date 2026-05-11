@@ -3,8 +3,8 @@ import Link from "next/link";
 export function HeaderPage({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-white/10 bg-linear-to-r from-slate-950/90 via-teal-950/85 to-cyan-950/80 px-5 backdrop-blur-md">
-        <div className="relative flex items-center bg-lime-400 shadow-lg shadow-cyan-500/50 rounded-sm p-1 overflow-hidden">
+      <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-white/10 bg-emerald-100 px-5 backdrop-blur-md">
+        <div className="relative flex items-center bg-emerald-200 hover:bg-white shadow-lg shadow-black rounded-sm p-1 overflow-hidden">
           {/* ECG/Pulse SVG background */}
           <svg
             className="absolute inset-0 w-full h-full opacity-50"
@@ -28,16 +28,17 @@ export function HeaderPage({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
 
-        <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-6">
+        <div className="absolute bg-emerald-200 rounded-full left-1/2 flex -translate-x-1/2 items-center gap-6 px-10 py-2">
+          {" "}
           <a
             href="#about"
-            className="text-xl font-semibold text-white/80 transition hover:text-white"
+            className="text-xl font-semibold text-black/80 transition hover:text-white"
           >
             About
           </a>
           <a
             href="#how-it-works"
-            className="text-xl font-semibold text-white/80 transition hover:text-cyan-300"
+            className="text-xl font-semibold text-black/80 transition hover:text-white"
           >
             How it works
           </a>

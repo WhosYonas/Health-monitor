@@ -5,7 +5,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-100 via-white to-teal-50 py-28">
         {/* decorative circles */}
         <div className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-emerald-100/60" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-teal-100/50" />
@@ -109,7 +109,8 @@ export function LandingPage() {
           <h2 className="mb-14 text-center text-3xl font-bold tracking-tight">
             Designed around three promises
           </h2>
-          <div className="grid gap-8 md:grid-cols-3">
+
+          <div className="flex flex-col divide-y divide-white/20 border-y border-white/20">
             {[
               {
                 heading: "Comfort",
@@ -123,15 +124,23 @@ export function LandingPage() {
                 heading: "Affordability",
                 body: "High-quality sensors at a price that won't strain a facility's budget, better care for more patients.",
               },
-            ].map((p) => (
+            ].map((p, i) => (
               <div
                 key={p.heading}
-                className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-sm"
+                className="group flex items-start gap-6 overflow-hidden py-5 transition-all duration-500 ease-in-out hover:py-10"
               >
-                <h3 className="mb-3 text-xl font-semibold">{p.heading}</h3>
-                <p className="text-sm leading-relaxed text-white/75">
-                  {p.body}
-                </p>
+                <span className="mt-0.5 shrink-0 text-xs font-semibold tracking-widest text-white/40 uppercase">
+                  0{i + 1}
+                </span>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold">{p.heading}</h3>
+                  <p className="mt-0 max-h-0 overflow-hidden text-sm leading-relaxed text-white/70 transition-all duration-500 ease-in-out group-hover:mt-3 group-hover:max-h-24">
+                    {p.body}
+                  </p>
+                </div>
+                <span className="mt-1 shrink-0 text-white/30 transition-transform duration-500 group-hover:translate-y-1">
+                  ↓
+                </span>
               </div>
             ))}
           </div>
@@ -160,16 +169,16 @@ export function LandingPage() {
             </p>
             <ul className="mt-6 space-y-2 text-sm text-slate-600">
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Sub-second update
-                latency
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                Low update latency
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> MAX30102 pulse-ox
-                sensor
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                MAX30102 pulse oximeter
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> DS18B20 precision
-                thermometer
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                DS18B20 precision thermometer
               </li>
             </ul>
           </div>
@@ -206,16 +215,12 @@ export function LandingPage() {
             </p>
             <ul className="mt-6 space-y-2 text-sm text-slate-600">
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Configurable
-                per-patient thresholds
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                Configurable per-patient thresholds
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Multi-device push
-                delivery
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Full alert history
-                log
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                Full alert history log
               </li>
             </ul>
           </div>
@@ -240,16 +245,16 @@ export function LandingPage() {
             </p>
             <ul className="mt-6 space-y-2 text-sm text-slate-600">
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Whole-facility
-                patient grid
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />{" "}
+                Whole-facility patient grid
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Risk-level colour
-                coding
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />{" "}
+                Risk-level colour coding
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Role-based access
-                control
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />{" "}
+                Role-based access control
               </li>
             </ul>
           </div>
@@ -286,15 +291,12 @@ export function LandingPage() {
             </p>
             <ul className="mt-6 space-y-2 text-sm text-slate-600">
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Adjustable
-                time-range view
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                Adjustable time-range view
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Baseline & anomaly
-                annotation
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> PDF / CSV export
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                Baseline & anomaly annotation
               </li>
             </ul>
           </div>
@@ -382,7 +384,10 @@ export function LandingPage() {
               <a href="#" className="transition hover:text-slate-700">
                 LinkedIn
               </a>
-              <a href="#" className="transition hover:text-slate-700">
+              <a
+                href="https://github.com/WhosYonas/Health-monitor.git"
+                className="transition hover:text-slate-700"
+              >
                 GitHub
               </a>
             </div>
