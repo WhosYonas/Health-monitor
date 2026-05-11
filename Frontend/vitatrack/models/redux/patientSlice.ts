@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { postGetPatientInfoThunk } from "@/communication/patientInfoCommunication";
 import { postGetPatientHealthDataThunk } from "@/communication/patientHealthDataCommunication";
 import { postPatientLoginThunk } from "@/communication/patientLoginCommunication";
+import { postDeletePatientThunk } from "@/communication/patientDeleteCommunication";
 
 interface patientHealthData {
   pulse: number | null;
@@ -83,6 +84,19 @@ export const patientSlice = createSlice({
       state.infoLoading = false;
       state.health_error_message =
         action.payload ?? action.error.message ?? "Unknown error";
+    });
+    builder.addCase(postDeletePatientThunk.pending, (state) => {
+      state.infoLoading = true;
+      state.info_error_message = null;
+    });
+    builder.addCase(postDeletePatientThunk.fulfilled, (state) => {
+      state.patient_info = null;
+      state.health_data = null;
+      state.infoLoading = false;
+    });
+    builder.addCase(postDeletePatientThunk.rejected, (state, action) => {
+      state.info_error_message = action.payload as string;
+      state.infoLoading = false;
     });
   },
 });

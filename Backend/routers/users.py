@@ -10,7 +10,6 @@ from starlette.requests import Request
 from database import get_db
 
 from .auth import (
-    caregiver_oauth2_scheme,
     create_access_token,
     decode_access_token,
 )
@@ -216,37 +215,77 @@ def get_me(request: Request, db: Session = Depends(get_db)):
 def update_patient(
     patient_id: int,
     data: schemas.PatientUpdate,
-    token: str = Depends(caregiver_oauth2_scheme),
+    request: Request,
     db: Session = Depends(get_db),
 ):
-    payload = decode_access_token(token)
-    if payload.get("role") != "caregiver":
-        raise HTTPException(
-            status_code=403, detail="Only caregivers can update patients."
-        )
-    patient = crud.update_patient(db, patient_id, data)
-    if not patient:
-        raise HTTPException(status_code=404, detail="Patient not found.")
-    return patient
+    access_token = request.cookies.get("access_token")
+
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") != "caregiver":
+            raise HTTPException(
+                status_code=403, detail="Only caregivers can update patients."
+            )
+
+        patient = crud.update_patient(db, patient_id, data)
+        if not patient:
+            raise HTTPException(status_code=404, detail="Patient not found.")
+        return patient
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in update_patient: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 # =======DELETE PATIENT=========
-
-
 @router.delete("/patient/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_patient(
     patient_id: int,
-    token: str = Depends(caregiver_oauth2_scheme),
+    request: Request,
     db: Session = Depends(get_db),
 ):
-    payload = decode_access_token(token)
-    if payload.get("role") != "caregiver":
-        raise HTTPException(
-            status_code=403, detail="Only caregivers can delete patients."
-        )
-    deleted = crud.delete_patient(db, patient_id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Patient not found.")
+    access_token = request.cookies.get("access_token")
+
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    try:
+        payload = decode_access_token(access_token)
+        if payload.get("role") != "caregiver":
+            raise HTTPException(
+                status_code=403, detail="Only caregivers can delete patients."
+            )
+
+        deleted = crud.delete_patient(db, patient_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Patient not found.")
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"crash in delete_patient: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+# @router.delete("/patient/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
+# def delete_patient(
+#     patient_id: int,
+#     token: str = Depends(caregiver_oauth2_scheme),
+#     db: Session = Depends(get_db),
+# ):
+#     payload = decode_access_token(token)
+#     if payload.get("role") != "caregiver":
+#         raise HTTPException(
+#             status_code=403, detail="Only caregivers can delete patients."
+#         )
+#     deleted = crud.delete_patient(db, patient_id)
+#     if not deleted:
+#         raise HTTPException(status_code=404, detail="Patient not found.")
 
 
 # =================LOGOUT==========================

@@ -325,14 +325,45 @@ def get_patients_below_threshold(
     return results
 
 
-# =====UPDATE PATIENT======
+# # =====UPDATE PATIENT======
+# def update_patient(
+#     db: Session, patient_id: int, data: schemas.PatientUpdate
+# ) -> models.PatientAccount | None:
+#     patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+#     if not patient:
+#         return None
+
+#     person = patient.person
+#     if data.first_name is not None:
+#         person.first_name = data.first_name
+#     if data.last_name is not None:
+#         person.last_name = data.last_name
+#     if data.phone_number is not None:
+#         person.phone_number = data.phone_number
+#     if data.personnummer is not None:
+#         person.personnummer = data.personnummer
+
+#     if data.password is not None:
+#         patient.password_hash = hash_password(data.password)
+
+#     db.commit()
+#     db.refresh(patient)
+#     return patient
+
+
 def update_patient(
     db: Session, patient_id: int, data: schemas.PatientUpdate
 ) -> models.PatientAccount | None:
-    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    patient = (
+        db.query(models.PatientAccount)
+        .options(joinedload(models.PatientAccount.relatives))
+        .filter_by(patient_id=patient_id)
+        .first()
+    )
     if not patient:
         return None
 
+    # Person fields
     person = patient.person
     if data.first_name is not None:
         person.first_name = data.first_name
@@ -343,8 +374,27 @@ def update_patient(
     if data.personnummer is not None:
         person.personnummer = data.personnummer
 
-    if data.password is not None:
-        patient.password_hash = hash_password(data.password)
+    # Patient fields
+    if data.critical_level is not None:
+        patient.critical_level = data.critical_level
+
+    # Relative (assume one relative per patient)
+    if data.relative_fullname is not None or data.relative_phone_number is not None:
+        relative = patient.relatives[0] if patient.relatives else None
+
+        if relative is None:
+            if data.relative_fullname is not None:
+                relative = models.Relative(
+                    patient_id=patient.patient_id,
+                    full_name=data.relative_fullname,
+                    phone_number=data.relative_phone_number,
+                )
+                db.add(relative)
+        else:
+            if data.relative_fullname is not None:
+                relative.full_name = data.relative_fullname
+            if data.relative_phone_number is not None:
+                relative.phone_number = data.relative_phone_number
 
     db.commit()
     db.refresh(patient)

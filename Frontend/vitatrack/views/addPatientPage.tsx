@@ -14,6 +14,7 @@ interface addPatientProps {
     critical_level: number | null;
     password: string | null;
   }) => void;
+  onCancel: () => void;
 }
 
 export function AddPatientPage({
@@ -21,6 +22,7 @@ export function AddPatientPage({
   addSuccess,
   addError,
   onAddPatient,
+  onCancel,
 }: addPatientProps) {
   return (
     <AddPatient
@@ -28,6 +30,7 @@ export function AddPatientPage({
       addSuccess={addSuccess}
       addError={addError}
       onAddPatient={onAddPatient}
+      onCancel={onCancel}
     />
   );
 }

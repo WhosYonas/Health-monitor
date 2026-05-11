@@ -189,5 +189,6 @@ class PatientUpdate(BaseModel):
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
     personnummer: Optional[str] = None
-    username: Optional[str] = None
-    password: Optional[str] = None
+    critical_level: Optional[int] = None
+    relative_fullname: Optional[str] = None
+    relative_phone_number: Optional[str] = None

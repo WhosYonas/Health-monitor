@@ -1,3 +1,5 @@
+import { EditPatientPresenter } from "@/presenters/editPatientPage-presenter";
+
 export default async function PatientEdit() {
-  return <div style={{ padding: "20px" }}>EDIT</div>;
+  return <EditPatientPresenter />;
 }
