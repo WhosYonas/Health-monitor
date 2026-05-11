@@ -5,13 +5,36 @@ type loginPayload = {
   password: string;
 };
 
-type LoginResponse = {
+interface ApiLoginResponse {
+  access_token: string;
+  role: string;
+  user: {
+    patient_id: number;
+    person: {
+      first_name: string;
+      last_name: string;
+      phone_number: string;
+      personnummer: string;
+    };
+    critical_level: number;
+    relatives: {
+      full_name: string;
+      phone_number: string;
+    }[];
+  };
+}
+
+export type LoginResponse = {
+  patient_id: number;
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
-  personnummer: string | null;
-  role: "patient" | "caregiver" | null;
+  person_number: string | null;
+  relative_fullname: string | null;
+  relative_phone_number: string | null;
+  critical_level: number | null;
 };
+
 const postLogin = async (payload: loginPayload) => {
   const formData = new URLSearchParams();
   formData.append("username", payload.identifier);
@@ -41,7 +64,7 @@ const postLogin = async (payload: loginPayload) => {
       detail: data.detail,
     };
   }
-  return data;
+  return data as ApiLoginResponse;
 };
 
 export const postPatientLoginThunk = createAsyncThunk<
@@ -50,15 +73,19 @@ export const postPatientLoginThunk = createAsyncThunk<
   { rejectValue: string }
 >("user/postPatientLoginThunk", async (payload, thunkAPI) => {
   try {
-    const data = await postLogin(payload);
-    const userInfo: LoginResponse = {
-      first_name: data.user.person.first_name,
-      last_name: data.user.person.last_name,
-      phone_number: data.user.person.phone_number,
-      personnummer: data.user.person.person_number,
-      role: data.user.role,
+    const data: ApiLoginResponse = await postLogin(payload);
+    const user = data.user;
+    const firstRelative = user.relatives.length > 0 ? user.relatives[0] : null;
+    return {
+      patient_id: user.patient_id,
+      first_name: user.person.first_name,
+      last_name: user.person.last_name,
+      phone_number: user.person.phone_number,
+      person_number: user.person.personnummer,
+      critical_level: user.critical_level,
+      relative_fullname: firstRelative ? firstRelative.full_name : null,
+      relative_phone_number: firstRelative ? firstRelative.phone_number : null,
     };
-    return userInfo;
   } catch (error: any) {
     if (error.status === 401) {
       return thunkAPI.rejectWithValue("Incorrect identifier or password");

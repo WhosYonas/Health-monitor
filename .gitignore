@@ -5,3 +5,6 @@ __pycache__/
 mqtt-certs/
 *.key
 *.crt
+
+
+pyrightconfig.json

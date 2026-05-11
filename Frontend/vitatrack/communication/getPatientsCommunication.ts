@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 type Patient = {
   patient_id: number;
+  critical_level: number;
   person: {
     first_name: string;
     last_name: string;

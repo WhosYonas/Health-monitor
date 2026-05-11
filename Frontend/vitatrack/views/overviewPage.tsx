@@ -1,25 +1,43 @@
 "use client";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMyPatientsThunk } from "@/communication/getPatientsCommunication";
-import { PatientOverview } from "@/components/custom/patientOverview";
-import type { AppDispatch } from "@/lib/store";
 import Link from "next/link";
+import { PatientOverview } from "@/components/custom/patientOverview";
 
-export default function OverviewPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { patients, patientsLoading, patientsError } = useSelector(
-    (state: any) => state.patientManagement,
-  );
+type Patient = {
+  patient_id: number;
+  person: {
+    first_name: string;
+    last_name: string;
+    phone_number: string | null;
+    personnummer: string;
+  };
+};
 
-  useEffect(() => {
-    dispatch(getMyPatientsThunk());
-  }, [dispatch]);
+type SortOption = "priority" | "name" | "latest";
 
+interface OverviewPageProps {
+  patients: Patient[];
+  filteredPatients: Patient[];
+  patientsLoading: boolean;
+  patientsError: string | null;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  sortBy: SortOption;
+  onSortChange: (value: SortOption) => void;
+}
+
+export default function OverviewPage({
+  patients,
+  filteredPatients,
+  patientsLoading,
+  patientsError,
+  searchQuery,
+  onSearchChange,
+  sortBy,
+  onSortChange,
+}: OverviewPageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E6F5F2] to-[#F4FAF8] p-5">
       <div className="mx-auto max-w-[1600px] space-y-5">
-
         {/* Header */}
         <header className="rounded-[8px] border border-white/40 bg-gradient-to-br from-white to-[#f5f7f8] px-4 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.08)] sm:px-6 sm:py-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -36,7 +54,7 @@ export default function OverviewPage() {
             </div>
             <div className="flex justify-start sm:justify-end">
               <Link href="/addpatient">
-                <button className="rounded-2xl bg-[#00C281] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
+                <button className="cursor-pointer rounded-2xl bg-[#00C281] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#00a86f] hover:shadow-md hover:-translate-y-[1px]">
                   Add Patient
                 </button>
               </Link>
@@ -89,13 +107,14 @@ export default function OverviewPage() {
             <h2 className="mt-3 text-[26px] sm:text-[30px] font-bold tracking-[-0.03em] text-[#00C281]">
               Stable
             </h2>
-            <p className="mt-1 text-sm text-[#6b7280]">Monitoring stream active</p>
+            <p className="mt-1 text-sm text-[#6b7280]">
+              Monitoring stream active
+            </p>
           </div>
         </section>
 
         {/* Main + Sidebar */}
         <div className="flex flex-col gap-5 lg:flex-row">
-
           {/* Patient list */}
           <section className="w-full lg:w-[70%] rounded-[8px] border border-white/35 bg-white p-4 sm:p-5 shadow-[0_12px_32px_rgba(15,23,42,0.07)]">
             <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -124,14 +143,17 @@ export default function OverviewPage() {
                   <input
                     type="text"
                     placeholder="Search patients..."
+                    value={searchQuery}
+                    onChange={(e) => onSearchChange(e.target.value)}
                     className="w-full min-w-[220px] rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-10 pr-4 text-sm text-[#111827] outline-none transition-all duration-300 placeholder:text-[#9ca3af] focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
                   />
                 </div>
 
                 <div className="relative">
                   <select
-                    defaultValue="priority"
-                    className="w-full rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-4 pr-10 text-sm font-medium text-[#6b7280] outline-none transition-all duration-300 hover:border-[#d1d5db] hover:bg-white hover:shadow-sm focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
+                    value={sortBy}
+                    onChange={(e) => onSortChange(e.target.value as SortOption)}
+                    className="w-full appearance-none rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] py-2 pl-4 pr-10 text-sm font-medium text-[#6b7280] outline-none transition-all duration-300 hover:border-[#d1d5db] hover:bg-white hover:shadow-sm focus:border-[#00C281] focus:bg-white focus:shadow-[0_0_0_4px_rgba(0,194,129,0.10)]"
                   >
                     <option value="priority">Sort by priority</option>
                     <option value="name">Sort by name</option>
@@ -153,7 +175,6 @@ export default function OverviewPage() {
               </div>
             </div>
 
-            {/* Loading / Error states */}
             {patientsLoading && (
               <p className="text-sm text-[#6b7280]">Loading patients...</p>
             )}
@@ -161,8 +182,17 @@ export default function OverviewPage() {
               <p className="text-sm text-red-500">{patientsError}</p>
             )}
 
+            {!patientsLoading &&
+              !patientsError &&
+              filteredPatients.length === 0 &&
+              searchQuery && (
+                <p className="text-sm text-[#6b7280]">
+                  No patients match &quot;{searchQuery}&quot;.
+                </p>
+              )}
+
             <div className="space-y-3">
-              {patients.map((patient: any) => (
+              {filteredPatients.map((patient) => (
                 <PatientOverview key={patient.patient_id} patient={patient} />
               ))}
             </div>
@@ -170,23 +200,32 @@ export default function OverviewPage() {
 
           {/* Sidebar */}
           <div className="flex w-full flex-col gap-5 lg:w-[30%]">
-
             {/* Notifications */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="text-[15px] font-semibold text-[#111827]">Notifications</p>
+                <p className="text-[15px] font-semibold text-[#111827]">
+                  Notifications
+                </p>
                 <span className="rounded-full bg-[#00C281] px-2.5 py-1 text-[12px] font-semibold text-white">
                   2 new
                 </span>
               </div>
               <div className="space-y-3">
                 <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">Patient 14 needs attention</p>
-                  <p className="mt-1 text-sm text-[#6b7280]">Heart rate threshold exceeded 2 minutes ago.</p>
+                  <p className="text-sm font-semibold text-[#111827]">
+                    Patient 14 needs attention
+                  </p>
+                  <p className="mt-1 text-sm text-[#6b7280]">
+                    Heart rate threshold exceeded 2 minutes ago.
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-4 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
-                  <p className="text-sm font-semibold text-[#111827]">Lab update received</p>
-                  <p className="mt-1 text-sm text-[#6b7280]">New blood panel data is available for review.</p>
+                  <p className="text-sm font-semibold text-[#111827]">
+                    Lab update received
+                  </p>
+                  <p className="mt-1 text-sm text-[#6b7280]">
+                    New blood panel data is available for review.
+                  </p>
                 </div>
               </div>
             </section>
@@ -194,7 +233,9 @@ export default function OverviewPage() {
             {/* Tasks */}
             <section className="rounded-[28px] border border-white/35 bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="text-[15px] font-semibold text-[#111827]">Tasks</p>
+                <p className="text-[15px] font-semibold text-[#111827]">
+                  Tasks
+                </p>
                 <button className="whitespace-nowrap rounded-2xl bg-[#111827] px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#1f2937] hover:shadow-sm">
                   Add task
                 </button>
@@ -225,12 +266,13 @@ export default function OverviewPage() {
               </p>
               <div className="mt-5 flex items-center gap-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-white" />
-                <span className="text-sm font-medium text-white">Connected to live feed</span>
+                <span className="text-sm font-medium text-white">
+                  Connected to live feed
+                </span>
               </div>
             </section>
           </div>
         </div>
-
       </div>
     </div>
   );

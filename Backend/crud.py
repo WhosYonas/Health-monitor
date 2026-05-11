@@ -1,8 +1,7 @@
-from sqlalchemy.orm import Session
+import bcrypt
 import models
 import schemas
-import bcrypt
-
+from sqlalchemy.orm import Session, joinedload
 
 
 def hash_password(password: str) -> str:
@@ -14,9 +13,13 @@ def verify_password(plain: str, hashed: str) -> bool:
     password_bytes = plain.encode("utf-8")[:72]
     return bcrypt.checkpw(password_bytes, hashed.encode("utf-8"))
 
-#=================CAREGIVER========================
 
-def get_caregiver_by_personnummer(db: Session, personnummer: str) -> models.CaregiverAccount | None:
+# =================CAREGIVER========================
+
+
+def get_caregiver_by_personnummer(
+    db: Session, personnummer: str
+) -> models.CaregiverAccount | None:
     return (
         db.query(models.CaregiverAccount)
         .join(models.Person)
@@ -24,15 +27,28 @@ def get_caregiver_by_personnummer(db: Session, personnummer: str) -> models.Care
         .first()
     )
 
-def get_caregiver_by_username(db: Session, username: str) -> models.CaregiverAccount | None:
-    return db.query(models.CaregiverAccount).filter(models.CaregiverAccount.username == username).first()
+
+def get_caregiver_by_username(
+    db: Session, username: str
+) -> models.CaregiverAccount | None:
+    return (
+        db.query(models.CaregiverAccount)
+        .filter(models.CaregiverAccount.username == username)
+        .first()
+    )
 
 
-def get_caregiver_by_id(db: Session, caregiver_id: int) -> models.CaregiverAccount | None:
-    return db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+def get_caregiver_by_id(
+    db: Session, caregiver_id: int
+) -> models.CaregiverAccount | None:
+    return (
+        db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    )
 
 
-def create_caregiver(db: Session, data: schemas.CaregiverCreate) -> models.CaregiverAccount:
+def create_caregiver(
+    db: Session, data: schemas.CaregiverCreate
+) -> models.CaregiverAccount:
     person = models.Person(
         first_name=data.first_name,
         last_name=data.last_name,
@@ -53,9 +69,12 @@ def create_caregiver(db: Session, data: schemas.CaregiverCreate) -> models.Careg
     return account
 
 
-#=================PATIENT========================
+# =================PATIENT========================
 
-def get_patient_by_personnummer(db: Session, personnummer: str) -> models.PatientAccount | None:
+
+def get_patient_by_personnummer(
+    db: Session, personnummer: str
+) -> models.PatientAccount | None:
     return (
         db.query(models.PatientAccount)
         .join(models.Person)
@@ -63,8 +82,22 @@ def get_patient_by_personnummer(db: Session, personnummer: str) -> models.Patien
         .first()
     )
 
+
 def get_patient_by_id(db: Session, patient_id: int) -> models.PatientAccount | None:
-    return db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+    return (
+        db.query(models.PatientAccount)
+        .options(joinedload(models.PatientAccount.relatives))
+        .filter(models.PatientAccount.patient_id == patient_id)
+        .first()
+    )
+
+
+def get_patient_relatives(db: Session, patient_id: int):
+    relatives = (
+        db.query(models.Relative).filter(models.Relative.patient_id == patient_id).all()
+    )
+    return relatives
+
 
 def create_patient(db: Session, data: schemas.PatientCreate) -> models.PatientAccount:
     person = models.Person(
@@ -79,32 +112,45 @@ def create_patient(db: Session, data: schemas.PatientCreate) -> models.PatientAc
     account = models.PatientAccount(
         person_id=person.person_id,
         password_hash=hash_password(data.password),
-        critical_level=data.critical_level
+        critical_level=data.critical_level,
     )
     db.add(account)
+
     db.commit()
     db.refresh(account)
     return account
 
 
-#===============CAREGIVER<->PATIENT======================
+# ===============CAREGIVER<->PATIENT======================
 
-def assign_patient_to_caregiver(db: Session, caregiver_id: int, patient_id: int) -> None:
-    caregiver = db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
-    patient   = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+
+def assign_patient_to_caregiver(
+    db: Session, caregiver_id: int, patient_id: int
+) -> None:
+    caregiver = (
+        db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    )
+    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
     if not caregiver or not patient:
         raise ValueError("Caregiver or patient not found")
     if patient not in caregiver.patients:
         caregiver.patients.append(patient)
         db.commit()
 
-def get_patients_by_caregiver(db: Session, caregiver_id: int) -> list[models.PatientAccount]:
-    caregiver = db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+
+def get_patients_by_caregiver(
+    db: Session, caregiver_id: int
+) -> list[models.PatientAccount]:
+    caregiver = (
+        db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    )
     if not caregiver:
         return []
     return caregiver.patients
 
-#================DEVICE======================
+
+# ================DEVICE======================
+
 
 def create_device(db: Session, patient_id: int, device_uid: str) -> models.Device:
     device = models.Device(patient_id=patient_id, device_uid=device_uid)
@@ -118,7 +164,8 @@ def get_devices_by_patient(db: Session, patient_id: int) -> list[models.Device]:
     return db.query(models.Device).filter_by(patient_id=patient_id).all()
 
 
-#============MEASUREMENT====================
+# ============MEASUREMENT====================
+
 
 def create_measurement(
     db: Session,
@@ -139,7 +186,9 @@ def create_measurement(
     return m
 
 
-def get_measurements_by_device(db: Session, device_id: int, limit: int = 100) -> list[models.Measurement]:
+def get_measurements_by_device(
+    db: Session, device_id: int, limit: int = 100
+) -> list[models.Measurement]:
     return (
         db.query(models.Measurement)
         .filter_by(device_id=device_id)
@@ -148,18 +197,27 @@ def get_measurements_by_device(db: Session, device_id: int, limit: int = 100) ->
         .all()
     )
 
+    # ================RELATIVE=================
 
-#================RELATIVE=================
 
-def create_relative(db: Session, patient_id: int, data: schemas.RelativeCreate) -> models.Relative:
-    rel = models.Relative(patient_id=patient_id, full_name=data.full_name, phone_number=data.phone_number)
+def create_relative(
+    db: Session,
+    patient_id: int,
+    data: schemas.RelativeCreate,
+) -> models.Relative:
+    rel = models.Relative(
+        patient_id=patient_id,
+        full_name=data.full_name,
+        phone_number=data.phone_number,
+    )
     db.add(rel)
     db.commit()
     db.refresh(rel)
     return rel
 
 
-#=============ALERT===========
+# =============ALERT===========
+
 
 def create_alert(
     db: Session,
@@ -182,17 +240,21 @@ def create_alert(
     return alert
 
 
-def acknowledge_alert(db: Session, alert_id: int, caregiver_id: int) -> models.Alert | None:
+def acknowledge_alert(
+    db: Session, alert_id: int, caregiver_id: int
+) -> models.Alert | None:
     alert = db.query(models.Alert).filter_by(alert_id=alert_id).first()
     if alert:
-        alert.acknowledged    = True
+        alert.acknowledged = True
         alert.acknowledged_by = caregiver_id
         db.commit()
         db.refresh(alert)
     return alert
 
 
-def get_unacknowledged_alerts_by_patient(db: Session, patient_id: int) -> list[models.Alert]:
+def get_unacknowledged_alerts_by_patient(
+    db: Session, patient_id: int
+) -> list[models.Alert]:
     return (
         db.query(models.Alert)
         .filter_by(patient_id=patient_id, acknowledged=False)
@@ -201,17 +263,19 @@ def get_unacknowledged_alerts_by_patient(db: Session, patient_id: int) -> list[m
     )
 
 
+# ============PATIENTS BELOW THRESHOLD===========
 
-#============PATIENTS BELOW THRESHOLD===========
 
 def get_patients_below_threshold(
     db: Session,
     caregiver_id: int,
-    spo2_min:  float | None = None,
-    hr_min:    int   | None = None,
-    temp_max:  float | None = None,
+    spo2_min: float | None = None,
+    hr_min: int | None = None,
+    temp_max: float | None = None,
 ) -> list[dict]:
-    caregiver = db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    caregiver = (
+        db.query(models.CaregiverAccount).filter_by(caregiver_id=caregiver_id).first()
+    )
     if not caregiver or not caregiver.patients:
         return []
 
@@ -241,26 +305,65 @@ def get_patients_below_threshold(
                 breaches = True
 
         if breaches:
-            results.append({
-                "patient_id": patient.patient_id,
-                "username":   patient.username,
-                "vitals": {
-                    "blood_oxygen": float(latest.blood_oxygen) if latest.blood_oxygen else None,
-                    "heart_rate":   latest.heart_rate,
-                    "temperature":  float(latest.temperature) if latest.temperature else None,
-                    "recorded_at":  latest.recorded_at,
-                },
-            })
+            results.append(
+                {
+                    "patient_id": patient.patient_id,
+                    "username": patient.username,
+                    "vitals": {
+                        "blood_oxygen": float(latest.blood_oxygen)
+                        if latest.blood_oxygen
+                        else None,
+                        "heart_rate": latest.heart_rate,
+                        "temperature": float(latest.temperature)
+                        if latest.temperature
+                        else None,
+                        "recorded_at": latest.recorded_at,
+                    },
+                }
+            )
 
     return results
 
 
-#=====UPDATE PATIENT======
-def update_patient(db: Session, patient_id: int, data: schemas.PatientUpdate) -> models.PatientAccount | None:
-    patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+# # =====UPDATE PATIENT======
+# def update_patient(
+#     db: Session, patient_id: int, data: schemas.PatientUpdate
+# ) -> models.PatientAccount | None:
+#     patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
+#     if not patient:
+#         return None
+
+#     person = patient.person
+#     if data.first_name is not None:
+#         person.first_name = data.first_name
+#     if data.last_name is not None:
+#         person.last_name = data.last_name
+#     if data.phone_number is not None:
+#         person.phone_number = data.phone_number
+#     if data.personnummer is not None:
+#         person.personnummer = data.personnummer
+
+#     if data.password is not None:
+#         patient.password_hash = hash_password(data.password)
+
+#     db.commit()
+#     db.refresh(patient)
+#     return patient
+
+
+def update_patient(
+    db: Session, patient_id: int, data: schemas.PatientUpdate
+) -> models.PatientAccount | None:
+    patient = (
+        db.query(models.PatientAccount)
+        .options(joinedload(models.PatientAccount.relatives))
+        .filter_by(patient_id=patient_id)
+        .first()
+    )
     if not patient:
         return None
 
+    # Person fields
     person = patient.person
     if data.first_name is not None:
         person.first_name = data.first_name
@@ -271,14 +374,35 @@ def update_patient(db: Session, patient_id: int, data: schemas.PatientUpdate) ->
     if data.personnummer is not None:
         person.personnummer = data.personnummer
 
-    if data.password is not None:
-        patient.password_hash = hash_password(data.password)
+    # Patient fields
+    if data.critical_level is not None:
+        patient.critical_level = data.critical_level
+
+    # Relative (assume one relative per patient)
+    if data.relative_fullname is not None or data.relative_phone_number is not None:
+        relative = patient.relatives[0] if patient.relatives else None
+
+        if relative is None:
+            if data.relative_fullname is not None:
+                relative = models.Relative(
+                    patient_id=patient.patient_id,
+                    full_name=data.relative_fullname,
+                    phone_number=data.relative_phone_number,
+                )
+                db.add(relative)
+        else:
+            if data.relative_fullname is not None:
+                relative.full_name = data.relative_fullname
+            if data.relative_phone_number is not None:
+                relative.phone_number = data.relative_phone_number
 
     db.commit()
     db.refresh(patient)
     return patient
 
-#===========DELETE PATIENT==========
+
+# ===========DELETE PATIENT==========
+
 
 def delete_patient(db: Session, patient_id: int) -> bool:
     patient = db.query(models.PatientAccount).filter_by(patient_id=patient_id).first()
@@ -286,7 +410,7 @@ def delete_patient(db: Session, patient_id: int) -> bool:
         return False
     person = patient.person
     db.delete(patient)
-    db.flush()      
+    db.flush()
     db.delete(person)
     db.commit()
     return True

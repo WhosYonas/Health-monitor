@@ -101,7 +101,7 @@ export function PatientOverview({ patient }: Props) {
         </div>
       </div>
 
-      <Link href={`/details/${patient.patient_id}`}>
+      <Link href={`/patients/${patient.patient_id}`}>
         <button className="ml-auto h-[52px] px-5 rounded-xl bg-[#1f2933] text-white font-medium text-[14px] tracking-[-0.01em] hover:bg-[#17212b] transition-all duration-300 hover:shadow-lg hover:-translate-y-[1px] active:translate-y-0 cursor-pointer">
           Show details
         </button>

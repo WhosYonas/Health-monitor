@@ -8,6 +8,7 @@ import { generatePassword } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
 import {
   Dialog,
   DialogClose,
@@ -18,9 +19,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Copy, Check } from "lucide-react";
 import { NotAuthenticatedPagePresenter } from "./notAuthenticatedPage-presenter";
 
 export function AddPatientPagePresenter() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { addLoading, addSuccess, addError } = useSelector(
     (state: RootState) => state.patientManagement,
@@ -33,6 +36,7 @@ export function AddPatientPagePresenter() {
     personnummer: string;
     password: string;
   } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (addError) {
@@ -77,6 +81,19 @@ export function AddPatientPagePresenter() {
       console.log("Patient info", patientInfo);
     }
   }
+
+  const handleCopyPassword = async () => {
+    if (!createdPatient?.password) return;
+    try {
+      await navigator.clipboard.writeText(createdPatient.password);
+      setCopied(true);
+      toast.success("Password copied to clipboard");
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast.error("Failed to copy password");
+    }
+  };
+
   if (loading) {
     return null;
   }
@@ -85,6 +102,10 @@ export function AddPatientPagePresenter() {
     return <NotAuthenticatedPagePresenter userRole={user?.role || null} />;
   }
 
+  const onCancel = () => {
+    router.push(`/overview`);
+  };
+
   return (
     <>
       <AddPatientPage
@@ -92,6 +113,7 @@ export function AddPatientPagePresenter() {
         addSuccess={addSuccess}
         addError={addError}
         onAddPatient={handleAddPatient}
+        onCancel={onCancel}
       />
 
       <Dialog
@@ -99,6 +121,7 @@ export function AddPatientPagePresenter() {
         onOpenChange={(open) => {
           if (!open) {
             setCreatedPatient(null);
+            setCopied(false);
           }
           setDialogOpen(open);
         }}
@@ -120,10 +143,32 @@ export function AddPatientPagePresenter() {
               </p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm text-slate-500">Password</p>
-              <p className="mt-1 text-lg font-semibold text-slate-900">
-                {createdPatient?.password}
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm text-slate-500">Password</p>
+                  <p className="mt-1 text-lg font-semibold text-slate-900">
+                    {createdPatient?.password}
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyPassword}
+                  className="shrink-0"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="mr-2 size-4 text-emerald-600" />
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="mr-2 size-4" />
+                      Copy
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 

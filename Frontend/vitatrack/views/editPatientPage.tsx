@@ -19,11 +19,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface addPatientProps {
-  addLoading: boolean;
-  addSuccess: boolean;
-  addError: string | null;
-  onAddPatient: (patientInfo: {
+interface patientInformation {
+  patient_id: number | null;
+  first_name: string | null;
+  last_name: string | null;
+  phone_number: string | null;
+  person_number: string | null;
+  relative_fullname: string | null;
+  relative_phone_number: string | null;
+  critical_level: number | null;
+}
+
+interface editPatientProps {
+  patient_info: patientInformation | null;
+  infoLoading: boolean;
+  info_error_message: string | null;
+  onUpdatePatient: (patientInfo: {
     first_name: string | null;
     last_name: string | null;
     phone_number: string | null;
@@ -31,37 +42,30 @@ interface addPatientProps {
     relative_fullname: string | null;
     relative_phone_number: string | null;
     critical_level: number | null;
-    password: string | null;
   }) => void;
   onCancel: () => void;
 }
 
-export function AddPatient({
-  addLoading,
-  addSuccess,
-  addError,
-  onAddPatient,
+export function EditPatientPage({
+  patient_info,
+  infoLoading,
+  info_error_message,
+  onUpdatePatient,
   onCancel,
-}: addPatientProps) {
-  const [criticalLevel, setCriticalLevel] = React.useState("1");
+}: editPatientProps) {
+  const [criticalLevel, setCriticalLevel] = React.useState<string>("1");
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [personNumber, setPersonNumber] = React.useState("");
-
-  const isFormValid =
-    firstName.trim() !== "" &&
-    lastName.trim() !== "" &&
-    phoneNumber.trim() !== "" &&
-    personNumber.trim() !== "" &&
-    criticalLevel !== "";
+  React.useEffect(() => {
+    if (patient_info?.critical_level != null) {
+      setCriticalLevel(String(patient_info.critical_level));
+    }
+  }, [patient_info?.critical_level]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const patientInfo = {
+    const updatedInfo = {
       first_name: formData.get("firstName") as string | null,
       last_name: formData.get("lastName") as string | null,
       phone_number: formData.get("phoneNumber") as string | null,
@@ -71,27 +75,48 @@ export function AddPatient({
         | string
         | null,
       critical_level: criticalLevel ? parseInt(criticalLevel) : null,
-      password: null,
     };
 
-    onAddPatient(patientInfo);
+    onUpdatePatient(updatedInfo);
   };
+
+  if (infoLoading && !patient_info) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900">
+        <p className="text-white">Loading patient...</p>
+      </div>
+    );
+  }
+
+  if (info_error_message && !patient_info) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900">
+        <p className="text-red-200">Error: {info_error_message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-950 via-teal-950 to-cyan-900">
       <div className="mx-auto w-full max-w-3xl rounded-[1rem] border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200 sm:p-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-slate-900">Add Patient</h1>
+          <h1 className="text-3xl font-semibold text-slate-900">
+            Edit Patient
+          </h1>
           <p className="mt-2 text-sm text-slate-600">
-            Enter patient details below.
+            Update patient details below.
           </p>
         </div>
 
-        <form className="space-y-8" onSubmit={handleSubmit}>
+        <form
+          className="space-y-8"
+          onSubmit={handleSubmit}
+          key={patient_info?.patient_id ?? "loading"}
+        >
           <FieldSet>
             <FieldLegend>Patient information</FieldLegend>
             <FieldDescription>
-              Provide the patient&apos;s basic contact and identity information.
+              Update the patient&apos;s basic contact and identity information.
             </FieldDescription>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -101,8 +126,7 @@ export function AddPatient({
                   id="patient-first-name"
                   name="firstName"
                   placeholder="John"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  defaultValue={patient_info?.first_name ?? ""}
                 />
               </Field>
               <Field>
@@ -111,8 +135,7 @@ export function AddPatient({
                   id="patient-last-name"
                   name="lastName"
                   placeholder="Doe"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  defaultValue={patient_info?.last_name ?? ""}
                 />
               </Field>
               <Field>
@@ -121,8 +144,7 @@ export function AddPatient({
                   id="patient-phone"
                   name="phoneNumber"
                   placeholder="+46 70 123 45 67"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  defaultValue={patient_info?.phone_number ?? ""}
                 />
               </Field>
               <Field>
@@ -133,8 +155,7 @@ export function AddPatient({
                   id="patient-person-number"
                   name="personNumber"
                   placeholder="19900202-1234"
-                  value={personNumber}
-                  onChange={(e) => setPersonNumber(e.target.value)}
+                  defaultValue={patient_info?.person_number ?? ""}
                 />
                 <FieldDescription>
                   Format example: 19900202-1234.
@@ -148,8 +169,8 @@ export function AddPatient({
           <FieldSet>
             <FieldLegend>Closest relative</FieldLegend>
             <FieldDescription>
-              Add the contact information for the patient&apos;s nearest
-              relative. This section is optional.
+              Update the contact information for the patient&apos;s nearest
+              relative.
             </FieldDescription>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -161,6 +182,7 @@ export function AddPatient({
                   id="relative-name"
                   name="relativeName"
                   placeholder="Alice Smith"
+                  defaultValue={patient_info?.relative_fullname ?? ""}
                 />
               </Field>
               <Field>
@@ -171,6 +193,7 @@ export function AddPatient({
                   id="relative-phone"
                   name="relativePhoneNumber"
                   placeholder="+46 70 765 43 21"
+                  defaultValue={patient_info?.relative_phone_number ?? ""}
                 />
               </Field>
             </div>
@@ -181,7 +204,7 @@ export function AddPatient({
           <FieldSet>
             <FieldLegend>Care settings</FieldLegend>
             <FieldDescription>
-              Choose the patient&apos;s current critical level.
+              Update the patient&apos;s current critical level.
             </FieldDescription>
 
             <Field>
@@ -200,8 +223,8 @@ export function AddPatient({
           </FieldSet>
 
           <Field orientation="horizontal" className="justify-end gap-3">
-            <Button type="submit" disabled={!isFormValid || addLoading}>
-              Add patient
+            <Button type="submit" disabled={infoLoading}>
+              Save changes
             </Button>
             <Button variant="outline" type="button" onClick={onCancel}>
               Cancel
