@@ -22,7 +22,7 @@ export function HeaderPage({
     <div>
       <nav className="sticky top-0 z-50 flex h-18 w-full items-center rounded-none border-b border-black/10 bg-emerald-100 px-5 backdrop-blur-md">
         {/* Logo */}
-        <div className="relative flex items-center bg-emerald-200 hover:bg-white shadow-lg shadow-black rounded-sm p-1 overflow-hidden transition-colors">
+        <div className="relative flex items-center bg-emerald-200 hover:bg-white hover:scale-105 transition-transform duration-700 shadow-lg shadow-black rounded-sm p-1 overflow-hidden transition-colors">
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full opacity-45"
             viewBox="0 0 120 40"

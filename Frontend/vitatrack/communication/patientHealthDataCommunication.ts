@@ -10,26 +10,23 @@ type healthDataResponse = {
   blood_oxygen_level: number | null;
 };
 
-const postGetPatientHealthData = async (payload: patientPayload) => {
+export const postGetPatientHealthData = async (payload: {
+  person_number: string;
+}) => {
   const response = await fetch(`/api/patients/health_data`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
     credentials: "include",
     redirect: "manual",
   });
-
   const data = await response.json();
-  if (!response.ok) {
-    throw {
-      status: response.status,
-      detail: data.detail,
-    };
-  }
-
-  return data;
+  if (!response.ok) throw { status: response.status, detail: data.detail };
+  return data as {
+    pulse: number | null;
+    body_temperature: number | null;
+    blood_oxygen_level: number | null;
+  };
 };
 
 export const postGetPatientHealthDataThunk = createAsyncThunk<

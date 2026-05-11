@@ -1,5 +1,13 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { postGetPatientHealthData } from "@/communication/patientHealthDataCommunication";
 
+type HealthData = {
+  pulse: number | null;
+  body_temperature: number | null;
+  blood_oxygen_level: number | null;
+};
 type Patient = {
   patient_id: number;
   person: {
@@ -106,6 +114,18 @@ function StatCard({
 
 export function PatientOverview({ patient }: Props) {
   const fullName = `${patient.person.first_name} ${patient.person.last_name}`;
+  const [healthData, setHealthData] = useState<HealthData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    postGetPatientHealthData({ person_number: patient.person.personnummer })
+      .then(setHealthData)
+      .catch(() => setHealthData(null))
+      .finally(() => setLoading(false));
+  }, [patient.person.personnummer]);
+
+  const fmt = (val: number | null | undefined) =>
+    val !== null && val !== undefined ? String(val) : "—";
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md">
@@ -127,7 +147,6 @@ export function PatientOverview({ patient }: Props) {
               />
             </svg>
           </div>
-
           <div className="min-w-0">
             <p className="truncate text-base font-semibold text-slate-900">
               {fullName}
@@ -136,9 +155,24 @@ export function PatientOverview({ patient }: Props) {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 xl:w-[420px] xl:max-w-[420px]">
-          <StatCard label="Heart rate" value="83" unit="bpm" tone="rose" />
-          <StatCard label="Temperature" value="36.5" unit="°C" tone="orange" />
-          <StatCard label="SpO2" value="98" unit="%" tone="sky" />
+          <StatCard
+            label="Heart rate"
+            value={loading ? "…" : fmt(healthData?.pulse)}
+            unit="bpm"
+            tone="rose"
+          />
+          <StatCard
+            label="Temperature"
+            value={loading ? "…" : fmt(healthData?.body_temperature)}
+            unit="°C"
+            tone="orange"
+          />
+          <StatCard
+            label="SpO2"
+            value={loading ? "…" : fmt(healthData?.blood_oxygen_level)}
+            unit="%"
+            tone="sky"
+          />
         </div>
 
         <Link
