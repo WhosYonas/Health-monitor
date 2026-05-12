@@ -23,37 +23,21 @@ export const DetailsPagePresenter = () => {
     health_history,
     historyLoading,
   } = useSelector((state: RootState) => state.patient);
+
   const { user } = useSelector((state: RootState) => state.user);
 
+  // Load patient info on mount
   useEffect(() => {
     if (params?.id) {
       const personId = Number(params.id);
       if (!isNaN(personId)) {
+        dispatch(clearHealthData());
         dispatch(postGetPatientInfoThunk({ person_id: personId }));
       }
     }
   }, [params?.id]);
 
-  useEffect(() => {
-    if (patient_info?.person_number) {
-      dispatch(
-        postGetPatientHealthDataThunk({
-          person_number: patient_info.person_number,
-        }),
-      );
-    }
-  }, [patient_info?.person_number]);
-
-  useEffect(() => {
-    if (params?.id) {
-      const personId = Number(params.id);
-      if (!isNaN(personId)) {
-        dispatch(clearHealthData()); // clear stale data immediately
-        dispatch(postGetPatientInfoThunk({ person_id: personId }));
-      }
-    }
-  }, [params?.id]);
-
+  // Load health data and history once patient info is available
   useEffect(() => {
     if (patient_info?.person_number) {
       dispatch(
@@ -69,14 +53,19 @@ export const DetailsPagePresenter = () => {
     }
   }, [patient_info?.person_number]);
 
+  // Poll health data every 10 seconds
   useEffect(() => {
-    if (patient_info?.person_number) {
+    if (!patient_info?.person_number) return;
+
+    const interval = setInterval(() => {
       dispatch(
-        fetchPatientHealthHistoryThunk({
-          person_number: patient_info.person_number,
+        postGetPatientHealthDataThunk({
+          person_number: patient_info.person_number!,
         }),
       );
-    }
+    }, 10_000);
+
+    return () => clearInterval(interval);
   }, [patient_info?.person_number]);
 
   const onOverviewClick = () => {
