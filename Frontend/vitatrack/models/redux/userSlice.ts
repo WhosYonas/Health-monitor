@@ -10,7 +10,8 @@ export interface userProfile {
   first_name: string | null;
   last_name: string | null;
   phone_number: string | null;
-  personnummer: string | null;
+  person_number?: string | null;
+  personnummer?: string | null;
   role: "patient" | "caregiver" | null;
 }
 
