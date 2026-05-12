@@ -52,6 +52,10 @@ services:
       mosquitto:
         condition: service_started
     environment:
+    environment:
+      MQTT_CA_CERT: /app/Subscriber/certs/ca.crt
+      MQTT_CLIENT_CERT: /app/Subscriber/certs/client.crt
+      MQTT_CLIENT_KEY: /app/Subscriber/certs/client.key
       MQTT_BROKER_HOST: mosquitto
       MQTT_BROKER_PORT: 8883
       MQTT_CLIENT_ID: ${MQTT_CLIENT_ID}
@@ -64,8 +68,7 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       LOG_LEVEL: INFO
     volumes:
-      - ./Subscriber/certs:/app/Subscriber/certs:ro
-  nginx:
+      - ./Subscriber/certs:/app/certs:ro  nginx:
     image: nginx:alpine
     restart: unless-stopped
     ports:
