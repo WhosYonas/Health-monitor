@@ -60,7 +60,9 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-
+      LOG_LEVEL: INFO
+    volumes:
+      - ./Subscriber/certs:/app/Subscriber/certs:ro
   nginx:
     image: nginx:alpine
     restart: unless-stopped

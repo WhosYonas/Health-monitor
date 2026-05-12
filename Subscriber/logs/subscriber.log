@@ -147,3 +147,327 @@ temperature
 2026-05-09 21:04:43 | INFO | services.db_service | Inserted reading for device esp32_001
 2026-05-09 21:04:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=24.9375 timestamp=datetime.datetime(2026, 5, 9, 21, 4, 48, 765704)
 2026-05-09 21:04:48 | INFO | services.db_service | Inserted reading for device esp32_001
+2026-05-12 22:36:52 | INFO | services.mqtt_client | Connected to MQTT broker
+2026-05-12 22:36:52 | INFO | services.mqtt_client | Subscribed to topic: esp32/health
+2026-05-12 22:37:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=72 spo2=98.0 temperature=36.6 timestamp=datetime.datetime(2026, 5, 12, 22, 37, 16, 246030)
+2026-05-12 22:37:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:39:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 39, 38, 319336)
+2026-05-12 22:39:38 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:39:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.75 timestamp=datetime.datetime(2026, 5, 12, 22, 39, 43, 766093)
+2026-05-12 22:39:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:39:49 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 39, 49, 252244)
+2026-05-12 22:39:49 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:39:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 39, 54, 697167)
+2026-05-12 22:39:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:00 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 0, 100877)
+2026-05-12 22:40:00 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 5, 636781)
+2026-05-12 22:40:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:11 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 11, 64647)
+2026-05-12 22:40:11 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 16, 491589)
+2026-05-12 22:40:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 21, 918228)
+2026-05-12 22:40:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 27, 346714)
+2026-05-12 22:40:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 32, 876984)
+2026-05-12 22:40:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 38, 302731)
+2026-05-12 22:40:38 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 43, 729812)
+2026-05-12 22:40:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:49 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 49, 179027)
+2026-05-12 22:40:49 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:40:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 40, 54, 584844)
+2026-05-12 22:40:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:00 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 0, 114226)
+2026-05-12 22:41:00 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 5, 541270)
+2026-05-12 22:41:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.8125 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 10, 968564)
+2026-05-12 22:41:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 16, 396697)
+2026-05-12 22:41:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 21, 825462)
+2026-05-12 22:41:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 27, 353538)
+2026-05-12 22:41:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 32, 780760)
+2026-05-12 22:41:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 38, 143570)
+2026-05-12 22:41:38 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 43, 824754)
+2026-05-12 22:41:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:49 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 49, 61716)
+2026-05-12 22:41:49 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:41:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 41, 54, 482250)
+2026-05-12 22:41:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:00 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 0, 18890)
+2026-05-12 22:42:00 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 5, 447065)
+2026-05-12 22:42:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 10, 872722)
+2026-05-12 22:42:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 16, 302088)
+2026-05-12 22:42:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 21, 727545)
+2026-05-12 22:42:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.875 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 27, 198727)
+2026-05-12 22:42:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 32, 684807)
+2026-05-12 22:42:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 38, 127751)
+2026-05-12 22:42:38 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 43, 651877)
+2026-05-12 22:42:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 48, 966498)
+2026-05-12 22:42:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 54, 497012)
+2026-05-12 22:42:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:42:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 42, 59, 848505)
+2026-05-12 22:42:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 5, 295545)
+2026-05-12 22:43:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 10, 778588)
+2026-05-12 22:43:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 16, 189627)
+2026-05-12 22:43:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 21, 736194)
+2026-05-12 22:43:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 27, 82247)
+2026-05-12 22:43:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 32, 606833)
+2026-05-12 22:43:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 38, 17549)
+2026-05-12 22:43:38 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 43, 443911)
+2026-05-12 22:43:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 48, 952331)
+2026-05-12 22:43:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 54, 315991)
+2026-05-12 22:43:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:43:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 43, 59, 827973)
+2026-05-12 22:43:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 5, 255781)
+2026-05-12 22:44:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 10, 682482)
+2026-05-12 22:44:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 16, 109534)
+2026-05-12 22:44:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 21, 597453)
+2026-05-12 22:44:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 27, 154014)
+2026-05-12 22:44:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=20.9375 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 32, 499079)
+2026-05-12 22:44:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:39 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 39, 48061)
+2026-05-12 22:44:39 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:47 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 47, 294492)
+2026-05-12 22:44:47 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:52 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 52, 770029)
+2026-05-12 22:44:52 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:44:58 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 44, 58, 197705)
+2026-05-12 22:44:58 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:03 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 3, 817000)
+2026-05-12 22:45:03 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:09 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 9, 153216)
+2026-05-12 22:45:09 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:14 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 14, 581293)
+2026-05-12 22:45:14 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:20 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 20, 8025)
+2026-05-12 22:45:20 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:25 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=125 spo2=100.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 25, 413414)
+2026-05-12 22:45:25 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:30 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 30, 964808)
+2026-05-12 22:45:30 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:36 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 36, 392979)
+2026-05-12 22:45:36 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:41 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=187 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 41, 819491)
+2026-05-12 22:45:41 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:47 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 47, 207433)
+2026-05-12 22:45:47 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:52 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 52, 674392)
+2026-05-12 22:45:52 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:45:58 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 45, 58, 116003)
+2026-05-12 22:45:58 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:03 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 3, 631670)
+2026-05-12 22:46:03 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:09 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 9, 58218)
+2026-05-12 22:46:09 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:14 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 14, 485652)
+2026-05-12 22:46:14 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:19 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 19, 913201)
+2026-05-12 22:46:19 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:25 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 25, 339861)
+2026-05-12 22:46:25 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:30 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 30, 869938)
+2026-05-12 22:46:30 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:36 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 36, 230978)
+2026-05-12 22:46:36 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:41 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 41, 677296)
+2026-05-12 22:46:41 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:47 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 47, 151128)
+2026-05-12 22:46:47 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:52 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 52, 577900)
+2026-05-12 22:46:52 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:46:58 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 46, 58, 108966)
+2026-05-12 22:46:58 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:03 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 3, 535798)
+2026-05-12 22:47:03 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:08 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 8, 964255)
+2026-05-12 22:47:08 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:14 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 14, 390392)
+2026-05-12 22:47:14 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:19 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 19, 817257)
+2026-05-12 22:47:19 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:25 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 25, 347145)
+2026-05-12 22:47:25 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:30 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 30, 774516)
+2026-05-12 22:47:30 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:36 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 36, 202767)
+2026-05-12 22:47:36 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:41 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.0625 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 41, 730960)
+2026-05-12 22:47:41 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:47:55 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.23494e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 47, 55, 986696)
+2026-05-12 22:47:55 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:01 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.189902e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 1, 699938)
+2026-05-12 22:48:01 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:07 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.17254e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 7, 332436)
+2026-05-12 22:48:07 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:12 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.155864e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 12, 963298)
+2026-05-12 22:48:12 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:18 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.145172e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 18, 596198)
+2026-05-12 22:48:18 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:24 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.117104e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 24, 329500)
+2026-05-12 22:48:24 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:29 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=3.128371e-40 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 29, 961534)
+2026-05-12 22:48:29 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:35 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.890532e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 35, 594282)
+2026-05-12 22:48:35 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:41 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.935373e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 41, 123182)
+2026-05-12 22:48:41 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:46 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.925564e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 46, 741556)
+2026-05-12 22:48:46 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:52 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.890532e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 52, 284924)
+2026-05-12 22:48:52 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:48:57 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.882124e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 48, 57, 788616)
+2026-05-12 22:48:57 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:03 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=4.915755e-42 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 3, 959810)
+2026-05-12 22:49:03 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:15 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 15, 872785)
+2026-05-12 22:49:15 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 21, 367871)
+2026-05-12 22:49:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:26 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 26, 794656)
+2026-05-12 22:49:26 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 32, 412883)
+2026-05-12 22:49:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:37 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 37, 751603)
+2026-05-12 22:49:37 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 43, 170446)
+2026-05-12 22:49:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 48, 606825)
+2026-05-12 22:49:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 54, 32630)
+2026-05-12 22:49:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:49:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=107 spo2=100.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 49, 59, 562486)
+2026-05-12 22:49:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:04 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 4, 990331)
+2026-05-12 22:50:04 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 10, 416797)
+2026-05-12 22:50:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:15 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 15, 844943)
+2026-05-12 22:50:15 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 21, 271447)
+2026-05-12 22:50:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:26 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 26, 888731)
+2026-05-12 22:50:26 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 32, 228036)
+2026-05-12 22:50:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:37 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 37, 656459)
+2026-05-12 22:50:37 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 43, 82751)
+2026-05-12 22:50:43 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 48, 502256)
+2026-05-12 22:50:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 54, 39868)
+2026-05-12 22:50:54 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:50:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 50, 59, 466708)
+2026-05-12 22:50:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:04 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 4, 898228)
+2026-05-12 22:51:04 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.125 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 10, 321257)
+2026-05-12 22:51:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:15 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 15, 749653)
+2026-05-12 22:51:15 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 21, 366224)
+2026-05-12 22:51:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:26 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 26, 706268)
+2026-05-12 22:51:26 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 32, 133581)
+2026-05-12 22:51:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:37 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 37, 560100)
+2026-05-12 22:51:37 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:42 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 42, 987461)
+2026-05-12 22:51:42 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 48, 476488)
+2026-05-12 22:51:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:53 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 53, 944147)
+2026-05-12 22:51:53 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:51:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 51, 59, 373568)
+2026-05-12 22:51:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:04 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 4, 799179)
+2026-05-12 22:52:04 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:11 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=136 spo2=100.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 11, 147188)
+2026-05-12 22:52:11 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:20 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 20, 728558)
+2026-05-12 22:52:20 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:26 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 26, 303307)
+2026-05-12 22:52:26 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:31 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 31, 976548)
+2026-05-12 22:52:31 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:37 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 37, 248963)
+2026-05-12 22:52:37 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:42 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 42, 626063)
+2026-05-12 22:52:42 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:48 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 48, 73875)
+2026-05-12 22:52:48 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:53 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=136 spo2=100.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 53, 480738)
+2026-05-12 22:52:53 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:52:58 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 52, 58, 907698)
+2026-05-12 22:52:58 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:53:04 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=250 spo2=99.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 53, 4, 437685)
+2026-05-12 22:53:04 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:53:09 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 53, 9, 864823)
+2026-05-12 22:53:09 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:53:15 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 53, 15, 292321)
+2026-05-12 22:53:15 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:53:20 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 53, 20, 719758)
+2026-05-12 22:53:20 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:53:26 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.1875 timestamp=datetime.datetime(2026, 5, 12, 22, 53, 26, 146219)
+2026-05-12 22:53:26 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:55:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 55, 59, 935338)
+2026-05-12 22:55:59 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:05 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 5, 392210)
+2026-05-12 22:56:05 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:10 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=100 spo2=100.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 10, 910182)
+2026-05-12 22:56:10 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:16 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 16, 384575)
+2026-05-12 22:56:16 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:21 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 21, 763974)
+2026-05-12 22:56:21 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:27 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 27, 191225)
+2026-05-12 22:56:27 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:32 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 32, 721231)
+2026-05-12 22:56:32 | ERROR | services.db_service | No device found for uid: esp32_001
+2026-05-12 22:56:38 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 38, 148273)
+2026-05-12 22:56:38 | INFO | services.db_service | Inserted reading for device esp32_001
+2026-05-12 22:56:43 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 43, 574767)
+2026-05-12 22:56:43 | INFO | services.db_service | Inserted reading for device esp32_001
+2026-05-12 22:56:49 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=300 spo2=99.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 49, 1720)
+2026-05-12 22:56:49 | INFO | services.db_service | Inserted reading for device esp32_001
+2026-05-12 22:56:54 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 54, 428875)
+2026-05-12 22:56:54 | INFO | services.db_service | Inserted reading for device esp32_001
+2026-05-12 22:56:59 | INFO | services.mqtt_client | Valid reading: device_id='esp32_001' patient_id=1 heart_rate=-1 spo2=-1.0 temperature=21.25 timestamp=datetime.datetime(2026, 5, 12, 22, 56, 59, 959197)
+2026-05-12 22:56:59 | INFO | services.db_service | Inserted reading for device esp32_001
