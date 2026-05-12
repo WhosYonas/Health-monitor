@@ -49,6 +49,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mosquitto:
+        condition: service_started
     environment:
       MQTT_BROKER_HOST: mosquitto
       MQTT_BROKER_PORT: 8883
