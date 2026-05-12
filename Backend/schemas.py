@@ -52,7 +52,21 @@ class CaregiverLoginOut(BaseModel):
 
     class Config:
         from_attributes = True
+        
+# ================RELATIVE=================
 
+
+class RelativeCreate(BaseModel):
+    full_name: str
+    phone_number: Optional[str] = None
+
+
+class RelativeOut(RelativeCreate):
+    relative_id: int
+    patient_id: int
+
+    class Config:
+        from_attributes = True
 
 # ===============PATIENT======================
 
@@ -144,21 +158,6 @@ class HealthDataOut(BaseModel):
 
 class HealthDataRequest(BaseModel):
     person_number: str
-
-# ================RELATIVE=================
-
-
-class RelativeCreate(BaseModel):
-    full_name: str
-    phone_number: Optional[str] = None
-
-
-class RelativeOut(RelativeCreate):
-    relative_id: int
-    patient_id: int
-
-    class Config:
-        from_attributes = True
 
 
 # =============ALERT===========
