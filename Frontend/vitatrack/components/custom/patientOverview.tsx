@@ -8,6 +8,7 @@ type HealthData = {
   body_temperature: number | null;
   blood_oxygen_level: number | null;
 };
+
 type Patient = {
   patient_id: number;
   person: {
@@ -96,12 +97,10 @@ function StatCard({
             </svg>
           )}
         </div>
-
         <span className="truncate text-xs font-medium text-slate-500">
           {label}
         </span>
       </div>
-
       <div className="flex items-baseline gap-1">
         <span className="text-base font-semibold text-slate-900 tabular-nums">
           {value}
@@ -118,10 +117,28 @@ export function PatientOverview({ patient }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    postGetPatientHealthData({ person_number: patient.person.personnummer })
-      .then(setHealthData)
-      .catch(() => setHealthData(null))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    const fetchHealth = () => {
+      postGetPatientHealthData({ person_number: patient.person.personnummer })
+        .then((data) => {
+          if (!cancelled) setHealthData(data);
+        })
+        .catch(() => {
+          if (!cancelled) setHealthData(null);
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    };
+
+    fetchHealth();
+    const interval = setInterval(fetchHealth, 10_000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [patient.person.personnummer]);
 
   const fmt = (val: number | null | undefined) =>
