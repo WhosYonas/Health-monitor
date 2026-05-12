@@ -67,7 +67,9 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       LOG_LEVEL: INFO
     volumes:
-      - ./Subscriber/certs:/app/certs:ro  nginx:
+      - ./Subscriber/certs:/app/certs:ro
+
+  nginx:
     image: nginx:alpine
     restart: unless-stopped
     ports:
