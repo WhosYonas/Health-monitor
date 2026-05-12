@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
-
+import { MeasurementPoint } from "@/communication/patientHealthHistoryCommunication";
 import { HealthDataGraph } from "@/components/ui/HealthDataGraph";
 
 type HealthData = {
@@ -20,6 +20,8 @@ type DetailedPageProps = {
   lastName?: string | null;
   role?: string | null;
   criticalLevel?: number | null;
+  healthHistory?: MeasurementPoint[];
+  historyLoading?: boolean;
 };
 
 type HealthCardProps = {
@@ -82,7 +84,6 @@ function CriticalLevelIndicator({
     </div>
   );
 }
-
 export function DetailedPage({
   healthData,
   loading,
@@ -91,6 +92,8 @@ export function DetailedPage({
   lastName,
   role,
   criticalLevel,
+  healthHistory,
+  historyLoading,
 }: DetailedPageProps) {
   const [graphOpen, openGraph] = useState<healthGraphType | null>(null);
   function handleGraphOpening(healthCardName: healthGraphType) {
@@ -100,9 +103,12 @@ export function DetailedPage({
       openGraph(healthCardName);
     }
   }
-  {/* below only for test*/}
-  criticalLevel=1; role="patient"; firstName="Ingrid"
-
+  {
+    /* below only for test*/
+  }
+  criticalLevel = 1;
+  role = "patient";
+  firstName = "Ingrid";
 
   return (
     <div className=" min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-950 via-teal-950 to-cyan-900">
@@ -164,7 +170,11 @@ export function DetailedPage({
             </h2>
             <div className="rounded-xl border border-slate-200 bg-slate-50 h-auto flex items-center justify-center text-slate-400 text-sm overflow-hidden">
               <div className="w-full h-full">
-                <HealthDataGraph title={graphOpen} />
+                <HealthDataGraph
+                  title={graphOpen}
+                  history={healthHistory ?? []}
+                  historyLoading={historyLoading ?? false}
+                />{" "}
               </div>
             </div>
           </div>

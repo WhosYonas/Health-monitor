@@ -1,12 +1,9 @@
-import Image from "next/image";
-import {LandingPagePresenter} from '@/presenters/landingPage-presenter'
-import {DetailedPagePresenter} from '@/presenters/detailedPage-presenter'
+import { LandingPagePresenter } from "@/presenters/landingPage-presenter";
 export default function Home() {
   return (
-    <div >
+    <div>
       {/*    <LandingPagePresenter/> */}
-      <LandingPagePresenter/> 
-      
+      <LandingPagePresenter />
     </div>
   );
 }
