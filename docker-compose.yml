@@ -52,7 +52,6 @@ services:
       mosquitto:
         condition: service_started
     environment:
-    environment:
       MQTT_CA_CERT: /app/Subscriber/certs/ca.crt
       MQTT_CLIENT_CERT: /app/Subscriber/certs/client.crt
       MQTT_CLIENT_KEY: /app/Subscriber/certs/client.key
