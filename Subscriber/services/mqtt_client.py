@@ -30,15 +30,19 @@ def on_disconnect(client, userdata, rc):
 def create_client() -> paho_client.Client:
     client = paho_client.Client()
     
-    #comment out for local testing
+    # Configure TLS
     client.tls_set(
-        ca_certs=str(mqtt_settings.ca_cert),
-        certfile=str(mqtt_settings.client_cert),
-        keyfile=str(mqtt_settings.client_key),
+        ca_certs=str(mqtt_settings.ca_cert),   # Points to /app/certs/ca.crt
+        certfile=str(mqtt_settings.client_cert), # Points to /app/certs/client.crt
+        keyfile=str(mqtt_settings.client_key),  # Points to /app/certs/client.key
     )
+    
+    client.tls_insecure_set(True)
     
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
+    
+    logger.info(f"Connecting to {mqtt_settings.broker_host}...")
     client.connect(mqtt_settings.broker_host, mqtt_settings.broker_port)
     return client
