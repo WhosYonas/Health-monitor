@@ -31,11 +31,11 @@ def create_client() -> paho_client.Client:
     client = paho_client.Client()
     
     #comment out for local testing
-    client.tls_set(
-        ca_certs=str(mqtt_settings.ca_cert),
-        certfile=str(mqtt_settings.client_cert),
-        keyfile=str(mqtt_settings.client_key),
-    )
+    #client.tls_set(
+     #   ca_certs=str(mqtt_settings.ca_cert),
+      #  certfile=str(mqtt_settings.client_cert),
+       # keyfile=str(mqtt_settings.client_key),
+    #)
     
     client.on_connect = on_connect
     client.on_message = on_message

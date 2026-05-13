@@ -66,8 +66,8 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       LOG_LEVEL: INFO
-    volumes:
-      - ./Subscriber/certs:/app/certs:ro
+    #volumes:
+    #  - ./Subscriber/certs:/app/certs:ro
 
   nginx:
     image: nginx:alpine
