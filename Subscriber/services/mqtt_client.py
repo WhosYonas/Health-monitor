@@ -3,6 +3,8 @@ from config.settings import mqtt as mqtt_settings
 from utils.parser import parse_payload
 from services.db_service import insert_reading
 from utils.logger import get_logger
+import ssl
+
 
 logger = get_logger(__name__)
 
@@ -27,18 +29,29 @@ def on_disconnect(client, userdata, rc):
     if rc != 0:
         logger.warning(f"Unexpected disconnect (rc={rc}), will auto-reconnect")
 
+
 def create_client() -> paho_client.Client:
     client = paho_client.Client()
     
-    #comment out for local testing
+    # Configure TLS
     client.tls_set(
         ca_certs=str(mqtt_settings.ca_cert),
         certfile=str(mqtt_settings.client_cert),
         keyfile=str(mqtt_settings.client_key),
+        cert_reqs=ssl.CERT_REQUIRED,
+        tls_version=ssl.PROTOCOL_TLSv1_2
     )
+    
+    client.tls_insecure_set(True)
     
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
-    client.connect(mqtt_settings.broker_host, mqtt_settings.broker_port)
+    
+    try:
+        client.connect(mqtt_settings.broker_host, mqtt_settings.broker_port)
+    except Exception as e:
+        logger.error(f"Connection failed: {e}")
+        raise
+        
     return client
